@@ -93,7 +93,7 @@ class FintClientSpec extends Specification {
                 .setBody(new ObjectMapper().writeValueAsString(resource)))
 
         when:
-        def setup = fintClient.getStatus(_ as String, JournalpostResource.class, _ as String)
+        def setup = fintClient.getStatus(_ as String, _ as String)
 
         then:
         StepVerifier

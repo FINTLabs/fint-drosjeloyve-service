@@ -60,7 +60,7 @@ public class FintClient {
         );
     }
 
-    public <T extends FintLinks> Mono<ResponseEntity<Void>> getStatus(String organisationNumber, Class<T> clazz, String uri) {
+    public <T extends FintLinks> Mono<ResponseEntity<Void>> getStatus(String organisationNumber, String uri) {
         return authorizedClient(organisationNumber).flatMap(client ->
                 webClient.head()
                         .uri(uri)
