@@ -1,0 +1,9 @@
+package no.fint.drosjeloyve.configuration;
+
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@Data
+@ConfigurationProperties("fint")
+public class FintProperties {
+}
