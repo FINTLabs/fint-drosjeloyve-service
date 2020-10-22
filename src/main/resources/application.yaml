@@ -1,4 +1,6 @@
-fint:
+scheduling:
+  initial-delay: 10000
+  fixed-delay: 60000
 
 organisation:
   921693230:
