@@ -1,6 +1,7 @@
 package no.fint.drosjeloyve.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import no.fint.drosjeloyve.configuration.FintProperties
 import no.fint.drosjeloyve.configuration.OrganisationProperties
 import no.fint.model.resource.arkiv.noark.JournalpostResource
 import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource
@@ -71,7 +72,7 @@ class FintClientSpec extends Specification {
                 .addHeader(HttpHeaders.LOCATION, 'status-location'))
 
         when:
-        def setup = fintClient.putResource(_ as String, new DrosjeloyveResource(), _ as String)
+        def setup = fintClient.putResource(_ as String, new DrosjeloyveResource(), _ as String, _ as String)
 
         then:
         StepVerifier
@@ -116,7 +117,7 @@ class FintClientSpec extends Specification {
                 .setBody(new ObjectMapper().writeValueAsString(resource)))
 
         when:
-        def setup = fintClient.getResource(_ as String, DrosjeloyveResource.class, _ as String)
+        def setup = fintClient.getResource(_ as String, DrosjeloyveResource.class, _ as String, _ as String)
 
         then:
         StepVerifier
@@ -150,7 +151,7 @@ class FintClientSpec extends Specification {
                 .setResponseCode(HttpStatus.NOT_FOUND.value()))
 
         when:
-        def setup = fintClient.getResource(_ as String, JournalpostResource.class, _ as String)
+        def setup = fintClient.getResource(_ as String, DrosjeloyveResource.class, _ as String, _ as String)
 
         then:
         StepVerifier

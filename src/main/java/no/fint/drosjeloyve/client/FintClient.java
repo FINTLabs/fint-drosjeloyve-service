@@ -1,5 +1,6 @@
 package no.fint.drosjeloyve.client;
 
+import no.fint.drosjeloyve.configuration.FintProperties;
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
@@ -12,8 +13,11 @@ import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClient
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriBuilder;
+import org.springframework.web.util.UriBuilderFactory;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.util.List;
 
 import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
@@ -43,10 +47,10 @@ public class FintClient {
         );
     }
 
-    public <T extends FintLinks> Mono<ResponseEntity<Void>> putResource(String requestor, T resource, String uri) {
+    public <T extends FintLinks> Mono<ResponseEntity<Void>> putResource(String requestor, T resource, String uri, String id) {
         return authorizedClient(requestor).flatMap(client ->
                 webClient.put()
-                        .uri(uri)
+                        .uri(uri, id)
                         .attributes(oauth2AuthorizedClient(client))
                         .bodyValue(resource)
                         .retrieve()
@@ -64,10 +68,10 @@ public class FintClient {
         );
     }
 
-    public <T extends FintLinks> Mono<T> getResource(String requestor, Class<T> clazz, String uri) {
+    public <T extends FintLinks> Mono<T> getResource(String requestor, Class<T> clazz, String uri, String id) {
         return authorizedClient(requestor).flatMap(client ->
                 webClient.get()
-                        .uri(uri)
+                        .uri(uri, id)
                         .attributes(oauth2AuthorizedClient(client))
                         .retrieve()
                         .bodyToMono(clazz)
@@ -83,7 +87,8 @@ public class FintClient {
                                 .build())
                         .attributes(oauth2AuthorizedClient(client))
                         .retrieve()
-                        .bodyToMono(new ParameterizedTypeReference<List<DrosjeloyveResource>>() {}));
+                        .bodyToMono(new ParameterizedTypeReference<List<DrosjeloyveResource>>() {
+                        }));
     }
 
     private Mono<OAuth2AuthorizedClient> authorizedClient(String organisationNumber) {

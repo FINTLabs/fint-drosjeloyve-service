@@ -1,10 +1,10 @@
 fint:
   endpoints:
-    drosjeloyve:
-    drosjeloyve-mappe-id:
-    drosjeloyve-system-id:
-    dokumentfil:
-    dokumentfil-system-id:
+    drosjeloyve: https://alpha.felleskomponent.no/arkiv/samferdsel/drosjeloyve
+    drosjeloyve-mappe-id: https://alpha.felleskomponent.no/arkiv/samferdsel/drosjeloyve/mappeid/{id}
+    drosjeloyve-system-id: https://alpha.felleskomponent.no/arkiv/samferdsel/drosjeloyve/systemid/{id}
+    dokumentfil: https://alpha.felleskomponent.no/arkiv/noark/dokumentfil
+    dokumentfil-system-id: https://alpha.felleskomponent.no/arkiv/noark/dokumentfil/systemid/{id}
 
 scheduling:
   initial-delay: 10000
