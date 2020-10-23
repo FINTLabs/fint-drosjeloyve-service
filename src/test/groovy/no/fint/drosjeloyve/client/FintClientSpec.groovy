@@ -1,9 +1,7 @@
 package no.fint.drosjeloyve.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.fint.drosjeloyve.configuration.FintProperties
 import no.fint.drosjeloyve.configuration.OrganisationProperties
-import no.fint.model.resource.arkiv.noark.JournalpostResource
 import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer

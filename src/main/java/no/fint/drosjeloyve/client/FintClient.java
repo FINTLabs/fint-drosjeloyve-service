@@ -77,8 +77,7 @@ public class FintClient {
     public Mono<List<DrosjeloyveResource>> getResources(String requestor, String uri, String subject) {
         return authorizedClient(requestor).flatMap(client ->
                 webClient.get()
-                        .uri(uriBuilder -> uriBuilder
-                                .path(uri)
+                        .uri(uri, uriBuilder -> uriBuilder
                                 .queryParam("organisasjonsnummer", subject)
                                 .build())
                         .attributes(oauth2AuthorizedClient(client))

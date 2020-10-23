@@ -5,10 +5,13 @@ fint:
     drosjeloyve-system-id:
     dokumentfil:
     dokumentfil-system-id:
+    attachment:
+    application:
+    evidence:
 
 scheduling:
   initial-delay: 10000
-  fixed-delay: 60000
+  fixed-delay: 360000
 
 organisation:
   921693230:
