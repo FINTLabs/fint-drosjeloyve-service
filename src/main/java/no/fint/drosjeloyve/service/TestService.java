@@ -18,6 +18,6 @@ public class TestService {
     }
 
     public void run() {
-        List<AltinnApplication> altinnApplications = altinnApplicationRepository.findByStatus(AltinnApplicationStatus.EVIDENCE_FETCHED);
+        List<AltinnApplication> altinnApplications = altinnApplicationRepository.findAllByStatus(AltinnApplicationStatus.EVIDENCE_FETCHED);
     }
 }

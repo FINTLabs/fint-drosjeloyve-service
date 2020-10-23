@@ -20,7 +20,9 @@ public class AltinnApplication {
     @Id
     private String archiveReference;
     private String requestor;
+    private String requestorName;
     private String subject;
+    private String subjectName;
     private String serviceCode;
     private Integer languageCode;
     private AltinnApplicationStatus status;
