@@ -1,6 +1,5 @@
 package no.fint.drosjeloyve.client;
 
-import no.fint.drosjeloyve.configuration.FintProperties;
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
 import no.fint.model.resource.FintLinks;
 import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
@@ -13,11 +12,8 @@ import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClient
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriBuilder;
-import org.springframework.web.util.UriBuilderFactory;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
 import java.util.List;
 
 import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
@@ -83,7 +79,7 @@ public class FintClient {
                 webClient.get()
                         .uri(uriBuilder -> uriBuilder
                                 .path(uri)
-                                .queryParam("organisationNumber", subject)
+                                .queryParam("organisasjonsnummer", subject)
                                 .build())
                         .attributes(oauth2AuthorizedClient(client))
                         .retrieve()
