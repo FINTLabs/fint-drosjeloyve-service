@@ -1,10 +1,7 @@
 package no.fint.drosjeloyve.service;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.drosjeloyve.client.FintAltinnClient;
-import no.fint.drosjeloyve.client.FintClient;
-import no.fint.drosjeloyve.client.Endpoints;
-import no.fint.drosjeloyve.configuration.FintProperties;
+import no.fint.drosjeloyve.configuration.OrganisationProperties;
 import no.fint.drosjeloyve.model.AltinnApplication;
 import no.fint.drosjeloyve.model.AltinnApplicationStatus;
 import no.fint.drosjeloyve.repository.AltinnApplicationRepository;
@@ -16,22 +13,33 @@ import java.util.List;
 @Slf4j
 @Service
 public class TestService {
-    private final FintClient fintClient;
-    private final FintAltinnClient fintAltinnClient;
-    private final FintProperties fintProperties;
-    private final AltinnApplicationRepository altinnApplicationRepository;
+    private final OrganisationProperties organisationProperties;
+    private final AltinnApplicationRepository repository;
+    private final CaseHandlerService caseHandlerService;
 
-    public TestService(FintClient fintClient, FintAltinnClient fintAltinnClient, FintProperties fintProperties, AltinnApplicationRepository altinnApplicationRepository) {
-        this.fintClient = fintClient;
-        this.fintAltinnClient = fintAltinnClient;
-        this.fintProperties = fintProperties;
-        this.altinnApplicationRepository = altinnApplicationRepository;
+    public TestService(OrganisationProperties organisationProperties, AltinnApplicationRepository repository, CaseHandlerService caseHandlerService) {
+        this.organisationProperties = organisationProperties;
+        this.repository = repository;
+        this.caseHandlerService = caseHandlerService;
     }
 
     @Scheduled(initialDelayString = "${scheduling.initial-delay}", fixedDelayString = "${scheduling.fixed-delay}")
     public void run() {
-        List<AltinnApplication> applications = altinnApplicationRepository.findAllByStatus(AltinnApplicationStatus.EVIDENCE_FETCHED);
+        List<AltinnApplication> applications = repository.findAllByStatus(AltinnApplicationStatus.NEW);
 
-        String uri = fintProperties.getEndpoints().get(Endpoints.APPLICATION.getKey());
+        applications.forEach(application -> {
+            OrganisationProperties.Organisation organisation = organisationProperties.getOrganisations().get(application.getRequestor());
+
+            if (organisation == null) {
+                log.warn("No organisation found for requestor {}", application.getRequestor());
+                return;
+            }
+
+            if (organisation.isDeviationPolicy()) {
+                caseHandlerService.updateCase(organisation, application);
+            } else {
+                caseHandlerService.newCase(organisation, application);
+            }
+        });
     }
 }

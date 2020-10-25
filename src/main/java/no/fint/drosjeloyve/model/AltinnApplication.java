@@ -19,6 +19,8 @@ import java.util.Map;
 public class AltinnApplication {
     @Id
     private String archiveReference;
+    private LocalDateTime archivedDate;
+    private String caseId;
     private String requestor;
     private String requestorName;
     private String subject;
@@ -28,7 +30,7 @@ public class AltinnApplication {
     private AltinnApplicationStatus status;
     private Form form;
     private Consent consent;
-    private List<Attachment> attachments = new ArrayList<>();
+    private Map<Integer, Attachment> attachments = new HashMap<>();
 
     @Version
     private long version;
@@ -42,16 +44,16 @@ public class AltinnApplication {
     @Data
     public static class Form {
         private String formData;
-        private byte[] formDataPdf;
+        private String documentId;
     }
 
     @Data
     public static class Attachment {
         private Integer attachmentId;
-        private byte[] attachmentData;
         private String attachmentType;
         private String attachmentTypeName;
         private String attachmentTypeNameLanguage;
+        private String documentId;
     }
 
     @Data

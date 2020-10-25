@@ -13,11 +13,11 @@ scheduling:
   initial-delay: 10000
   fixed-delay: 360000
 
-organisation:
+organisations:
   921693230:
     name: Viken fylkeskommune
     registration: viken
-    policy:
+    deviation-policy:
     username: username
     password: password
 
