@@ -1,0 +1,98 @@
+{
+    "evidenceStatus": {
+        "evidenceCodeName": "RestanserDrosje",
+        "status": {
+            "code": 1,
+            "description": "The information is available for harvest"
+        },
+        "validFrom": "2020-10-22T09:39:03.0761895+00:00",
+        "validTo": "2021-01-20T09:39:03.076184+00:00",
+        "didSupplyLegalBasis": false
+    },
+    "evidenceValues": [
+        {
+            "evidenceValueName": "skattForfaltOgUbetalt",
+            "source": "Skatteetaten",
+            "timestamp": "2020-10-24T20:31:23.1491266Z",
+            "value": "978775 NOK",
+            "valueType": "amount"
+        },
+        {
+            "evidenceValueName": "skattRenterOgGebyrer",
+            "source": "Skatteetaten",
+            "timestamp": "2020-10-24T20:31:23.1491318Z",
+            "value": "11001381 NOK",
+            "valueType": "amount"
+        },
+        {
+            "evidenceValueName": "arbeidsgiveravgiftForfaltOgUbetalt",
+            "source": "Skatteetaten",
+            "timestamp": "2020-10-24T20:31:23.1491323Z",
+            "value": "1011 NOK",
+            "valueType": "amount"
+        },
+        {
+            "evidenceValueName": "arbeidsgiveravgiftRenterOgGebyrer",
+            "source": "Skatteetaten",
+            "timestamp": "2020-10-24T20:31:23.1491325Z",
+            "value": "149 NOK",
+            "valueType": "amount"
+        },
+        {
+            "evidenceValueName": "merverdiavgiftForfaltOgUbetalt",
+            "source": "Skatteetaten",
+            "timestamp": "2020-10-24T20:31:23.1491328Z",
+            "value": "11123030 NOK",
+            "valueType": "amount"
+        },
+        {
+            "evidenceValueName": "merverdiavgiftRenterOgGebyrer",
+            "source": "Skatteetaten",
+            "timestamp": "2020-10-24T20:31:23.1491334Z",
+            "value": "14151500 NOK",
+            "valueType": "amount"
+        },
+        {
+            "evidenceValueName": "forskuddstrekkForfaltOgUbetalt",
+            "source": "Skatteetaten",
+            "timestamp": "2020-10-24T20:31:23.1491339Z",
+            "value": "10511 NOK",
+            "valueType": "amount"
+        },
+        {
+            "evidenceValueName": "forskuddstrekkRenterOgGebyrer",
+            "source": "Skatteetaten",
+            "timestamp": "2020-10-24T20:31:23.1491342Z",
+            "value": "2234448 NOK",
+            "valueType": "amount"
+        },
+        {
+            "evidenceValueName": "ansvarskravSkattForfaltOgUbetalt",
+            "source": "Skatteetaten",
+            "timestamp": "2020-10-24T20:31:23.1491345Z",
+            "value": "1313320 NOK",
+            "valueType": "amount"
+        },
+        {
+            "evidenceValueName": "ansvarskravSkattRenterOgGebyrer",
+            "source": "Skatteetaten",
+            "timestamp": "2020-10-24T20:31:23.1491348Z",
+            "value": "1416 NOK",
+            "valueType": "amount"
+        },
+        {
+            "evidenceValueName": "ansvarskravMvaForfaltOgUbetalt",
+            "source": "Skatteetaten",
+            "timestamp": "2020-10-24T20:31:23.1491351Z",
+            "value": "5400 NOK",
+            "valueType": "amount"
+        },
+        {
+            "evidenceValueName": "ansvarskravMvaRenterOgGebyrer",
+            "source": "Skatteetaten",
+            "timestamp": "2020-10-24T20:31:23.1491354Z",
+            "value": "0 NOK",
+            "valueType": "amount"
+        }
+    ]
+}

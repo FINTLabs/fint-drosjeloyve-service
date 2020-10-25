@@ -1,0 +1,105 @@
+{
+    "evidenceStatus": {
+        "evidenceCodeName": "KonkursDrosje",
+        "status": {
+            "code": 1,
+            "description": "The information is available for harvest"
+        },
+        "validFrom": "2020-10-22T09:39:03.0761895+00:00",
+        "validTo": "2021-01-20T09:39:03.076184+00:00",
+        "didSupplyLegalBasis": false
+    },
+    "evidenceValues": [
+        {
+            "evidenceValueName": "Organisasjonsnummer",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.1946205Z",
+            "value": 998997801,
+            "valueType": "number"
+        },
+        {
+            "evidenceValueName": "Organisasjonsnavn",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.1946264Z",
+            "value": "KOMPLETT BANK ASA",
+            "valueType": "string"
+        },
+        {
+            "evidenceValueName": "Adresse",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.194627Z",
+            "value": "Postboks 448",
+            "valueType": "string"
+        },
+        {
+            "evidenceValueName": "Postnummer",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.1946273Z",
+            "value": "1327",
+            "valueType": "string"
+        },
+        {
+            "evidenceValueName": "Poststed",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.1946277Z",
+            "value": "LYSAKER",
+            "valueType": "string"
+        },
+        {
+            "evidenceValueName": "Land",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.1946281Z",
+            "value": "Norge",
+            "valueType": "string"
+        },
+        {
+            "evidenceValueName": "Forretningsadresse",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.1946286Z",
+            "value": "Vollsveien 2A",
+            "valueType": "string"
+        },
+        {
+            "evidenceValueName": "ForretningsadressePostnummer",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.1946289Z",
+            "value": "1366",
+            "valueType": "string"
+        },
+        {
+            "evidenceValueName": "ForretningsadressePoststed",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.1946292Z",
+            "value": "LYSAKER",
+            "valueType": "string"
+        },
+        {
+            "evidenceValueName": "ForretningsadresseLand",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.1946297Z",
+            "value": "Norge",
+            "valueType": "string"
+        },
+        {
+            "evidenceValueName": "UnderAvvikling",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.1946347Z",
+            "value": false,
+            "valueType": "boolean"
+        },
+        {
+            "evidenceValueName": "Konkurs",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.194635Z",
+            "value": false,
+            "valueType": "boolean"
+        },
+        {
+            "evidenceValueName": "UnderTvangsavviklingEllerTvangsopplosning",
+            "source": "Enhetsregisteret",
+            "timestamp": "2020-10-25T21:13:15.1946353Z",
+            "value": false,
+            "valueType": "boolean"
+        }
+    ]
+}
