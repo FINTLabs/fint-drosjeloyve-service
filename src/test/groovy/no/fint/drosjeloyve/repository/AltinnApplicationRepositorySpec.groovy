@@ -14,12 +14,12 @@ class AltinnApplicationRepositorySpec extends Specification {
 
     def "findAllByStatus() returns documents given status"() {
         given:
-        repository.saveAll(Arrays.asList(new AltinnApplication(status: AltinnApplicationStatus.EVIDENCE_FETCHED),
+        repository.saveAll(Arrays.asList(new AltinnApplication(status: AltinnApplicationStatus.CONSENTS_ACCEPTED),
                 new AltinnApplication(status: AltinnApplicationStatus.CONSENTS_REQUESTED),
                 new AltinnApplication(status: AltinnApplicationStatus.CONSENTS_REQUESTED)))
 
         when:
-        def documents = repository.findAllByStatus(AltinnApplicationStatus.EVIDENCE_FETCHED)
+        def documents = repository.findAllByStatus(AltinnApplicationStatus.CONSENTS_ACCEPTED)
 
         then:
         documents.size() == 1

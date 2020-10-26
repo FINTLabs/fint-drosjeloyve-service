@@ -2,9 +2,7 @@ fint:
   endpoints:
     drosjeloyve: https://alpha.felleskomponent.no/arkiv/samferdsel/drosjeloyve
     drosjeloyve-mappe-id: https://alpha.felleskomponent.no/arkiv/samferdsel/drosjeloyve/mappeid/{id}
-    drosjeloyve-system-id: https://alpha.felleskomponent.no/arkiv/samferdsel/drosjeloyve/systemid/{id}
     dokumentfil: https://alpha.felleskomponent.no/arkiv/noark/dokumentfil
-    dokumentfil-system-id: https://alpha.felleskomponent.no/arkiv/noark/dokumentfil/systemid/{id}
     attachment:
     application:
     evidence:
@@ -13,13 +11,16 @@ scheduling:
   initial-delay: 10000
   fixed-delay: 360000
 
-organisation:
-  921693230:
-    name: Viken fylkeskommune
-    registration: viken
-    policy:
-    username: username
-    password: password
+drosjeloyve:
+  organisations:
+    921693230:
+      name: Viken fylkeskommune
+      registration: viken
+      deviation-policy:
+      skjermingshjemmel:
+      tilgangsrestriksjon:
+      username: username
+      password: password
 
 spring:
   security:

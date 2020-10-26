@@ -2,9 +2,7 @@ fint:
   endpoints:
     drosjeloyve:
     drosjeloyve-mappe-id:
-    drosjeloyve-system-id:
     dokumentfil:
-    dokumentfil-system-id:
     attachment:
     application:
     evidence:
@@ -13,13 +11,16 @@ scheduling:
   initial-delay: 10000
   fixed-delay: 360000
 
-organisation:
-  921693230:
-    name: Viken fylkeskommune
-    registration: viken
-    policy:
-    username: username
-    password: password
+drosjeloyve:
+  organisations:
+    921693230:
+      name: Viken fylkeskommune
+      registration: viken
+      deviation-policy:
+      skjermingshjemmel:
+      tilgangsrestriksjon:
+      username: username
+      password: password
 
 spring:
   security:

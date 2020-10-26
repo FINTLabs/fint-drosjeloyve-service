@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
-@ConfigurationProperties("organisation")
+@ConfigurationProperties("drosjeloyve")
 public class OrganisationProperties {
     private Map<String, Organisation> organisations = new HashMap<>();
 
@@ -17,5 +17,8 @@ public class OrganisationProperties {
         private String registration;
         private String username;
         private String password;
+        private boolean deviationPolicy;
+        private String skjermingshjemmel;
+        private String tilgangsrestriksjon;
     }
 }

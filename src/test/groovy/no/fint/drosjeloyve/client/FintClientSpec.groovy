@@ -25,20 +25,17 @@ class FintClientSpec extends Specification {
             .baseUrl('http://localhost:' + mockWebServer.getPort())
             .build()
 
-    OrganisationProperties organisationProperties = Stub(OrganisationProperties) {
-        getOrganisations() >> [(_ as String): new OrganisationProperties.Organisation(
+    OrganisationProperties.Organisation organisation = new OrganisationProperties.Organisation(
                 name: 'name',
                 registration: 'registration',
                 username: 'username',
-                password: 'password'
-        )]
-    }
+                password: 'password')
 
     ReactiveOAuth2AuthorizedClientManager authorizedClientManager = Stub(ReactiveOAuth2AuthorizedClientManager) {
         authorize(_ as OAuth2AuthorizeRequest) >> Mono.just(Mock(OAuth2AuthorizedClient))
     }
 
-    FintClient fintClient = new FintClient(organisationProperties, webClient, authorizedClientManager, Mock(Authentication))
+    FintClient fintClient = new FintClient(webClient, authorizedClientManager, Mock(Authentication))
 
     void cleanup() {
         mockWebServer.shutdown()
@@ -51,7 +48,26 @@ class FintClientSpec extends Specification {
                 .addHeader(HttpHeaders.LOCATION, 'status-location'))
 
         when:
-        def setup = fintClient.postResource(_ as String, new DrosjeloyveResource(), _ as String)
+        def setup = fintClient.postResource(organisation, new DrosjeloyveResource(), _ as String)
+
+        then:
+        StepVerifier
+                .create(setup)
+                .expectNextMatches({ responseEntity ->
+                    responseEntity.statusCode == HttpStatus.ACCEPTED &&
+                            responseEntity.headers.getLocation() == URI.create('status-location')
+                })
+                .verifyComplete()
+    }
+
+    def "post resource file returns location of status resource"() {
+        given:
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(HttpStatus.ACCEPTED.value())
+                .addHeader(HttpHeaders.LOCATION, 'status-location'))
+
+        when:
+        def setup = fintClient.postFile(organisation, [0, 1] as byte[], MediaType.APPLICATION_PDF, _ as String, _ as String)
 
         then:
         StepVerifier
@@ -70,7 +86,7 @@ class FintClientSpec extends Specification {
                 .addHeader(HttpHeaders.LOCATION, 'status-location'))
 
         when:
-        def setup = fintClient.putResource(_ as String, new DrosjeloyveResource(), _ as String, _ as String)
+        def setup = fintClient.putResource(organisation, new DrosjeloyveResource(), _ as String, _ as String)
 
         then:
         StepVerifier
@@ -93,7 +109,7 @@ class FintClientSpec extends Specification {
                 .setBody(new ObjectMapper().writeValueAsString(resource)))
 
         when:
-        def setup = fintClient.getStatus(_ as String, _ as String)
+        def setup = fintClient.getStatus(organisation, URI.create('http://localhost:' + mockWebServer.getPort()))
 
         then:
         StepVerifier
@@ -115,31 +131,12 @@ class FintClientSpec extends Specification {
                 .setBody(new ObjectMapper().writeValueAsString(resource)))
 
         when:
-        def setup = fintClient.getResource(_ as String, DrosjeloyveResource.class, _ as String, _ as String)
+        def setup = fintClient.getResource(organisation, DrosjeloyveResource.class, _ as String, _ as String)
 
         then:
         StepVerifier
                 .create(setup)
                 .expectNext(resource)
-                .verifyComplete()
-    }
-
-    def "get resources returns resources"() {
-        given:
-        DrosjeloyveResource resource = new DrosjeloyveResource()
-
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(HttpStatus.OK.value())
-                .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
-                .setBody(new ObjectMapper().writeValueAsString([resource, resource])))
-
-        when:
-        def setup = fintClient.getResources(_ as String, _ as String, _ as String)
-
-        then:
-        StepVerifier
-                .create(setup)
-                .expectNext([resource, resource])
                 .verifyComplete()
     }
 
@@ -149,7 +146,7 @@ class FintClientSpec extends Specification {
                 .setResponseCode(HttpStatus.NOT_FOUND.value()))
 
         when:
-        def setup = fintClient.getResource(_ as String, DrosjeloyveResource.class, _ as String, _ as String)
+        def setup = fintClient.getResource(organisation, DrosjeloyveResource.class, _ as String, _ as String)
 
         then:
         StepVerifier
