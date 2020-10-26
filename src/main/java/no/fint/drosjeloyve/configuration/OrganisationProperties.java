@@ -18,5 +18,7 @@ public class OrganisationProperties {
         private String username;
         private String password;
         private boolean deviationPolicy;
+        private String skjermingshjemmel;
+        private String tilgangsrestriksjon;
     }
 }

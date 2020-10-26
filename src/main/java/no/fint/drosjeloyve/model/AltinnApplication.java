@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,8 +20,9 @@ import java.util.Map;
 public class AltinnApplication {
     @Id
     private String archiveReference;
-    private LocalDateTime archivedDate;
     private String caseId;
+    private String accreditationId;
+    private LocalDateTime archivedDate;
     private String requestor;
     private String requestorName;
     private String subject;
@@ -29,8 +31,9 @@ public class AltinnApplication {
     private Integer languageCode;
     private AltinnApplicationStatus status;
     private Form form;
-    private Consent consent;
+
     private Map<Integer, Attachment> attachments = new HashMap<>();
+    private Map<String, Consent> consents = new HashMap<>();
 
     @Version
     private long version;
@@ -53,13 +56,14 @@ public class AltinnApplication {
         private String attachmentType;
         private String attachmentTypeName;
         private String attachmentTypeNameLanguage;
+        private String fileName;
         private String documentId;
     }
 
     @Data
     public static class Consent {
-        private String id;
-        private Map<String, ConsentStatus> status = new HashMap<>();
-        private List<Evidence> evidence = new ArrayList<>();
+        private ConsentStatus status;
+        private String evidenceCodeName;
+        private String documentId;
     }
 }

@@ -43,23 +43,21 @@ public class FintClient {
                         .attributes(oauth2AuthorizedClient(client))
                         .bodyValue(resource)
                         .retrieve()
-                        .toBodilessEntity()
-        );
+                        .toBodilessEntity());
     }
 
-    public Mono<ResponseEntity<Void>> postFile(OrganisationProperties.Organisation organisation, byte[] bytes, AltinnApplication.Attachment attachment, String uri) {
+    public Mono<ResponseEntity<Void>> postFile(OrganisationProperties.Organisation organisation, byte[] bytes, MediaType contentType, String filename, String uri) {
         return authorizedClient(organisation).flatMap(client ->
                 webClient.post()
                         .uri(uri)
-                        .contentType(MediaType.parseMediaType(attachment.getAttachmentType().replace("_", "/")))
                         .headers(httpHeaders -> {
-                            httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.builder("inline").filename("te.pdf").build().toString());
+                            httpHeaders.setContentType(contentType);
+                            httpHeaders.setContentDisposition(ContentDisposition.builder("attachment").filename(filename).build());
                         })
                         .attributes(oauth2AuthorizedClient(client))
                         .bodyValue(bytes)
                         .retrieve()
-                        .toBodilessEntity()
-        );
+                        .toBodilessEntity());
     }
 
     public <T extends FintLinks> Mono<ResponseEntity<Void>> putResource(OrganisationProperties.Organisation organisation, T resource, String uri, String id) {
@@ -69,18 +67,16 @@ public class FintClient {
                         .attributes(oauth2AuthorizedClient(client))
                         .bodyValue(resource)
                         .retrieve()
-                        .toBodilessEntity()
-        );
+                        .toBodilessEntity());
     }
 
-    public <T extends FintLinks> Mono<ResponseEntity<T>> getStatus(OrganisationProperties.Organisation organisation, Class<T> clazz, URI location) {
+    public Mono<ResponseEntity<Void>> getStatus(OrganisationProperties.Organisation organisation, URI location) {
         return authorizedClient(organisation).flatMap(client ->
-                webClient.get()
+                webClient.head()
                         .uri(location)
                         .attributes(oauth2AuthorizedClient(client))
                         .retrieve()
-                        .toEntity(clazz)
-        );
+                        .toBodilessEntity());
     }
 
     public <T extends FintLinks> Mono<T> getResource(OrganisationProperties.Organisation organisation, Class<T> clazz, String uri, String id) {
@@ -89,8 +85,7 @@ public class FintClient {
                         .uri(uri, id)
                         .attributes(oauth2AuthorizedClient(client))
                         .retrieve()
-                        .bodyToMono(clazz)
-        );
+                        .bodyToMono(clazz));
     }
 
     private Mono<OAuth2AuthorizedClient> authorizedClient(OrganisationProperties.Organisation organisation) {

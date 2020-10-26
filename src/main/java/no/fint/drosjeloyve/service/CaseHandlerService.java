@@ -2,132 +2,181 @@ package no.fint.drosjeloyve.service;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.drosjeloyve.FinalStatusPendingException;
-import no.fint.drosjeloyve.client.Endpoints;
-import no.fint.drosjeloyve.client.FintAltinnClient;
+import no.fint.drosjeloyve.client.AltinnClient;
 import no.fint.drosjeloyve.client.FintClient;
-import no.fint.drosjeloyve.configuration.FintProperties;
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
+import no.fint.drosjeloyve.factory.DrosjeloyveResourceFactory;
 import no.fint.drosjeloyve.model.AltinnApplication;
 import no.fint.drosjeloyve.repository.AltinnApplicationRepository;
-import no.fint.model.felles.kompleksedatatyper.Identifikator;
-import no.fint.model.resource.arkiv.noark.DokumentfilResource;
-import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.retry.Retry;
-import reactor.util.retry.RetrySpec;
 
-import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.time.Duration;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.function.BiConsumer;
+
+import static reactor.util.retry.Retry.withThrowable;
 
 @Slf4j
 @Service
 public class CaseHandlerService {
     private final FintClient fintClient;
-    private final FintAltinnClient fintAltinnClient;
-    private final FintProperties fintProperties;
+    private final AltinnClient altinnClient;
     private final AltinnApplicationRepository repository;
 
-    public reactor.retry.Retry<?> finalStatusPending;
+    public static Retry<?> finalStatusPending;
 
-    @PostConstruct
-    public void init() {
+    @Value("${fint.endpoints.drosjeloyve}")
+    private String drosjeloyveEndpoint;
+
+    @Value("${fint.endpoints.dokumentfil}")
+    private String dokumentfilEndpoint;
+
+    @Value("${fint.endpoints.application}")
+    private String applicationEndpoint;
+
+    @Value("${fint.endpoints.attachment}")
+    private String attachmentEndpoint;
+
+    @Value("${fint.endpoints.evidence}")
+    private String evidenceEndpoint;
+
+    public CaseHandlerService(FintClient fintClient, AltinnClient altinnClient, AltinnApplicationRepository repository) {
+        this.fintClient = fintClient;
+        this.altinnClient = altinnClient;
+        this.repository = repository;
+
         finalStatusPending = Retry.anyOf(FinalStatusPendingException.class)
                 .exponentialBackoff(Duration.ofSeconds(1), Duration.ofMinutes(5))
                 .timeout(Duration.ofMinutes(30))
                 .doOnRetry(exception -> log.info("{}", exception));
     }
 
-    public CaseHandlerService(FintClient fintClient, FintAltinnClient fintAltinnClient, FintProperties fintProperties, AltinnApplicationRepository repository) {
-        this.fintClient = fintClient;
-        this.fintAltinnClient = fintAltinnClient;
-        this.fintProperties = fintProperties;
-        this.repository = repository;
-    }
-
     public void newCase(OrganisationProperties.Organisation organisation, AltinnApplication application) {
-        if (application.getCaseId() == null) {
-            DrosjeloyveResource resource = newDrosjeloyveResource(application);
-
-            fintClient.postResource(organisation, resource, fintProperties.getEndpoints().get(Endpoints.DROSJELOYVE.getKey()))
-                    .doOnSuccess(resourceEntity -> fintClient.getStatus(organisation, DrosjeloyveResource.class, resourceEntity.getHeaders().getLocation())
-                            .doOnSuccess(statusEntity -> {
-                                if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
-                                    throw new FinalStatusPendingException();
-                                }
-
-                                Optional.ofNullable(statusEntity.getBody())
-                                        .map(DrosjeloyveResource::getMappeId)
-                                        .map(Identifikator::getIdentifikatorverdi)
-                                        .ifPresent(id -> {
-                                            application.setCaseId(id);
-                                            repository.save(application);
-                                        });
-                            })
-                            .doOnError(WebClientResponseException.class, ex -> log.info(ex.getResponseBodyAsString()))
-                            .retryWhen(reactor.util.retry.Retry.withThrowable(finalStatusPending))
-                            .subscribe())
-                    .doOnError(WebClientResponseException.class, ex -> log.info(ex.getResponseBodyAsString()))
-                    .subscribe();
-        }
-
-        application.getAttachments().values().stream()
-                .filter(attachment -> attachment.getDocumentId() == null)
-                .forEach(attachment -> fintAltinnClient.getAttachment(fintProperties.getEndpoints().get(Endpoints.ATTACHMENT.getKey()), attachment.getAttachmentId())
-                        .doOnSuccess(bytes -> fintClient.postFile(organisation, bytes, attachment, fintProperties.getEndpoints().get(Endpoints.DOKUMENTFIL.getKey()))
-                                .doOnSuccess(resourceEntity -> {
-                                    log.info("{}", resourceEntity.getHeaders().getLocation().toString());
-                                    fintClient.getStatus(organisation, DokumentfilResource.class, resourceEntity.getHeaders().getLocation())
-                                            .doOnSuccess(statusEntity -> {
-                                                log.info(statusEntity.getHeaders().getContentType().toString());
-
-                                                if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
-                                                    throw new FinalStatusPendingException();
-                                                }
-
-                                                Optional.ofNullable(statusEntity.getBody())
-                                                        .map(DokumentfilResource::getSystemId)
-                                                        .map(Identifikator::getIdentifikatorverdi)
-                                                        .ifPresent(id -> {
-                                                            attachment.setDocumentId(id);
-                                                            application.getAttachments().put(attachment.getAttachmentId(), attachment);
-                                                            repository.save(application);
-                                                        });
-                                            })
-                                            .doOnError(ex -> log.error("dsadsad {}", ex.getMessage()))
-                                            .retryWhen(reactor.util.retry.Retry.withThrowable(finalStatusPending))
-                                            .subscribe();
-                                }
-
-                                )
-                                .doOnError(ex -> log.error("{}", ex.getMessage()))
-                                .subscribe())
-                        .doOnError(ex -> log.error("{}", ex.getMessage()))
-                        .subscribe());
+        updateApplication()
+                .andThen(updateForm())
+                .andThen(updateAttachments())
+                .andThen(updateEvidence())
+                .accept(organisation, application);
     }
 
     public void updateCase(OrganisationProperties.Organisation organisation, AltinnApplication application) {
 
     }
 
-    private DrosjeloyveResource newDrosjeloyveResource(AltinnApplication application) {
-        DrosjeloyveResource resource = new DrosjeloyveResource();
-        resource.setOrganisasjonsnummer(application.getSubject());
-        resource.setTittel(application.getSubjectName());
+    private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> updateApplication() {
+        return (organisation, application) -> {
+            if (application.getCaseId() == null) {
+                fintClient.postResource(organisation, DrosjeloyveResourceFactory.ofBasic(application), drosjeloyveEndpoint)
+                        .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                                .doOnSuccess(statusEntity -> {
+                                    if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
+                                        throw new FinalStatusPendingException();
+                                    }
 
-        return resource;
+                                    getId(statusEntity, "mappeid/").ifPresent(id -> {
+                                        application.setCaseId(id);
+                                        repository.save(application);
+                                    });
+                                })
+                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                                .retryWhen(withThrowable(finalStatusPending))
+                                .subscribe())
+                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                        .subscribe();
+            }
+        };
+    }
+
+    private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> updateForm() {
+        return (organisation, application) -> {
+            if (application.getForm().getDocumentId() == null) {
+                altinnClient.getApplication(applicationEndpoint, application.getArchiveReference(), application.getLanguageCode())
+                        .doOnSuccess(bytes -> fintClient.postFile(organisation, bytes, MediaType.APPLICATION_PDF, "søknadsskjema.pdf", dokumentfilEndpoint)
+                                .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                                        .doOnSuccess(statusEntity -> {
+                                            if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
+                                                throw new FinalStatusPendingException();
+                                            }
+
+                                            getId(statusEntity, "/").ifPresent(id -> {
+                                                application.getForm().setDocumentId(id);
+                                                repository.save(application);
+                                            });
+                                        })
+                                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                                        .retryWhen(withThrowable(finalStatusPending))
+                                        .subscribe())
+                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                                .subscribe())
+                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                        .subscribe();
+            }
+        };
+    }
+
+    private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> updateAttachments() {
+        return (organisation, application) -> application.getAttachments().values().stream()
+                .filter(attachment -> attachment.getDocumentId() == null)
+                .forEach(attachment -> altinnClient.getAttachment(attachmentEndpoint, attachment.getAttachmentId())
+                        .doOnSuccess(bytes -> fintClient.postFile(organisation, bytes, MediaType.parseMediaType(attachment.getAttachmentType()), attachment.getFileName(), dokumentfilEndpoint)
+                                .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                                        .doOnSuccess(statusEntity -> {
+                                            if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
+                                                throw new FinalStatusPendingException();
+                                            }
+
+                                            getId(statusEntity, "/").ifPresent(id -> {
+                                                application.getAttachments().get(attachment.getAttachmentId()).setDocumentId(id);
+                                                repository.save(application);
+                                            });
+                                        })
+                                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                                        .retryWhen(withThrowable(finalStatusPending))
+                                        .subscribe())
+                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                                .subscribe())
+                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                        .subscribe());
+    }
+
+    private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> updateEvidence() {
+        return (organisation, application) -> application.getConsents().values().stream()
+                .filter(consent -> consent.getDocumentId() == null)
+                .forEach(consent -> altinnClient.getEvidence(evidenceEndpoint, application.getAccreditationId(), consent.getEvidenceCodeName())
+                        .doOnSuccess(bytes -> fintClient.postFile(organisation, bytes.getDocumentId().getBytes(), MediaType.APPLICATION_PDF, consent.getEvidenceCodeName().concat(".pdf"), dokumentfilEndpoint)
+                                .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                                        .doOnSuccess(statusEntity -> {
+                                            if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
+                                                throw new FinalStatusPendingException();
+                                            }
+
+                                            getId(statusEntity, "/").ifPresent(id -> {
+                                                application.getConsents().get(consent.getEvidenceCodeName()).setDocumentId(id);
+                                                repository.save(application);
+                                            });
+                                        })
+                                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                                        .retryWhen(withThrowable(finalStatusPending))
+                                        .subscribe())
+                                .doOnError(ex -> log.error(ex.getMessage()))
+                                .subscribe())
+                        .doOnError(ex -> log.error(ex.getMessage()))
+                        .subscribe());
+    }
+
+    private Optional<String> getId(ResponseEntity<Void> responseEntity, String separator) {
+        return Optional.of(responseEntity.getHeaders())
+                .map(HttpHeaders::getLocation)
+                .map(URI::toString)
+                .map(href -> StringUtils.substringAfterLast(href, separator));
     }
 }

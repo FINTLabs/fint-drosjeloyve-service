@@ -7,10 +7,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Component
-public class FintAltinnClient {
+public class AltinnClient {
     private final WebClient webClient;
 
-    public FintAltinnClient(WebClient.Builder builder) {
+    public AltinnClient(WebClient.Builder builder) {
         this.webClient = builder
                 .exchangeStrategies(ExchangeStrategies.builder().codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(-1)).build())
                 .build();

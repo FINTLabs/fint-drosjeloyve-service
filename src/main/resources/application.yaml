@@ -18,6 +18,8 @@ organisations:
     name: Viken fylkeskommune
     registration: viken
     deviation-policy:
+    skjermingshjemmel:
+    tilgangsrestriksjon:
     username: username
     password: password
 

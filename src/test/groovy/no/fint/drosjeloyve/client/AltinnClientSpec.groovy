@@ -12,10 +12,10 @@ import org.springframework.web.reactive.function.client.WebClient
 import reactor.test.StepVerifier
 import spock.lang.Specification
 
-class FintAltinnClientSpec extends Specification {
+class AltinnClientSpec extends Specification {
     MockWebServer mockWebServer = new MockWebServer()
 
-    FintAltinnClient client = new FintAltinnClient(WebClient.builder())
+    AltinnClient client = new AltinnClient(WebClient.builder())
 
     void setup() {
         mockWebServer.start()
