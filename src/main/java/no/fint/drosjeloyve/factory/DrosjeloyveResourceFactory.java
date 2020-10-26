@@ -11,6 +11,7 @@ import no.fint.model.arkiv.noark.Tilgang;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.*;
 import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -66,7 +67,7 @@ public class DrosjeloyveResourceFactory {
 
                     DokumentobjektResource dokumentobjektResource = new DokumentobjektResource();
 
-                    dokumentobjektResource.setFormat(attachment.getAttachmentType());
+                    dokumentobjektResource.setFormat(StringUtils.substringAfter(attachment.getFileName(), ".".toUpperCase()));
                     dokumentobjektResource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
                     dokumentobjektResource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", attachment.getDocumentId()));
 
@@ -115,7 +116,7 @@ public class DrosjeloyveResourceFactory {
 
                     DokumentobjektResource dokumentobjektResource = new DokumentobjektResource();
 
-                    dokumentobjektResource.setFormat(attachment.getAttachmentType());
+                    dokumentobjektResource.setFormat(StringUtils.substringAfter(attachment.getFileName(), ".".toUpperCase()));
                     dokumentobjektResource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
                     dokumentobjektResource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", attachment.getDocumentId()));
 
@@ -136,7 +137,7 @@ public class DrosjeloyveResourceFactory {
 
                     DokumentobjektResource dokumentobjektResource = new DokumentobjektResource();
 
-                    dokumentobjektResource.setFormat("application/pdf");
+                    dokumentobjektResource.setFormat("PDF");
                     dokumentobjektResource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
                     dokumentobjektResource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", consent.getDocumentId()));
 
@@ -152,9 +153,11 @@ public class DrosjeloyveResourceFactory {
 
         DokumentobjektResource dokumentobjektResource = new DokumentobjektResource();
 
-        dokumentobjektResource.setFormat("application/pdf");
+        dokumentobjektResource.setFormat("PDF");
         dokumentobjektResource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
         dokumentobjektResource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", application.getForm().getDocumentId()));
+
+        dokumentbeskrivelseResource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
 
         journalpostResource.getDokumentbeskrivelse().add(dokumentbeskrivelseResource);
 
