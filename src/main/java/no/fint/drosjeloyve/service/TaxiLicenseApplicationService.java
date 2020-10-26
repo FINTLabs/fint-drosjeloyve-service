@@ -35,7 +35,7 @@ public class TaxiLicenseApplicationService {
         log.info("Found {} application(s) ready for submission", applications.size());
 
         Flux.fromIterable(applications)
-                .delayElements(Duration.ofSeconds(20))
+                .delayElements(Duration.ofSeconds(10))
                 .subscribe(application -> {
                     OrganisationProperties.Organisation organisation = organisationProperties.getOrganisations().get(application.getRequestor());
 
