@@ -25,16 +25,7 @@ public class DrosjeloyveResourceFactory {
     }
 
     public static DrosjeloyveResource ofComplete(DrosjeloyveResource resource, AltinnApplication application, OrganisationProperties.Organisation organisation) {
-        resource.setJournalpost(Arrays.asList(ofPlain(), ofSensitive(application, organisation)));
-
-        return resource;
-    }
-
-    public static JournalpostResource ofPlain() {
-        JournalpostResource resource = new JournalpostResource();
-
-        resource.addJournalposttype(Link.with(JournalpostType.class, "systemid", "I"));
-
+        resource.setJournalpost(Arrays.asList(ofSensitive(application, organisation), ofLessSensitive(application, organisation)));
 
         return resource;
     }
@@ -64,8 +55,10 @@ public class DrosjeloyveResourceFactory {
 
         journalpostResource.setKorrespondansepart(Collections.singletonList(korrespondansepartResource));
 
+        journalpostResource.setDokumentbeskrivelse(new ArrayList<>());
+
         application.getAttachments().values().stream()
-                .filter(attachment -> attachment.getAttachmentTypeName().equals("KopiAvDomForelegg") || attachment.getAttachmentType().startsWith("Politiattest"))
+                .filter(attachment -> attachment.getAttachmentTypeName().startsWith("Kopi") || attachment.getAttachmentType().startsWith("Politiattest"))
                 .map(attachment -> {
                     DokumentbeskrivelseResource dokumentbeskrivelseResource = new DokumentbeskrivelseResource();
 
@@ -82,6 +75,88 @@ public class DrosjeloyveResourceFactory {
                     return dokumentbeskrivelseResource;
                 })
                 .forEach(journalpostResource.getDokumentbeskrivelse()::add);
+
+        return journalpostResource;
+    }
+
+    public static JournalpostResource ofLessSensitive(AltinnApplication application, OrganisationProperties.Organisation organisation) {
+        JournalpostResource journalpostResource = new JournalpostResource();
+
+        journalpostResource.addJournalposttype(Link.with(JournalpostType.class, "systemid", "I"));
+
+        String title = String.format("Drosjeløyvesøknad - %s", application.getArchivedDate().toLocalDate());
+
+        journalpostResource.setTittel(title);
+        journalpostResource.setOffentligTittel(title);
+
+        SkjermingResource skjermingResource = new SkjermingResource();
+
+        skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getSkjermingshjemmel()));
+        skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getTilgangsrestriksjon()));
+
+        journalpostResource.setSkjerming(skjermingResource);
+
+        KorrespondansepartResource korrespondansepartResource = new KorrespondansepartResource();
+
+        korrespondansepartResource.setKorrespondansepartNavn(application.getSubjectName());
+        korrespondansepartResource.setOrganisasjonsnummer(application.getSubject());
+        korrespondansepartResource.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", "EA"));
+
+        journalpostResource.setKorrespondansepart(Collections.singletonList(korrespondansepartResource));
+
+        journalpostResource.setDokumentbeskrivelse(new ArrayList<>());
+
+        application.getAttachments().values().stream()
+                .filter(attachment -> attachment.getAttachmentTypeName().startsWith("Konkursattest") || attachment.getAttachmentType().startsWith("Skatteattest"))
+                .map(attachment -> {
+                    DokumentbeskrivelseResource dokumentbeskrivelseResource = new DokumentbeskrivelseResource();
+
+                    dokumentbeskrivelseResource.setTittel(attachment.getAttachmentTypeNameLanguage());
+
+                    DokumentobjektResource dokumentobjektResource = new DokumentobjektResource();
+
+                    dokumentobjektResource.setFormat(attachment.getAttachmentType());
+                    dokumentobjektResource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
+                    dokumentobjektResource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", attachment.getDocumentId()));
+
+                    dokumentbeskrivelseResource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
+
+                    return dokumentbeskrivelseResource;
+                }).forEach(journalpostResource.getDokumentbeskrivelse()::add);
+
+        application.getConsents().values().stream()
+                .map(consent -> {
+                    DokumentbeskrivelseResource dokumentbeskrivelseResource = new DokumentbeskrivelseResource();
+
+                    if (consent.getEvidenceCodeName().equals("RestanserDrosje")) {
+                        dokumentbeskrivelseResource.setTittel("Skatteattest for foretak");
+                    } else {
+                        dokumentbeskrivelseResource.setTittel("Konkursattest for foretak");
+                    }
+
+                    DokumentobjektResource dokumentobjektResource = new DokumentobjektResource();
+
+                    dokumentobjektResource.setFormat("application/pdf");
+                    dokumentobjektResource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
+                    dokumentobjektResource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", consent.getDocumentId()));
+
+                    dokumentbeskrivelseResource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
+
+                    return dokumentbeskrivelseResource;
+                }).forEach(journalpostResource.getDokumentbeskrivelse()::add);
+
+
+        DokumentbeskrivelseResource dokumentbeskrivelseResource = new DokumentbeskrivelseResource();
+
+        dokumentbeskrivelseResource.setTittel("Altinn søknadsskjema");
+
+        DokumentobjektResource dokumentobjektResource = new DokumentobjektResource();
+
+        dokumentobjektResource.setFormat("application/pdf");
+        dokumentobjektResource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
+        dokumentobjektResource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", application.getForm().getDocumentId()));
+
+        journalpostResource.getDokumentbeskrivelse().add(dokumentbeskrivelseResource);
 
         return journalpostResource;
     }

@@ -21,6 +21,4 @@ public class Evidence {
 
     @JsonProperty("evidenceValues")
     private List<EvidenceValue> evidenceValues;
-
-    private String documentId;
 }

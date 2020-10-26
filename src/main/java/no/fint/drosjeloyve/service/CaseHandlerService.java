@@ -7,7 +7,9 @@ import no.fint.drosjeloyve.client.FintClient;
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
 import no.fint.drosjeloyve.factory.DrosjeloyveResourceFactory;
 import no.fint.drosjeloyve.model.AltinnApplication;
+import no.fint.drosjeloyve.model.AltinnApplicationStatus;
 import no.fint.drosjeloyve.repository.AltinnApplicationRepository;
+import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -32,10 +34,13 @@ public class CaseHandlerService {
     private final AltinnClient altinnClient;
     private final AltinnApplicationRepository repository;
 
-    public static Retry<?> finalStatusPending;
+    public final Retry<?> finalStatusPending;
 
     @Value("${fint.endpoints.drosjeloyve}")
     private String drosjeloyveEndpoint;
+
+    @Value("${fint.endpoints.drosjeloyve-mappe-id}")
+    private String drosjeloyveMappeIdEndpoint;
 
     @Value("${fint.endpoints.dokumentfil}")
     private String dokumentfilEndpoint;
@@ -49,7 +54,7 @@ public class CaseHandlerService {
     @Value("${fint.endpoints.evidence}")
     private String evidenceEndpoint;
 
-    public CaseHandlerService(FintClient fintClient, AltinnClient altinnClient, AltinnApplicationRepository repository) {
+    public CaseHandlerService(FintClient fintClient, AltinnClient altinnClient, AltinnApplicationRepository repository, OrganisationProperties organisationProperties) {
         this.fintClient = fintClient;
         this.altinnClient = altinnClient;
         this.repository = repository;
@@ -60,7 +65,7 @@ public class CaseHandlerService {
                 .doOnRetry(exception -> log.info("{}", exception));
     }
 
-    public void newCase(OrganisationProperties.Organisation organisation, AltinnApplication application) {
+    public void create(OrganisationProperties.Organisation organisation, AltinnApplication application) {
         updateApplication()
                 .andThen(updateForm())
                 .andThen(updateAttachments())
@@ -68,7 +73,7 @@ public class CaseHandlerService {
                 .accept(organisation, application);
     }
 
-    public void updateCase(OrganisationProperties.Organisation organisation, AltinnApplication application) {
+    public void update(OrganisationProperties.Organisation organisation, AltinnApplication application) {
 
     }
 
@@ -87,10 +92,10 @@ public class CaseHandlerService {
                                         repository.save(application);
                                     });
                                 })
-                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                 .retryWhen(withThrowable(finalStatusPending))
                                 .subscribe())
-                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                         .subscribe();
             }
         };
@@ -112,12 +117,12 @@ public class CaseHandlerService {
                                                 repository.save(application);
                                             });
                                         })
-                                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                         .retryWhen(withThrowable(finalStatusPending))
                                         .subscribe())
-                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                 .subscribe())
-                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                         .subscribe();
             }
         };
@@ -139,12 +144,12 @@ public class CaseHandlerService {
                                                 repository.save(application);
                                             });
                                         })
-                                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                         .retryWhen(withThrowable(finalStatusPending))
                                         .subscribe())
-                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                 .subscribe())
-                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                         .subscribe());
     }
 
@@ -152,7 +157,7 @@ public class CaseHandlerService {
         return (organisation, application) -> application.getConsents().values().stream()
                 .filter(consent -> consent.getDocumentId() == null)
                 .forEach(consent -> altinnClient.getEvidence(evidenceEndpoint, application.getAccreditationId(), consent.getEvidenceCodeName())
-                        .doOnSuccess(bytes -> fintClient.postFile(organisation, bytes.getDocumentId().getBytes(), MediaType.APPLICATION_PDF, consent.getEvidenceCodeName().concat(".pdf"), dokumentfilEndpoint)
+                        .doOnSuccess(bytes -> fintClient.postFile(organisation, bytes.getEvidenceStatus().getEvidenceCodeName().getBytes(), MediaType.APPLICATION_PDF, consent.getEvidenceCodeName().concat(".pdf"), dokumentfilEndpoint)
                                 .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
                                         .doOnSuccess(statusEntity -> {
                                             if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
@@ -164,13 +169,38 @@ public class CaseHandlerService {
                                                 repository.save(application);
                                             });
                                         })
-                                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getResponseBodyAsString()))
+                                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                         .retryWhen(withThrowable(finalStatusPending))
                                         .subscribe())
-                                .doOnError(ex -> log.error(ex.getMessage()))
+                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                 .subscribe())
-                        .doOnError(ex -> log.error(ex.getMessage()))
+                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                         .subscribe());
+    }
+
+    public void submit(OrganisationProperties.Organisation organisation, AltinnApplication application) {
+        fintClient.getResource(organisation, DrosjeloyveResource.class, drosjeloyveMappeIdEndpoint, application.getCaseId())
+                .doOnSuccess(resource -> {
+                    DrosjeloyveResource drosjeloyveResource = DrosjeloyveResourceFactory.ofComplete(resource, application, organisation);
+
+                    fintClient.putResource(organisation, drosjeloyveResource, drosjeloyveMappeIdEndpoint, application.getCaseId())
+                            .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                                    .doOnSuccess(statusEntity -> {
+                                        if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
+                                            throw new FinalStatusPendingException();
+                                        }
+
+                                        application.setStatus(AltinnApplicationStatus.ARCHIVED);
+                                        repository.save(application);
+                                    })
+                                    .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                    .retryWhen(withThrowable(finalStatusPending))
+                                    .subscribe())
+                            .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                            .subscribe();
+                })
+                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                .subscribe();
     }
 
     private Optional<String> getId(ResponseEntity<Void> responseEntity, String separator) {

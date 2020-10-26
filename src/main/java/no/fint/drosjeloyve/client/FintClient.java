@@ -1,13 +1,8 @@
 package no.fint.drosjeloyve.client;
 
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
-import no.fint.drosjeloyve.model.AltinnApplication;
 import no.fint.model.resource.FintLinks;
-import no.fint.model.resource.arkiv.noark.DokumentfilResource;
-import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,7 +15,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
-import java.util.List;
 
 import static org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
 
