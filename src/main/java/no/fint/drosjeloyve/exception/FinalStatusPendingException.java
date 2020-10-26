@@ -1,4 +1,4 @@
-package no.fint.drosjeloyve;
+package no.fint.drosjeloyve.exception;
 
 public class FinalStatusPendingException extends RuntimeException {
 

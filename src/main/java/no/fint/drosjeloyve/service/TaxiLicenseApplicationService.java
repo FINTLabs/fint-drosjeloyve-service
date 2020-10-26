@@ -32,7 +32,7 @@ public class TaxiLicenseApplicationService {
     public void run() {
         List<AltinnApplication> applications = repository.findAllByStatus(AltinnApplicationStatus.CONSENTS_ACCEPTED);
 
-        log.info("Found {} application(s) with all consents accepted ", applications.size());
+        log.info("Found {} application(s) ready for submission", applications.size());
 
         Flux.fromIterable(applications)
                 .delayElements(Duration.ofSeconds(20))
