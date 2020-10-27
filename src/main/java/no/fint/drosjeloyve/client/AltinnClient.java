@@ -1,11 +1,13 @@
 package no.fint.drosjeloyve.client;
 
+import lombok.extern.slf4j.Slf4j;
 import no.fint.drosjeloyve.model.ebevis.Evidence;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Component
 public class AltinnClient {
     private final WebClient webClient;
@@ -33,6 +35,8 @@ public class AltinnClient {
     }
 
     public Mono<Evidence> getEvidence(String uri, String accreditationId, String evidenceCodeName) {
+        log.info("Getting evidence {} - {} - {}", uri,accreditationId, evidenceCodeName);
+
         return webClient.get()
                 .uri(uri, uriBuilder -> uriBuilder
                         .queryParam("evidenceCodeName", evidenceCodeName)

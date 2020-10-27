@@ -13,26 +13,13 @@ scheduling:
 
 drosjeloyve:
   organisations:
-    921693230:
-      name: Viken fylkeskommune
-      registration: viken
-      deviation-policy:
-      skjermingshjemmel:
-      tilgangsrestriksjon:
-      username: username
-      password: password
+
 
 spring:
   security:
     oauth2:
       client:
         registration:
-          viken:
-            client-id: client-id
-            client-secret: client-secret
-            authorization-grant-type: password
-            scope: fint-client
-            provider: fint
         provider:
           fint:
             token-uri: https://idp.felleskomponent.no/nidp/oauth/nam/token
