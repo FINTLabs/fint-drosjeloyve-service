@@ -11,7 +11,7 @@ pipeline {
         }
         stage('Publish') {
             when {
-                branch 'master'
+                branch 'main'
             }
             steps {
                 sh "docker tag ${GIT_COMMIT} fintlabsacr.azurecr.io/drosjeloyve-service:build.${BUILD_NUMBER}"
