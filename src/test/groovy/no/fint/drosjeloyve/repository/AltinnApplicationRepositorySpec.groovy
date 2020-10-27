@@ -24,4 +24,20 @@ class AltinnApplicationRepositorySpec extends Specification {
         then:
         documents.size() == 1
     }
+
+    def "findByRequestorAndSubject returns document"() {
+        given:
+        repository.saveAll(Arrays.asList(new AltinnApplication(caseId: 'case-id', requestor: 'requestor', subject: 'subject'),
+                new AltinnApplication(requestor: 'requestor2', subject: 'subject2'),
+                new AltinnApplication(requestor: 'requestor3', subject: 'subject3')))
+
+        when:
+        def document = repository.findByRequestorAndSubject('requestor', 'subject')
+
+        then:
+        document.isPresent()
+        document.get().requestor == 'requestor'
+        document.get().subject == 'subject'
+        document.get().caseId == 'case-id'
+    }
 }

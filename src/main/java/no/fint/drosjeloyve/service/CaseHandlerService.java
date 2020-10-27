@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Flux;
 import reactor.retry.Retry;
 
 import java.net.URI;
@@ -74,7 +75,11 @@ public class CaseHandlerService {
     }
 
     public void update(OrganisationProperties.Organisation organisation, AltinnApplication application) {
+        Optional<AltinnApplication> existingApplication = repository.findByRequestorAndSubject(application.getRequestor(), application.getSubject());
 
+        /*
+        TODO
+         */
     }
 
     private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> updateApplication() {
@@ -129,9 +134,10 @@ public class CaseHandlerService {
     }
 
     private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> updateAttachments() {
-        return (organisation, application) -> application.getAttachments().values().stream()
+        return (organisation, application) -> Flux.fromIterable(application.getAttachments().values())
                 .filter(attachment -> attachment.getDocumentId() == null)
-                .forEach(attachment -> altinnClient.getAttachment(attachmentEndpoint, attachment.getAttachmentId())
+                .delayElements(Duration.ofSeconds(1))
+                .subscribe(attachment -> altinnClient.getAttachment(attachmentEndpoint, attachment.getAttachmentId())
                         .doOnSuccess(bytes -> fintClient.postFile(organisation, bytes, MediaType.parseMediaType(attachment.getAttachmentType()), attachment.getFileName(), dokumentfilEndpoint)
                                 .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
                                         .doOnSuccess(statusEntity -> {
@@ -154,9 +160,10 @@ public class CaseHandlerService {
     }
 
     private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> updateEvidence() {
-        return (organisation, application) -> application.getConsents().values().stream()
+        return (organisation, application) -> Flux.fromIterable(application.getConsents().values())
                 .filter(consent -> consent.getDocumentId() == null)
-                .forEach(consent -> altinnClient.getEvidence(evidenceEndpoint, application.getAccreditationId(), consent.getEvidenceCodeName())
+                .delayElements(Duration.ofSeconds(1))
+                .subscribe(consent -> altinnClient.getEvidence(evidenceEndpoint, application.getAccreditationId(), consent.getEvidenceCodeName())
                         .doOnSuccess(bytes -> fintClient.postFile(organisation, bytes.getEvidenceStatus().getEvidenceCodeName().getBytes(), MediaType.APPLICATION_PDF, consent.getEvidenceCodeName().concat(".pdf"), dokumentfilEndpoint)
                                 .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
                                         .doOnSuccess(statusEntity -> {
