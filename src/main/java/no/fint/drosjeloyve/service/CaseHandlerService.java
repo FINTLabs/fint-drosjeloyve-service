@@ -1,6 +1,7 @@
 package no.fint.drosjeloyve.service;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.drosjeloyve.Application;
 import no.fint.drosjeloyve.exception.FinalStatusPendingException;
 import no.fint.drosjeloyve.client.AltinnClient;
 import no.fint.drosjeloyve.client.FintClient;
@@ -67,22 +68,32 @@ public class CaseHandlerService {
     }
 
     public void create(OrganisationProperties.Organisation organisation, AltinnApplication application) {
-        updateApplication()
-                .andThen(updateForm())
-                .andThen(updateAttachments())
-                .andThen(updateEvidence())
+        createApplication()
+                .andThen(createForm())
+                .andThen(createAttachments())
+                .andThen(createEvidence())
                 .accept(organisation, application);
     }
 
     public void update(OrganisationProperties.Organisation organisation, AltinnApplication application) {
-        Optional<AltinnApplication> existingApplication = repository.findByRequestorAndSubject(application.getRequestor(), application.getSubject());
+        Optional<AltinnApplication> existingCase = repository.findByRequestorAndSubject(application.getRequestor(), application.getSubject());
 
-        /*
-        TODO
-         */
+        Optional<String> caseId = existingCase.map(AltinnApplication::getCaseId);
+
+        if (caseId.isPresent()) {
+            application.setCaseId(caseId.get());
+            repository.save(application);
+
+            createForm()
+                    .andThen(createAttachments())
+                    .andThen(createEvidence())
+                    .accept(organisation, application);
+        } else {
+            create(organisation, application);
+        }
     }
 
-    private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> updateApplication() {
+    private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> createApplication() {
         return (organisation, application) -> {
             if (application.getCaseId() == null) {
                 fintClient.postResource(organisation, DrosjeloyveResourceFactory.ofBasic(application), drosjeloyveEndpoint)
@@ -106,7 +117,7 @@ public class CaseHandlerService {
         };
     }
 
-    private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> updateForm() {
+    private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> createForm() {
         return (organisation, application) -> {
             if (application.getForm().getDocumentId() == null) {
                 altinnClient.getApplication(applicationEndpoint, application.getArchiveReference(), application.getLanguageCode())
@@ -133,7 +144,7 @@ public class CaseHandlerService {
         };
     }
 
-    private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> updateAttachments() {
+    private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> createAttachments() {
         return (organisation, application) -> Flux.fromIterable(application.getAttachments().values())
                 .filter(attachment -> attachment.getDocumentId() == null)
                 .delayElements(Duration.ofSeconds(1))
@@ -159,7 +170,7 @@ public class CaseHandlerService {
                         .subscribe());
     }
 
-    private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> updateEvidence() {
+    private BiConsumer<OrganisationProperties.Organisation, AltinnApplication> createEvidence() {
         return (organisation, application) -> Flux.fromIterable(application.getConsents().values())
                 .filter(consent -> consent.getDocumentId() == null)
                 .delayElements(Duration.ofSeconds(1))
