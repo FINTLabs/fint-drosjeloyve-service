@@ -16,9 +16,17 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 public class DrosjeloyveResourceFactory {
+    private static final Set<String> POLICE_CERTIFICATES = new HashSet<>(Arrays.asList("PolitiattestForForetaket",
+            "PolitiattestInnehaverDagligLeder", "PolitiattestTransportleder", "KopiAvDomForelegg"));
+
+    private static final Set<String> BANKRUPTCY_ARREARS_MANAGER = new HashSet<>(Arrays.asList("KonkursattestInnehaverDagligLeder",
+            "SkatteattestInnehaverDagligLeder"));
+
+    private static final Set<String> BANKRUPTCY_ARREARS_COMPANY = new HashSet<>(Arrays.asList("RestanserDrosje", "KonkursDrosje"));
 
     public static DrosjeloyveResource ofBasic(AltinnApplication application) {
         DrosjeloyveResource resource = new DrosjeloyveResource();
+
         resource.setOrganisasjonsnummer(application.getSubject());
         resource.setTittel(application.getSubjectName());
 
@@ -26,141 +34,125 @@ public class DrosjeloyveResourceFactory {
     }
 
     public static DrosjeloyveResource ofComplete(DrosjeloyveResource resource, AltinnApplication application, OrganisationProperties.Organisation organisation) {
-        resource.setJournalpost(Arrays.asList(ofSensitive(application, organisation), ofLessSensitive(application, organisation)));
+        if (resource.getJournalpost() == null) {
+            resource.setJournalpost(new ArrayList<>());
+        }
+
+        resource.getJournalpost().addAll(Arrays.asList(application(application, organisation), policeCertificates(application, organisation)));
 
         return resource;
     }
 
-    public static JournalpostResource ofSensitive(AltinnApplication application, OrganisationProperties.Organisation organisation) {
-        JournalpostResource journalpostResource = new JournalpostResource();
+    private static JournalpostResource application(AltinnApplication application, OrganisationProperties.Organisation organisation) {
+        JournalpostResource resource = new JournalpostResource();
 
-        journalpostResource.addJournalposttype(Link.with(JournalpostType.class, "systemid", "I"));
+        String title = String.format("Drosjeløyvesøknad - %s - %s", application.getSubjectName(), application.getArchivedDate().toLocalDate());
 
-        String title = String.format("Politiattest - %s", application.getArchivedDate().toLocalDate());
+        setDefaults(application, organisation, resource, title);
 
-        journalpostResource.setTittel(title);
-        journalpostResource.setOffentligTittel(title);
+        DokumentbeskrivelseResource dokumentbeskrivelseResource = toDokumentbeskrivelseResource(application.getForm());
 
-        SkjermingResource skjermingResource = new SkjermingResource();
-
-        skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getSkjermingshjemmel()));
-        skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getTilgangsrestriksjon()));
-
-        journalpostResource.setSkjerming(skjermingResource);
-
-        KorrespondansepartResource korrespondansepartResource = new KorrespondansepartResource();
-
-        korrespondansepartResource.setKorrespondansepartNavn(application.getSubjectName());
-        korrespondansepartResource.setOrganisasjonsnummer(application.getSubject());
-        korrespondansepartResource.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", "EA"));
-
-        journalpostResource.setKorrespondansepart(Collections.singletonList(korrespondansepartResource));
-
-        journalpostResource.setDokumentbeskrivelse(new ArrayList<>());
+        resource.getDokumentbeskrivelse().add(dokumentbeskrivelseResource);
 
         application.getAttachments().values().stream()
-                .filter(attachment -> attachment.getAttachmentTypeName().startsWith("Kopi") || attachment.getAttachmentType().startsWith("Politiattest"))
-                .map(attachment -> {
-                    DokumentbeskrivelseResource dokumentbeskrivelseResource = new DokumentbeskrivelseResource();
-
-                    dokumentbeskrivelseResource.setTittel(attachment.getAttachmentTypeNameLanguage());
-
-                    DokumentobjektResource dokumentobjektResource = new DokumentobjektResource();
-
-                    dokumentobjektResource.setFormat(StringUtils.substringAfter(attachment.getFileName(), ".".toUpperCase()));
-                    dokumentobjektResource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
-                    dokumentobjektResource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", attachment.getDocumentId()));
-
-                    dokumentbeskrivelseResource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
-
-                    return dokumentbeskrivelseResource;
-                })
-                .forEach(journalpostResource.getDokumentbeskrivelse()::add);
-
-        return journalpostResource;
-    }
-
-    public static JournalpostResource ofLessSensitive(AltinnApplication application, OrganisationProperties.Organisation organisation) {
-        JournalpostResource journalpostResource = new JournalpostResource();
-
-        journalpostResource.addJournalposttype(Link.with(JournalpostType.class, "systemid", "I"));
-
-        String title = String.format("Drosjeløyvesøknad - %s", application.getArchivedDate().toLocalDate());
-
-        journalpostResource.setTittel(title);
-        journalpostResource.setOffentligTittel(title);
-
-        SkjermingResource skjermingResource = new SkjermingResource();
-
-        skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getSkjermingshjemmel()));
-        skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getTilgangsrestriksjon()));
-
-        journalpostResource.setSkjerming(skjermingResource);
-
-        KorrespondansepartResource korrespondansepartResource = new KorrespondansepartResource();
-
-        korrespondansepartResource.setKorrespondansepartNavn(application.getSubjectName());
-        korrespondansepartResource.setOrganisasjonsnummer(application.getSubject());
-        korrespondansepartResource.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", "EA"));
-
-        journalpostResource.setKorrespondansepart(Collections.singletonList(korrespondansepartResource));
-
-        journalpostResource.setDokumentbeskrivelse(new ArrayList<>());
-
-        application.getAttachments().values().stream()
-                .filter(attachment -> attachment.getAttachmentTypeName().startsWith("Konkursattest") || attachment.getAttachmentType().startsWith("Skatteattest"))
-                .map(attachment -> {
-                    DokumentbeskrivelseResource dokumentbeskrivelseResource = new DokumentbeskrivelseResource();
-
-                    dokumentbeskrivelseResource.setTittel(attachment.getAttachmentTypeNameLanguage());
-
-                    DokumentobjektResource dokumentobjektResource = new DokumentobjektResource();
-
-                    dokumentobjektResource.setFormat(StringUtils.substringAfter(attachment.getFileName(), ".".toUpperCase()));
-                    dokumentobjektResource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
-                    dokumentobjektResource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", attachment.getDocumentId()));
-
-                    dokumentbeskrivelseResource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
-
-                    return dokumentbeskrivelseResource;
-                }).forEach(journalpostResource.getDokumentbeskrivelse()::add);
+                .filter(attachment -> BANKRUPTCY_ARREARS_MANAGER.contains(attachment.getAttachmentTypeName()))
+                .map(DrosjeloyveResourceFactory::toDokumentbeskrivelseResource)
+                .forEach(resource.getDokumentbeskrivelse()::add);
 
         application.getConsents().values().stream()
-                .map(consent -> {
-                    DokumentbeskrivelseResource dokumentbeskrivelseResource = new DokumentbeskrivelseResource();
+                .filter(consent -> BANKRUPTCY_ARREARS_COMPANY.contains(consent.getEvidenceCodeName()))
+                .map(DrosjeloyveResourceFactory::toDokumentbeskrivelseResource)
+                .forEach(resource.getDokumentbeskrivelse()::add);
 
-                    if (consent.getEvidenceCodeName().equals("RestanserDrosje")) {
-                        dokumentbeskrivelseResource.setTittel("Skatteattest for foretak");
-                    } else {
-                        dokumentbeskrivelseResource.setTittel("Konkursattest for foretak");
-                    }
+        return resource;
+    }
 
-                    DokumentobjektResource dokumentobjektResource = new DokumentobjektResource();
+    private static JournalpostResource policeCertificates(AltinnApplication application, OrganisationProperties.Organisation organisation) {
+        JournalpostResource resource = new JournalpostResource();
 
-                    dokumentobjektResource.setFormat("PDF");
-                    dokumentobjektResource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
-                    dokumentobjektResource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", consent.getDocumentId()));
+        String title = String.format("Politiattest - %s - %s", application.getSubjectName(), application.getArchivedDate().toLocalDate());
 
-                    dokumentbeskrivelseResource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
+        setDefaults(application, organisation, resource, title);
 
-                    return dokumentbeskrivelseResource;
-                }).forEach(journalpostResource.getDokumentbeskrivelse()::add);
+        application.getAttachments().values().stream()
+                .filter(attachment -> POLICE_CERTIFICATES.contains(attachment.getAttachmentTypeName()))
+                .map(DrosjeloyveResourceFactory::toDokumentbeskrivelseResource)
+                .forEach(resource.getDokumentbeskrivelse()::add);
 
+        return resource;
+    }
 
-        DokumentbeskrivelseResource dokumentbeskrivelseResource = new DokumentbeskrivelseResource();
+    private static void setDefaults(AltinnApplication application, OrganisationProperties.Organisation organisation, JournalpostResource resource, String title) {
+        resource.addJournalposttype(Link.with(JournalpostType.class, "systemid", "I"));
 
-        dokumentbeskrivelseResource.setTittel("Altinn søknadsskjema");
+        resource.setTittel(title);
+        resource.setOffentligTittel(title);
 
-        DokumentobjektResource dokumentobjektResource = new DokumentobjektResource();
+        SkjermingResource skjermingResource = new SkjermingResource();
+        skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getSkjermingshjemmel()));
+        skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getTilgangsrestriksjon()));
 
-        dokumentobjektResource.setFormat("PDF");
-        dokumentobjektResource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
-        dokumentobjektResource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", application.getForm().getDocumentId()));
+        resource.setSkjerming(skjermingResource);
 
-        dokumentbeskrivelseResource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
+        KorrespondansepartResource korrespondansepartResource = new KorrespondansepartResource();
+        korrespondansepartResource.setKorrespondansepartNavn(application.getSubjectName());
+        korrespondansepartResource.setOrganisasjonsnummer(application.getSubject());
+        korrespondansepartResource.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", "EA"));
 
-        journalpostResource.getDokumentbeskrivelse().add(dokumentbeskrivelseResource);
+        resource.setKorrespondansepart(Collections.singletonList(korrespondansepartResource));
 
-        return journalpostResource;
+        resource.setDokumentbeskrivelse(new ArrayList<>());
+    }
+
+    private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication.Attachment attachment) {
+        DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
+
+        resource.setTittel(attachment.getAttachmentTypeNameLanguage());
+
+        String format = StringUtils.substringAfter(attachment.getFileName(), ".").toUpperCase();
+
+        DokumentobjektResource dokumentobjektResource = getDokumentobjektResource(format, attachment.getDocumentId());
+
+        resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
+
+        return resource;
+    }
+
+    private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication.Consent consent) {
+        DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
+
+        if (consent.getEvidenceCodeName().equals("RestanserDrosje")) {
+            resource.setTittel("Skatteattest for foretak");
+        } else {
+            resource.setTittel("Konkursattest for foretak");
+        }
+
+        DokumentobjektResource dokumentobjektResource = getDokumentobjektResource("PDF", consent.getDocumentId());
+
+        resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
+
+        return resource;
+    }
+
+    private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication.Form form) {
+        DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
+
+        resource.setTittel("Altinn søknadsskjema");
+
+        DokumentobjektResource dokumentobjektResource = getDokumentobjektResource("PDF", form.getDocumentId());
+
+        resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
+
+        return resource;
+    }
+
+    private static DokumentobjektResource getDokumentobjektResource(String format, String id) {
+        DokumentobjektResource resource = new DokumentobjektResource();
+
+        resource.setFormat(format);
+        resource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
+        resource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", id));
+
+        return resource;
     }
 }
