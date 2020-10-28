@@ -3,9 +3,9 @@ fint:
     drosjeloyve: https://alpha.felleskomponent.no/arkiv/samferdsel/drosjeloyve
     drosjeloyve-mappe-id: https://alpha.felleskomponent.no/arkiv/samferdsel/drosjeloyve/mappeid/{id}
     dokumentfil: https://alpha.felleskomponent.no/arkiv/noark/dokumentfil
-    attachment: http://altinn-downloadqueue-service:8080/applications
-    application: http://altinn-downloadqueue-service:8080/attachments
-    evidence: http://altinn-ebevis-service:8080/evidence
+    attachment: http://altinn-downloadqueue-service:8080/applications/{id}
+    application: http://altinn-downloadqueue-service:8080/attachments/{id}
+    evidence: http://altinn-ebevis-service:8080/evidence/{id}
 
 scheduling:
   initial-delay: 10000
