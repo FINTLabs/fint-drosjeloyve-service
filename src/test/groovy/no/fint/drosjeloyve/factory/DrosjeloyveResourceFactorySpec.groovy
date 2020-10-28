@@ -63,6 +63,17 @@ class DrosjeloyveResourceFactorySpec extends Specification {
                     it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
         }
 
+        resource.journalpost.last().tittel == 'Politiattest - subject-name - 2020-01-01'
+        resource.journalpost.last().offentligTittel == 'Politiattest - subject-name - 2020-01-01'
+        resource.journalpost.last().journalposttype.any { it.href == '${arkiv.kodeverk.journalposttype}/systemid/I' }
+        resource.journalpost.last().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
+        resource.journalpost.last().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
+        resource.journalpost.last().korrespondansepart.any { it ->
+            it.korrespondansepartNavn == 'subject-name' &&
+                    it.organisasjonsnummer == 'subject' &&
+                    it.korrespondanseparttype.any { it.href == '${arkiv.kodeverk.korrespondanseparttype}/systemid/EA' }
+        }
+
         resource.journalpost.last().dokumentbeskrivelse.size() == 1
         resource.journalpost.last().dokumentbeskrivelse.first().tittel == 'Politiattest for foretaket'
         resource.journalpost.last().dokumentbeskrivelse.first().dokumentobjekt.first().format == 'PDF'
