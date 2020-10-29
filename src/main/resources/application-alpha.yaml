@@ -16,7 +16,7 @@ drosjeloyve:
     921693230:
       name: Viken fylkeskommune
       registration: viken
-      deviation-policy:
+      deviation-policy: false
       skjermingshjemmel:
       tilgangsrestriksjon:
       username: username

@@ -1,7 +1,6 @@
 package no.fint.drosjeloyve.service;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.drosjeloyve.Application;
 import no.fint.drosjeloyve.exception.FinalStatusPendingException;
 import no.fint.drosjeloyve.client.AltinnClient;
 import no.fint.drosjeloyve.client.FintClient;

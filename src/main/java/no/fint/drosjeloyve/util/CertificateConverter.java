@@ -50,7 +50,7 @@ public class CertificateConverter {
             document.add(new Paragraph("Attest for skatt og merverdiavgift").setFontSize(18).setBold());
 
             document.add(new Paragraph("Attesten er produsert på bakgrunn av registrerte opplysninger i skatte- og avgiftssystemene." +
-                    " For spørsmål om merverdiavgift kontakt Skatteetaten. For spørsmål om øvrige skatte- og avgiftskrav kontakt skatteoppkrever"));
+                    " For spørsmål om merverdiavgift kontakt Skatteetaten. For spørsmål om øvrige skatte- og avgiftskrav kontakt skatteoppkrever."));
 
             document.add(new Paragraph("Gjelder:").setBold());
 
@@ -63,13 +63,12 @@ public class CertificateConverter {
             document.add(new Paragraph("Ved offentlige anskaffelser skal attesten ikke være eldre enn 6 måneder.").setBold());
             document.add(new Paragraph("Dokumentet er elektronisk godkjent og er derfor ikke signert."));
             document.add(new Paragraph().add("Skatteetaten.no | FINTLabs.no | VigoIKS.no").setTextAlignment(TextAlignment.RIGHT));
+
             document.close();
 
-            log.info("We'll now return an byte array representation of the tax certificate, temporary saved in {}. It will be deleted on exit.",
-                    pdfFile.getPath());
             return Files.readAllBytes(pdfFile.toPath());
         } catch (IOException e) {
-            log.error("Ups, it's trouble in the tower :-/", e);
+            log.error("Ups, it's PDF trouble in the tower :-/", e);
         }
 
         return null;
@@ -98,11 +97,9 @@ public class CertificateConverter {
 
             document.close();
 
-            log.info("We'll now return an byte array representation of the bankrupt certificate, temporary saved in {}. It will be deleted on exit.",
-                    pdfFile.getPath());
             return Files.readAllBytes(pdfFile.toPath());
         } catch (IOException e) {
-            log.error("Ups, it's trouble in the tower :-/", e);
+            log.error("Ups, it's PDF trouble in the tower :-/", e);
         }
 
         return null;
@@ -115,6 +112,7 @@ public class CertificateConverter {
 
         Document document = new Document(pdfADocument);
         pdfADocument.setTagged();
+        pdfADocument.getCatalog().setLang(new PdfString("no"));
 
         PdfFont pdfFont = PdfFontFactory.createFont(fontFile, PdfEncodings.WINANSI, true);
         document.setFont(pdfFont);
