@@ -3,33 +3,34 @@ package no.fint.drosjeloyve.util;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.pdf.PdfAConformanceLevel;
-import com.itextpdf.kernel.pdf.PdfDictionary;
-import com.itextpdf.kernel.pdf.PdfOutputIntent;
-import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.pdfa.PdfADocument;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.drosjeloyve.model.AltinnApplication;
 import no.fint.drosjeloyve.model.ebevis.Evidence;
+import no.fint.drosjeloyve.model.ebevis.EvidenceStatus;
+import no.fint.drosjeloyve.model.ebevis.EvidenceValue;
+import no.fint.drosjeloyve.model.ebevis.vocab.ValueType;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
+import java.time.OffsetDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 public class CertificateConverter {
-
     private static final String TAX_TITLE = "Skatteattest";
     private static final String BANKRUPT_TITLE = "Bekreftelse fra Konkursregisteret";
+    private static final String MISSING_OR_FAULTY_DATA = "<Feil eller mangler i mottatte data>";
 
-    private String fontFile;
+    private final String fontFile;
 
     public CertificateConverter() {
         this.fontFile = this.getClass().getResource("/times.ttf").getFile();
@@ -46,19 +47,18 @@ public class CertificateConverter {
 
             document.add(new Paragraph("U.off. offl. § 13, sktbl. § 3-2").setTextAlignment(TextAlignment.RIGHT));
 
-            document.add(new Paragraph().add(application.getSubject()).add(new Text("\n")).add(application.getSubjectName()));
-
             document.add(new Paragraph("Attest for skatt og merverdiavgift").setFontSize(18).setBold());
-            String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.YYYY"));
-            document.add(new Paragraph("Attesten er produsert på bakgrunn av registrerte opplysninger i skatte- og avgiftssystemene per " + currentDate +
-                    ". For spørsmål om merverdiavgift kontakt Skatteetaten. For spørsmål om øvrige skatte- og avgiftskrav kontakt skatteoppkrever"));
+
+            document.add(new Paragraph("Attesten er produsert på bakgrunn av registrerte opplysninger i skatte- og avgiftssystemene." +
+                    " For spørsmål om merverdiavgift kontakt Skatteetaten. For spørsmål om øvrige skatte- og avgiftskrav kontakt skatteoppkrever"));
 
             document.add(new Paragraph("Gjelder:").setBold());
-            document.add(new Paragraph("Organisasjonsnummer " + application.getSubject()));
 
-            document.add(new Paragraph("Følgende forfalte ikke betalte restanser er registrert på ovennevnte foretak per dags dato:").setBold());
+            document.add(new Paragraph(String.format("%s (%s)", application.getSubjectName(), application.getSubject())));
 
-            document.add(new Paragraph("Snart vil du se restanser her...").setItalic());
+            document.add(new Paragraph("Følgende forfalte ikke betalte restanser er registrert på ovennevnte foretak:").setBold());
+
+            addEvidence(evidence, document);
 
             document.add(new Paragraph("Ved offentlige anskaffelser skal attesten ikke være eldre enn 6 måneder.").setBold());
             document.add(new Paragraph("Dokumentet er elektronisk godkjent og er derfor ikke signert."));
@@ -85,12 +85,12 @@ public class CertificateConverter {
             document.add(new Paragraph(BANKRUPT_TITLE).setFontSize(36));
 
             document.add(new Paragraph("Vi viser til din bestilling vedrørende:"));
-            document.add(new Paragraph("Organisasjonsnummer: ").add(application.getSubject())
-            .add(new Text("\n")).add("Navn: ").add(application.getSubjectName()));
 
-            document.add(new Paragraph("Konkursregisteret har følgende registrerte opplysnigner per dags dato:").setBold());
+            document.add(new Paragraph(String.format("%s (%s)", application.getSubjectName(), application.getSubject())));
 
-            document.add(new Paragraph("Snart vil du se om foretaket er under tvangsavvikling her...").setItalic());
+            document.add(new Paragraph("Konkursregisteret har følgende registrerte opplysninger:").setBold());
+
+            addEvidence(evidence, document);
 
             document.add(new Paragraph("Ved offentlige anskaffelser skal attesten ikke være eldre enn 6 måneder.").setBold());
             document.add(new Paragraph("Dokumentet er elektronisk godkjent og er derfor ikke signert."));
@@ -121,4 +121,85 @@ public class CertificateConverter {
 
         return document;
     }
+
+    private void addEvidence(Evidence evidence, Document document) {
+        if (evidence == null) {
+            document.add(new Paragraph(MISSING_OR_FAULTY_DATA));
+            return;
+        }
+
+        List<EvidenceValue> evidenceValues = evidence.getEvidenceValues();
+        EvidenceStatus evidenceStatus = evidence.getEvidenceStatus();
+
+        if (evidenceValues == null || evidenceStatus == null) {
+            document.add(new Paragraph(MISSING_OR_FAULTY_DATA));
+            return;
+        }
+
+        Map<String, EvidenceValue> values = evidenceValues.stream()
+                .collect(Collectors.toMap(EvidenceValue::getEvidenceValueName, value -> value));
+
+        String evidenceCodeName = evidenceStatus.getEvidenceCodeName();
+
+        if (evidenceCodeName == null) {
+            document.add(new Paragraph(String.format("Kilde: %s", MISSING_OR_FAULTY_DATA)));
+        } else if (evidenceCodeName.equals("KonkursDrosje")) {
+            document.add(new Paragraph(String.format("Kilde: %s %s", getSource(values.get("Organisasjonsnavn")), getDate(values.get("Organisasjonsnavn")))));
+        } else if (evidenceCodeName.equals("RestanserDrosje")) {
+            document.add(new Paragraph(String.format("Kilde: %s %s", getSource(values.get("skattForfaltOgUbetalt")), getDate(values.get("skattForfaltOgUbetalt")))));
+        }
+
+        values.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .filter(entry -> evidenceValueMapping.containsKey(entry.getKey()))
+                .forEach(entry -> document.add(new Paragraph(String.format("%s: %s", evidenceValueMapping.get(entry.getKey()), getValue(entry.getValue())))));
+    }
+
+    private String getValue(EvidenceValue evidenceValue) {
+        return Optional.ofNullable(evidenceValue)
+                .map(value -> {
+                    if (value.getValue() == null || value.getValueType() == null) {
+                        return MISSING_OR_FAULTY_DATA;
+                    }
+
+                    if (evidenceValue.getValueType().equals(ValueType.BOOLEAN)) {
+                        return Boolean.parseBoolean(evidenceValue.getValue().toString()) ? "ja" : "nei";
+                    }
+
+                    return evidenceValue.getValue().toString();
+                })
+                .orElse(MISSING_OR_FAULTY_DATA);
+    }
+
+    private String getSource(EvidenceValue evidenceValue) {
+        return Optional.ofNullable(evidenceValue)
+                .map(EvidenceValue::getSource)
+                .orElse(MISSING_OR_FAULTY_DATA);
+    }
+
+    private String getDate(EvidenceValue evidenceValue) {
+        return Optional.ofNullable(evidenceValue)
+                .map(EvidenceValue::getTimestamp)
+                .map(OffsetDateTime::toLocalDate)
+                .map(LocalDate::toString)
+                .orElse(MISSING_OR_FAULTY_DATA);
+    }
+
+    private static final Map<String, String> evidenceValueMapping = Stream.of(
+            new AbstractMap.SimpleImmutableEntry<>("UnderAvvikling", "Under avvikling"),
+            new AbstractMap.SimpleImmutableEntry<>("Konkurs", "Konkurs"),
+            new AbstractMap.SimpleImmutableEntry<>("UnderTvangsavviklingEllerTvangsopplosning", "Under tvangsavvikling eller tvangsoppløsning"),
+            new AbstractMap.SimpleImmutableEntry<>("skattForfaltOgUbetalt", "Skatt forfalt og ubetalt"),
+            new AbstractMap.SimpleImmutableEntry<>("skattRenterOgGebyrer", "Skatt renter og gebyr"),
+            new AbstractMap.SimpleImmutableEntry<>("arbeidsgiveravgiftForfaltOgUbetalt", "Arbeidsgiveravgift forfalt og ubetalt"),
+            new AbstractMap.SimpleImmutableEntry<>("arbeidsgiveravgiftRenterOgGebyrer", "Arbeidsgiveravgift renter og gebyr"),
+            new AbstractMap.SimpleImmutableEntry<>("merverdiavgiftForfaltOgUbetalt", "Merverdiavgift forfalt og ubetalt"),
+            new AbstractMap.SimpleImmutableEntry<>("merverdiavgiftRenterOgGebyrer", "Merverdiavgift renter og gebyr"),
+            new AbstractMap.SimpleImmutableEntry<>("forskuddstrekkForfaltOgUbetalt", "Forskuddstrekk forfalt og ubetalt"),
+            new AbstractMap.SimpleImmutableEntry<>("forskuddstrekkRenterOgGebyrer", "Forskuddstrekk renter og gebyr"),
+            new AbstractMap.SimpleImmutableEntry<>("ansvarskravSkattForfaltOgUbetalt", "Ansvarskrav skatt forfalt og ubetalt"),
+            new AbstractMap.SimpleImmutableEntry<>("ansvarskravSkattRenterOgGebyrer", "Ansvarskrav skatt renter og gebyr"),
+            new AbstractMap.SimpleImmutableEntry<>("ansvarskravMvaForfaltOgUbetalt", "Ansvarskrav mva forfalt og ubetalt"),
+            new AbstractMap.SimpleImmutableEntry<>("ansvarskravMvaRenterOgGebyrer", "Ansvarskrav mva renter og gebyr"))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 }
