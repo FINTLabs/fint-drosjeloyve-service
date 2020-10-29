@@ -35,8 +35,6 @@ public class AltinnClient {
     }
 
     public Mono<Evidence> getEvidence(String uri, String accreditationId, String evidenceCodeName) {
-        log.info("Getting evidence {} - {} - {}", uri,accreditationId, evidenceCodeName);
-
         return webClient.get()
                 .uri(uri, uriBuilder -> uriBuilder
                         .queryParam("evidenceCodeName", evidenceCodeName)

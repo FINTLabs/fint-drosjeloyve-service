@@ -9,6 +9,7 @@ import no.fint.drosjeloyve.factory.DrosjeloyveResourceFactory;
 import no.fint.drosjeloyve.model.AltinnApplication;
 import no.fint.drosjeloyve.model.AltinnApplicationStatus;
 import no.fint.drosjeloyve.repository.AltinnApplicationRepository;
+import no.fint.drosjeloyve.util.CertificateConverter;
 import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +36,12 @@ public class CaseHandlerService {
     private final AltinnClient altinnClient;
     private final AltinnApplicationRepository repository;
 
+    private final CertificateConverter certificateConverter = new CertificateConverter();
+
     public final Retry<?> finalStatusPending;
+
+    private static final String BANKRUPTCY = "KonkursDrosje";
+    private static final String ARREARS = "RestanserDrosje";
 
     @Value("${fint.endpoints.drosjeloyve}")
     private String drosjeloyveEndpoint;
@@ -120,23 +126,30 @@ public class CaseHandlerService {
         return (organisation, application) -> {
             if (application.getForm().getDocumentId() == null) {
                 altinnClient.getApplication(applicationEndpoint, application.getArchiveReference(), application.getLanguageCode())
-                        .doOnSuccess(bytes -> fintClient.postFile(organisation, bytes, MediaType.APPLICATION_PDF, "søknadsskjema.pdf", dokumentfilEndpoint)
-                                .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
-                                        .doOnSuccess(statusEntity -> {
-                                            if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
-                                                throw new FinalStatusPendingException();
-                                            }
+                        .doOnSuccess(bytes -> {
+                            if (bytes.length == 0) {
+                                log.warn("Received empty PDF of form for archive reference {}.", application.getArchiveReference());
+                                return;
+                            }
 
-                                            getId(statusEntity, "/").ifPresent(id -> {
-                                                application.getForm().setDocumentId(id);
-                                                repository.save(application);
-                                            });
-                                        })
-                                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
-                                        .retryWhen(withThrowable(finalStatusPending))
-                                        .subscribe())
-                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
-                                .subscribe())
+                            fintClient.postFile(organisation, bytes, MediaType.APPLICATION_PDF, "søknadsskjema.pdf", dokumentfilEndpoint)
+                                    .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                                            .doOnSuccess(statusEntity -> {
+                                                if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
+                                                    throw new FinalStatusPendingException();
+                                                }
+
+                                                getId(statusEntity, "/").ifPresent(id -> {
+                                                    application.getForm().setDocumentId(id);
+                                                    repository.save(application);
+                                                });
+                                            })
+                                            .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                            .retryWhen(withThrowable(finalStatusPending))
+                                            .subscribe())
+                                    .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                    .subscribe();
+                        })
                         .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                         .subscribe();
             }
@@ -148,23 +161,30 @@ public class CaseHandlerService {
                 .filter(attachment -> attachment.getDocumentId() == null)
                 .delayElements(Duration.ofSeconds(1))
                 .subscribe(attachment -> altinnClient.getAttachment(attachmentEndpoint, attachment.getAttachmentId())
-                        .doOnSuccess(bytes -> fintClient.postFile(organisation, bytes, MediaType.parseMediaType(attachment.getAttachmentType()), attachment.getFileName(), dokumentfilEndpoint)
-                                .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
-                                        .doOnSuccess(statusEntity -> {
-                                            if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
-                                                throw new FinalStatusPendingException();
-                                            }
+                        .doOnSuccess(bytes -> {
+                            if (bytes.length == 0) {
+                                log.warn("Received empty PDF of attachment {} for archive reference {}.", attachment.getAttachmentId(), application.getArchiveReference());
+                                return;
+                            }
 
-                                            getId(statusEntity, "/").ifPresent(id -> {
-                                                application.getAttachments().get(attachment.getAttachmentId()).setDocumentId(id);
-                                                repository.save(application);
-                                            });
-                                        })
-                                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
-                                        .retryWhen(withThrowable(finalStatusPending))
-                                        .subscribe())
-                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
-                                .subscribe())
+                            fintClient.postFile(organisation, bytes, MediaType.parseMediaType(attachment.getAttachmentType()), attachment.getFileName(), dokumentfilEndpoint)
+                                    .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                                            .doOnSuccess(statusEntity -> {
+                                                if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
+                                                    throw new FinalStatusPendingException();
+                                                }
+
+                                                getId(statusEntity, "/").ifPresent(id -> {
+                                                    application.getAttachments().get(attachment.getAttachmentId()).setDocumentId(id);
+                                                    repository.save(application);
+                                                });
+                                            })
+                                            .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                            .retryWhen(withThrowable(finalStatusPending))
+                                            .subscribe())
+                                    .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                    .subscribe();
+                        })
                         .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                         .subscribe());
     }
@@ -174,23 +194,40 @@ public class CaseHandlerService {
                 .filter(consent -> consent.getDocumentId() == null)
                 .delayElements(Duration.ofSeconds(1))
                 .subscribe(consent -> altinnClient.getEvidence(evidenceEndpoint, application.getAccreditationId(), consent.getEvidenceCodeName())
-                        .doOnSuccess(bytes -> fintClient.postFile(organisation, bytes.getEvidenceStatus().getEvidenceCodeName().getBytes(), MediaType.APPLICATION_PDF, consent.getEvidenceCodeName().concat(".pdf"), dokumentfilEndpoint)
-                                .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
-                                        .doOnSuccess(statusEntity -> {
-                                            if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
-                                                throw new FinalStatusPendingException();
-                                            }
+                        .doOnSuccess(evidence -> {
+                            byte[] bytes = null;
 
-                                            getId(statusEntity, "/").ifPresent(id -> {
-                                                application.getConsents().get(consent.getEvidenceCodeName()).setDocumentId(id);
-                                                repository.save(application);
-                                            });
-                                        })
-                                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
-                                        .retryWhen(withThrowable(finalStatusPending))
-                                        .subscribe())
-                                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
-                                .subscribe())
+                            if (consent.getEvidenceCodeName().equals(BANKRUPTCY)) {
+                                bytes = certificateConverter.convertBankruptCertificate(evidence, application);
+                            } else if (consent.getEvidenceCodeName().equals(ARREARS)) {
+                                bytes = certificateConverter.convertTaxCertificate(evidence, application);
+                            }
+
+                            if (bytes == null) {
+                                log.warn("Failed to create PDF of evidence {} for archive reference {}.", consent.getEvidenceCodeName(), application.getArchiveReference());
+                                return;
+                            }
+
+                            String filename = consent.getEvidenceCodeName().concat(".pdf");
+
+                            fintClient.postFile(organisation, bytes, MediaType.APPLICATION_PDF, filename, dokumentfilEndpoint)
+                                    .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                                            .doOnSuccess(statusEntity -> {
+                                                if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
+                                                    throw new FinalStatusPendingException();
+                                                }
+
+                                                getId(statusEntity, "/").ifPresent(id -> {
+                                                    application.getConsents().get(consent.getEvidenceCodeName()).setDocumentId(id);
+                                                    repository.save(application);
+                                                });
+                                            })
+                                            .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                            .retryWhen(withThrowable(finalStatusPending))
+                                            .subscribe())
+                                    .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                    .subscribe();
+                        })
                         .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                         .subscribe());
     }
