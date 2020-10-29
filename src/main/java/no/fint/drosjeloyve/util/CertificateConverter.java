@@ -161,7 +161,7 @@ public class CertificateConverter {
                     }
 
                     if (evidenceValue.getValueType().equals(ValueType.BOOLEAN)) {
-                        return Boolean.parseBoolean(evidenceValue.getValue().toString()) ? "ja" : "nei";
+                        return Boolean.parseBoolean(value.getValue().toString()) ? "ja" : "nei";
                     }
 
                     return evidenceValue.getValue().toString();
