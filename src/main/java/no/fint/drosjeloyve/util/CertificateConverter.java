@@ -18,7 +18,6 @@ import no.fint.drosjeloyve.model.ebevis.EvidenceValue;
 import no.fint.drosjeloyve.model.ebevis.vocab.ValueType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
