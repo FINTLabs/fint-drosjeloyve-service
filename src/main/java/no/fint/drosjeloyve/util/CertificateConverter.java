@@ -19,6 +19,7 @@ import no.fint.drosjeloyve.model.ebevis.vocab.ValueType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -49,7 +50,8 @@ public class CertificateConverter {
     @Value("${bar:123}")
     private int bar;
 
-    public CertificateConverter() {
+    @PostConstruct
+    public void init() {
         if (this.fontFile == null) {
             log.warn("The font file seems to be null. There will probably be trouble. You're herby warned!");
         }
