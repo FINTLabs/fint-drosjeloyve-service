@@ -14,8 +14,12 @@ import no.fint.drosjeloyve.model.ebevis.Evidence;
 import no.fint.drosjeloyve.model.ebevis.EvidenceStatus;
 import no.fint.drosjeloyve.model.ebevis.EvidenceValue;
 import no.fint.drosjeloyve.model.ebevis.vocab.ValueType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,17 +32,21 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
+@Component
 public class CertificateConverter {
     private static final String TAX_TITLE = "Skatteattest";
     private static final String BANKRUPT_TITLE = "Bekreftelse fra Konkursregisteret";
     private static final String MISSING_OR_FAULTY_DATA = "<Feil eller mangler i mottatte data>";
 
+    @Autowired
+    private ResourceLoader resourceLoader;
+
     private final String fontFile;
 
     public CertificateConverter() {
-        //this.fontFile = this.getClass().getClassLoader().getResource("times.ttf").getFile();
-
-        Resource resource = new ClassPathResource("times.ttf");
+//        this.fontFile = getClass().getClassLoader().getResource("times.ttf").getFile();
+        log.info("Welcome to the CertificateConverter ...");
+        Resource resource = new ClassPathResource("src/main/resources/times.ttf");
         log.info("Resource: {}", resource);
 
         String foo = null;
