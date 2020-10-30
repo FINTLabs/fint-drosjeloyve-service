@@ -40,27 +40,9 @@ public class CertificateConverter {
     private static final String MISSING_OR_FAULTY_DATA = "<Feil eller mangler i mottatte data>";
 
     @Value("${fint.font:/data/times.ttf}")
-    @Getter
     @Setter
     private String fontFile;
 
-    @Value("${foo:milf}")
-    private String foo;
-
-    @Value("${bar:123}")
-    private int bar;
-
-    @PostConstruct
-    public void init() {
-        if (this.fontFile == null) {
-            log.warn("The font file seems to be null. There will probably be trouble. You're herby warned!");
-        }
-
-        log.info("How about the foo? {}", this.foo);
-        log.info("How about the bar? {}", this.bar);
-
-        log.info("Our PDFs will be written in {}", this.fontFile);
-    }
 
     public byte[] convertTaxCertificate(Evidence evidence, AltinnApplication application) {
         try {
@@ -135,6 +117,7 @@ public class CertificateConverter {
         return null;
     }
 
+    @PostConstruct
     private Document createDocument(File pdfFile) throws IOException {
         PdfADocument pdfADocument = new PdfADocument(new PdfWriter(pdfFile),
                 PdfAConformanceLevel.PDF_A_1A,
@@ -148,7 +131,7 @@ public class CertificateConverter {
 
         PdfFont pdfFont = PdfFontFactory.createFont(fontFile, PdfEncodings.WINANSI, true);
         document.setFont(pdfFont);
-        log.debug("Font set: {}", pdfFont);
+        log.debug("Font set (filename: {}}): {}", fontFile, pdfFont);
 
         log.info("About to return a document: {}", document);
         return document;
