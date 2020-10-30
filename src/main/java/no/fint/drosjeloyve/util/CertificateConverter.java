@@ -33,7 +33,7 @@ public class CertificateConverter {
     private final String fontFile;
 
     public CertificateConverter() {
-        this.fontFile = Objects.requireNonNull(this.getClass().getClassLoader().getResource("/times.ttf")).getFile();
+        this.fontFile = this.getClass().getClassLoader().getResource("times.ttf").getFile();
     }
 
     public byte[] convertTaxCertificate(Evidence evidence, AltinnApplication application) {
