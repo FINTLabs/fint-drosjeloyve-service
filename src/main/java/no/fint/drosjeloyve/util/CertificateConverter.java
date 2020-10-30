@@ -122,14 +122,18 @@ public class CertificateConverter {
         PdfADocument pdfADocument = new PdfADocument(new PdfWriter(pdfFile),
                 PdfAConformanceLevel.PDF_A_1A,
                 new PdfOutputIntent(new PdfDictionary()));
+        log.info("PdfADocument: ", pdfADocument);
 
         Document document = new Document(pdfADocument);
         pdfADocument.setTagged();
         pdfADocument.getCatalog().setLang(new PdfString("no"));
+        log.debug("Document tagged ...");
 
         PdfFont pdfFont = PdfFontFactory.createFont(fontFile, PdfEncodings.WINANSI, true);
         document.setFont(pdfFont);
+        log.debug("Font set: {}", pdfFont);
 
+        log.info("About to return a document: {}", document);
         return document;
     }
 
