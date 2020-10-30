@@ -199,7 +199,7 @@ public class CaseHandlerService {
 
                             if (consent.getEvidenceCodeName().equals(BANKRUPTCY)) {
                                 // TODO Remove temporary logging below, and be aware of the Bernie Hack Policy
-                                log.info("We're very soon populating our byte array with bankrupt goodies. The font in CertificateConverter are righ now: {}", certificateConverter.getFontFile());
+                                log.info("We're very soon populating our byte array with bankrupt goodies. The font in CertificateConverter are right now: {}", certificateConverter.getFontFile());
                                 if (certificateConverter.getFontFile() == null) {
                                     certificateConverter.setFontFile("/data/times.ttf");
                                     log.warn("Bearnie Hack Policy is true, font file manually enforced: {}", certificateConverter.getFontFile());
@@ -207,7 +207,7 @@ public class CaseHandlerService {
                                 bytes = certificateConverter.convertBankruptCertificate(evidence, application);
                             } else if (consent.getEvidenceCodeName().equals(ARREARS)) {
                                 // TODO Remove temporary logging below, and be aware of the Bernie Hack Policy
-                                log.info("We're very soon populating our byte array with tax goodies. The font in CertificateConverter are righ now: {}", certificateConverter.getFontFile());
+                                log.info("We're very soon populating our byte array with tax goodies. The font in CertificateConverter are right now: {}", certificateConverter.getFontFile());
                                 if (certificateConverter.getFontFile() == null) {
                                     certificateConverter.setFontFile("/data/times.ttf");
                                     log.warn("Bearnie Hack Policy is true, font file manually enforced: {}", certificateConverter.getFontFile());
