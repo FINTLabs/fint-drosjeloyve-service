@@ -6,6 +6,7 @@ fint:
     attachment: http://altinn-downloadqueue-service:8080/applications/{id}
     application: http://altinn-downloadqueue-service:8080/attachments/{id}
     evidence: http://altinn-ebevis-service:8080/evidence/{id}
+  font: /data/times.ttf
 
 scheduling:
   initial-delay: 10000
