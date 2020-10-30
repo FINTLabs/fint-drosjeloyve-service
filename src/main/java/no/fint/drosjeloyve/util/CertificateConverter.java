@@ -43,6 +43,14 @@ public class CertificateConverter {
     @Setter
     private String fontFile;
 
+    @PostConstruct
+    public void init() {
+        if (this.fontFile == null) {
+            log.warn("The font file seems to be null? It can cause trouble. You're hereby warned.");
+        } else {
+            log.debug("All good. The font file value is: {}. Hopefully you'll be happy with that.", this.fontFile);
+        }
+    }
 
     public byte[] convertTaxCertificate(Evidence evidence, AltinnApplication application) {
         try {
@@ -117,7 +125,6 @@ public class CertificateConverter {
         return null;
     }
 
-    @PostConstruct
     private Document createDocument(File pdfFile) throws IOException {
         PdfADocument pdfADocument = new PdfADocument(new PdfWriter(pdfFile),
                 PdfAConformanceLevel.PDF_A_1A,
