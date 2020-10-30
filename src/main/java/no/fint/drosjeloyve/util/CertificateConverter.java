@@ -39,11 +39,14 @@ public class CertificateConverter {
         //this.fontFile = this.getClass().getClassLoader().getResource("times.ttf").getFile();
 
         Resource resource = new ClassPathResource("times.ttf");
+        log.info("Resource: {}", resource);
+
         String foo = null;
         try {
             foo = resource.getFile().getPath();
+            log.info("foo: {}", foo);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Ups, we're not able to find the font file.", e);
         }
 
         this.fontFile = foo;
