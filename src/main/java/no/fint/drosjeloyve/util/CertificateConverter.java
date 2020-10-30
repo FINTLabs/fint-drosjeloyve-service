@@ -16,20 +16,19 @@ import no.fint.drosjeloyve.model.ebevis.Evidence;
 import no.fint.drosjeloyve.model.ebevis.EvidenceStatus;
 import no.fint.drosjeloyve.model.ebevis.EvidenceValue;
 import no.fint.drosjeloyve.model.ebevis.vocab.ValueType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,8 +44,21 @@ public class CertificateConverter {
     @Setter
     private String fontFile;
 
+    @Value("${foo:milf}")
+    private String foo;
+
+    @Value("${bar:123}")
+    private int bar;
+
     public CertificateConverter() {
-        log.info("Our PDFs will be written in {}", fontFile);
+        if (this.fontFile == null) {
+            log.warn("The font file seems to be null. There will probably be trouble. You're herby warned!");
+        }
+
+        log.info("How about the foo? {}", this.foo);
+        log.info("How about the bar? {}", this.bar);
+
+        log.info("Our PDFs will be written in {}", this.fontFile);
     }
 
     public byte[] convertTaxCertificate(Evidence evidence, AltinnApplication application) {
