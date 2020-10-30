@@ -15,6 +15,7 @@ public class CertificateConverterTest {
         application.setSubject("123456789");
         application.setSubjectName("Radiobilene AS");
         CertificateConverter converter = new CertificateConverter();
+        converter.setFontFile("times.ttf");
 
         byte[] pdf = converter.convertTaxCertificate(evidence, application);
 
@@ -28,6 +29,7 @@ public class CertificateConverterTest {
         application.setSubject("123456789");
         application.setSubjectName("Radiobilene AS");
         CertificateConverter converter = new CertificateConverter();
+        converter.setFontFile("times.ttf");
 
         byte[] pdf = converter.convertBankruptCertificate(evidence, application);
 

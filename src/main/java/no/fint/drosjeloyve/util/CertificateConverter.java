@@ -8,6 +8,8 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.pdfa.PdfADocument;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.drosjeloyve.model.AltinnApplication;
 import no.fint.drosjeloyve.model.ebevis.Evidence;
@@ -32,38 +34,22 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
-@Component
 public class CertificateConverter {
     private static final String TAX_TITLE = "Skatteattest";
     private static final String BANKRUPT_TITLE = "Bekreftelse fra Konkursregisteret";
     private static final String MISSING_OR_FAULTY_DATA = "<Feil eller mangler i mottatte data>";
 
-    @Autowired
-    private ResourceLoader resourceLoader;
+    @Value("${fint.font:/data/times.ttf}")
+    @Getter
+    @Setter
+    private String fontFile;
 
-    private final String fontFile;
-
-    public CertificateConverter() {
-//        this.fontFile = getClass().getClassLoader().getResource("times.ttf").getFile();
-        log.info("Welcome to the CertificateConverter ...");
-        Resource resource = new ClassPathResource("src/main/resources/times.ttf");
-        log.info("Resource: {}", resource);
-
-        String foo = null;
-        try {
-            foo = resource.getFile().getPath();
-            log.info("foo: {}", foo);
-        } catch (IOException e) {
-            log.error("Ups, we're not able to find the font file.", e);
-        }
-
-        this.fontFile = foo;
-    }
 
     public byte[] convertTaxCertificate(Evidence evidence, AltinnApplication application) {
         try {
             File pdfFile = File.createTempFile("tax", ".pdf");
             pdfFile.deleteOnExit();
+            log.info("We're abount to produce some tax certificate PDF ... ");
 
             Document document = createDocument(pdfFile);
             Paragraph paragraph = new Paragraph(TAX_TITLE).setFontSize(36);
@@ -90,6 +76,7 @@ public class CertificateConverter {
 
             document.close();
 
+            log.info("Happy go lucky, tax certificate byte array on its way! :-)");
             return Files.readAllBytes(pdfFile.toPath());
         } catch (IOException e) {
             log.error("Ups, it's PDF trouble in the tower :-/", e);
@@ -102,6 +89,7 @@ public class CertificateConverter {
         try {
             File pdfFile = File.createTempFile("bankrupt", ".pdf");
             pdfFile.deleteOnExit();
+            log.info("We're abount to produce some bankrupt certificate PDF ... ");
 
             Document document = createDocument(pdfFile);
             document.add(new Paragraph("Brønnøysundregistrene").setFontSize(18).setItalic());
@@ -121,6 +109,7 @@ public class CertificateConverter {
 
             document.close();
 
+            log.info("Happy go lucky, tax certificate byte array on its way! :-)");
             return Files.readAllBytes(pdfFile.toPath());
         } catch (IOException e) {
             log.error("Ups, it's PDF trouble in the tower :-/", e);
