@@ -14,9 +14,12 @@ import no.fint.drosjeloyve.model.ebevis.Evidence;
 import no.fint.drosjeloyve.model.ebevis.EvidenceStatus;
 import no.fint.drosjeloyve.model.ebevis.EvidenceValue;
 import no.fint.drosjeloyve.model.ebevis.vocab.ValueType;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -33,7 +36,17 @@ public class CertificateConverter {
     private final String fontFile;
 
     public CertificateConverter() {
-        this.fontFile = this.getClass().getResource("/times.ttf").getFile();
+        //this.fontFile = this.getClass().getClassLoader().getResource("times.ttf").getFile();
+
+        Resource resource = new ClassPathResource("times.ttf");
+        String foo = null;
+        try {
+            foo = resource.getFile().getPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        this.fontFile = foo;
     }
 
     public byte[] convertTaxCertificate(Evidence evidence, AltinnApplication application) {
