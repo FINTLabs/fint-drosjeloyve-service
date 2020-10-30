@@ -16,8 +16,10 @@ import no.fint.drosjeloyve.model.ebevis.EvidenceValue;
 import no.fint.drosjeloyve.model.ebevis.vocab.ValueType;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.util.ResourceUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -33,20 +35,15 @@ public class CertificateConverter {
     private static final String BANKRUPT_TITLE = "Bekreftelse fra Konkursregisteret";
     private static final String MISSING_OR_FAULTY_DATA = "<Feil eller mangler i mottatte data>";
 
-    private final String fontFile;
+    private String fontFile;
 
     public CertificateConverter() {
-        //this.fontFile = this.getClass().getClassLoader().getResource("times.ttf").getFile();
-
-        Resource resource = new ClassPathResource("times.ttf");
-        String foo = null;
         try {
-            foo = resource.getFile().getPath();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            this.fontFile = ResourceUtils.getURL("classpath:times.ttf").getFile();
 
-        this.fontFile = foo;
+        } catch (FileNotFoundException e) {
+            log.error("feil");
+        }
     }
 
     public byte[] convertTaxCertificate(Evidence evidence, AltinnApplication application) {

@@ -225,10 +225,10 @@ public class CaseHandlerService {
                                             .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                    .doOnError(ex -> log.error(ex.getMessage()))
                                     .subscribe();
                         })
-                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                        .doOnError(ex -> log.error(ex.getMessage()))
                         .subscribe());
     }
 
