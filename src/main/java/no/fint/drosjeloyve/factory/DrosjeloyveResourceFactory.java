@@ -2,9 +2,7 @@ package no.fint.drosjeloyve.factory;
 
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
 import no.fint.drosjeloyve.model.AltinnApplication;
-import no.fint.model.arkiv.kodeverk.JournalpostType;
-import no.fint.model.arkiv.kodeverk.KorrespondansepartType;
-import no.fint.model.arkiv.kodeverk.Variantformat;
+import no.fint.model.arkiv.kodeverk.*;
 import no.fint.model.arkiv.noark.Dokumentfil;
 import no.fint.model.arkiv.noark.Skjerming;
 import no.fint.model.arkiv.noark.Tilgang;
@@ -46,22 +44,22 @@ public class DrosjeloyveResourceFactory {
     private static JournalpostResource application(AltinnApplication application, OrganisationProperties.Organisation organisation) {
         JournalpostResource resource = new JournalpostResource();
 
-        String title = String.format("Drosjeløyvesøknad - %s - %s", application.getSubjectName(), application.getArchivedDate().toLocalDate());
+        String title = String.format("Drosjeløyvesøknad - %s - %s", application.getSubjectName(), application.getSubject());
 
-        setDefaults(application, organisation, resource, title);
+        setJournalPostDefaults(application, organisation, resource, title);
 
-        DokumentbeskrivelseResource dokumentbeskrivelseResource = toDokumentbeskrivelseResource(application.getForm());
+        DokumentbeskrivelseResource dokumentbeskrivelseResource = toDokumentbeskrivelseResource(application, organisation);
 
         resource.getDokumentbeskrivelse().add(dokumentbeskrivelseResource);
 
         application.getAttachments().values().stream()
                 .filter(attachment -> BANKRUPTCY_ARREARS_MANAGER.contains(attachment.getAttachmentTypeName()))
-                .map(DrosjeloyveResourceFactory::toDokumentbeskrivelseResource)
+                .map(attachment -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(attachment, organisation))
                 .forEach(resource.getDokumentbeskrivelse()::add);
 
         application.getConsents().values().stream()
                 .filter(consent -> BANKRUPTCY_ARREARS_COMPANY.contains(consent.getEvidenceCodeName()))
-                .map(DrosjeloyveResourceFactory::toDokumentbeskrivelseResource)
+                .map(consent -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(consent, organisation))
                 .forEach(resource.getDokumentbeskrivelse()::add);
 
         return resource;
@@ -70,19 +68,19 @@ public class DrosjeloyveResourceFactory {
     private static JournalpostResource policeCertificates(AltinnApplication application, OrganisationProperties.Organisation organisation) {
         JournalpostResource resource = new JournalpostResource();
 
-        String title = String.format("Politiattest - %s - %s", application.getSubjectName(), application.getArchivedDate().toLocalDate());
+        String title = String.format("Politiattest - %s - %s", application.getSubjectName(), application.getSubject());
 
-        setDefaults(application, organisation, resource, title);
+        setJournalPostDefaults(application, organisation, resource, title);
 
         application.getAttachments().values().stream()
                 .filter(attachment -> POLICE_CERTIFICATES.contains(attachment.getAttachmentTypeName()))
-                .map(DrosjeloyveResourceFactory::toDokumentbeskrivelseResource)
+                .map(attachment -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(attachment, organisation))
                 .forEach(resource.getDokumentbeskrivelse()::add);
 
         return resource;
     }
 
-    private static void setDefaults(AltinnApplication application, OrganisationProperties.Organisation organisation, JournalpostResource resource, String title) {
+    private static void setJournalPostDefaults(AltinnApplication application, OrganisationProperties.Organisation organisation, JournalpostResource resource, String title) {
         resource.addJournalposttype(Link.with(JournalpostType.class, "systemid", "I"));
 
         resource.setTittel(title);
@@ -104,22 +102,38 @@ public class DrosjeloyveResourceFactory {
         resource.setDokumentbeskrivelse(new ArrayList<>());
     }
 
-    private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication.Attachment attachment) {
+    private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication application, OrganisationProperties.Organisation organisation) {
         DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
+
+        setDokumentbeskrivelseDefaults(resource, organisation);
+
+        resource.setTittel(String.format("Drosjeløyvesøknad - %s", application.getSubjectName()));
+
+        DokumentobjektResource dokumentobjektResource = getDokumentobjektResource("PDF", application.getForm().getDocumentId());
+        resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
+
+        return resource;
+    }
+
+    private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication.Attachment attachment, OrganisationProperties.Organisation organisation) {
+        DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
+
+        setDokumentbeskrivelseDefaults(resource, organisation);
 
         resource.setTittel(attachment.getAttachmentTypeNameLanguage());
 
         String format = StringUtils.substringAfter(attachment.getFileName(), ".").toUpperCase();
 
         DokumentobjektResource dokumentobjektResource = getDokumentobjektResource(format, attachment.getDocumentId());
-
         resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
 
         return resource;
     }
 
-    private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication.Consent consent) {
+    private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication.Consent consent, OrganisationProperties.Organisation organisation) {
         DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
+
+        setDokumentbeskrivelseDefaults(resource, organisation);
 
         if (consent.getEvidenceCodeName().equals("RestanserDrosje")) {
             resource.setTittel("Skatteattest for foretak");
@@ -128,22 +142,20 @@ public class DrosjeloyveResourceFactory {
         }
 
         DokumentobjektResource dokumentobjektResource = getDokumentobjektResource("PDF", consent.getDocumentId());
-
         resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
 
         return resource;
     }
 
-    private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication.Form form) {
-        DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
+    private static void setDokumentbeskrivelseDefaults(DokumentbeskrivelseResource resource, OrganisationProperties.Organisation organisation) {
+        resource.addDokumentstatus(Link.with(DokumentStatus.class, "systemid", "F"));
+        resource.addTilknyttetRegistreringSom(Link.with(TilknyttetRegistreringSom.class, "systemid", "H"));
 
-        resource.setTittel("Altinn søknadsskjema");
+        SkjermingResource skjermingResource = new SkjermingResource();
+        skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getSkjermingshjemmel()));
+        skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getTilgangsrestriksjon()));
 
-        DokumentobjektResource dokumentobjektResource = getDokumentobjektResource("PDF", form.getDocumentId());
-
-        resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
-
-        return resource;
+        resource.setSkjerming(skjermingResource);
     }
 
     private static DokumentobjektResource getDokumentobjektResource(String format, String id) {
