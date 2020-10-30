@@ -198,8 +198,12 @@ public class CaseHandlerService {
                             byte[] bytes = null;
 
                             if (consent.getEvidenceCodeName().equals(BANKRUPTCY)) {
+                                // TODO Remove temporary logging below
+                                log.info("We're very soon populating our byte array with bankrupt goodies. The font in CertificateConverter are righ now: {}", certificateConverter.getFontFile());
                                 bytes = certificateConverter.convertBankruptCertificate(evidence, application);
                             } else if (consent.getEvidenceCodeName().equals(ARREARS)) {
+                                // TODO Remove temporary logging below
+                                log.info("We're very soon populating our byte array with tax goodies. The font in CertificateConverter are righ now: {}", certificateConverter.getFontFile());
                                 bytes = certificateConverter.convertTaxCertificate(evidence, application);
                             }
 

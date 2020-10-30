@@ -41,14 +41,20 @@ public class CertificateConverter {
 
     @Value("${fint.font:/data/times.ttf}")
     @Setter
+    @Getter
     private String fontFile;
+
+    public CertificateConverter() {
+        log.info("Congratulation with your brand new instance of {}. The font file seem right now to be: {}",
+                CertificateConverter.class.getCanonicalName(), fontFile);
+    }
 
     @PostConstruct
     public void init() {
         if (this.fontFile == null) {
             log.warn("The font file seems to be null? It can cause trouble. You're hereby warned.");
         } else {
-            log.debug("All good. The font file value is: {}. Hopefully you'll be happy with that.", this.fontFile);
+            log.info("All good. The font file value is: {}. Hopefully you'll be happy with that.", this.fontFile);
         }
     }
 
@@ -134,11 +140,11 @@ public class CertificateConverter {
         Document document = new Document(pdfADocument);
         pdfADocument.setTagged();
         pdfADocument.getCatalog().setLang(new PdfString("no"));
-        log.debug("Document tagged ...");
+        log.info("Document tagged ...");
 
         PdfFont pdfFont = PdfFontFactory.createFont(fontFile, PdfEncodings.WINANSI, true);
         document.setFont(pdfFont);
-        log.debug("Font set (filename: {}}): {}", fontFile, pdfFont);
+        log.info("Font set (filename: {}}): {}", fontFile, pdfFont);
 
         log.info("About to return a document: {}", document);
         return document;
