@@ -17,6 +17,7 @@ import no.fint.drosjeloyve.model.ebevis.vocab.ValueType;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -30,10 +31,10 @@ public class CertificateConverter {
     private static final String BANKRUPT_TITLE = "Bekreftelse fra Konkursregisteret";
     private static final String MISSING_OR_FAULTY_DATA = "<Feil eller mangler i mottatte data>";
 
-    private final String fontFile;
+    private final URL fontFile;
 
     public CertificateConverter() {
-        this.fontFile = this.getClass().getClassLoader().getResource("times.ttf").getFile();
+        this.fontFile = this.getClass().getClassLoader().getResource("times.ttf");
     }
 
     public byte[] convertTaxCertificate(Evidence evidence, AltinnApplication application) {
@@ -114,7 +115,7 @@ public class CertificateConverter {
         pdfADocument.setTagged();
         pdfADocument.getCatalog().setLang(new PdfString("no"));
 
-        PdfFont pdfFont = PdfFontFactory.createFont(fontFile, PdfEncodings.WINANSI, true);
+        PdfFont pdfFont = PdfFontFactory.createFont(fontFile.getPath(), PdfEncodings.WINANSI, true);
         document.setFont(pdfFont);
 
         return document;
