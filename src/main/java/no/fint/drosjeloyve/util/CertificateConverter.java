@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
+@Component
 public class CertificateConverter {
     private static final String TAX_TITLE = "Skatteattest";
     private static final String BANKRUPT_TITLE = "Bekreftelse fra Konkursregisteret";
@@ -44,6 +45,9 @@ public class CertificateConverter {
     @Setter
     private String fontFile;
 
+    public CertificateConverter() {
+        log.info("Our PDFs will be written in {}", fontFile);
+    }
 
     public byte[] convertTaxCertificate(Evidence evidence, AltinnApplication application) {
         try {
