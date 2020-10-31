@@ -94,9 +94,7 @@ public class CaseHandlerService {
                 .distinct()
                 .collect(Collectors.toList());
 
-        if (caseIds.size() > 1) {
-            log.error("More than 1 caseId for requestor {} and subject {}", application.getRequestor(), application.getSubject());
-        } else if (caseIds.size() == 1) {
+        if (caseIds.size() == 1) {
             application.setCaseId(caseIds.get(0));
             repository.save(application);
 
@@ -104,8 +102,10 @@ public class CaseHandlerService {
                     .andThen(createAttachments())
                     .andThen(createEvidence())
                     .accept(organisation, application);
-        } else {
+        } else if (caseIds.size() == 0) {
             create(organisation, application);
+        } else {
+            log.error("Found more than 1 caseId for requestor {} and subject {}", application.getRequestor(), application.getSubject());
         }
     }
 
