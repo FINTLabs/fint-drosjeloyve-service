@@ -112,6 +112,7 @@ public class CaseHandlerService {
                                     getId(statusEntity, "mappeid/").ifPresent(id -> {
                                         application.setCaseId(id);
                                         repository.save(application);
+                                        log.info("Application (post) of archive reference: {}", application.getArchiveReference());
                                     });
                                 })
                                 .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
@@ -143,6 +144,7 @@ public class CaseHandlerService {
                                                 getId(statusEntity, "/").ifPresent(id -> {
                                                     application.getForm().setDocumentId(id);
                                                     repository.save(application);
+                                                    log.info("Form (post) of archive reference: {}", application.getArchiveReference());
                                                 });
                                             })
                                             .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
@@ -178,15 +180,16 @@ public class CaseHandlerService {
                                                 getId(statusEntity, "/").ifPresent(id -> {
                                                     application.getAttachments().get(attachment.getAttachmentId()).setDocumentId(id);
                                                     repository.save(application);
+                                                    log.info("Attachment (post) of archive reference: {}", application.getArchiveReference());
                                                 });
                                             })
                                             .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(ex -> log.error("Attachement of archive reference: {}", application.getArchiveReference(), ex))
+                                    .doOnError(ex -> log.error("Attachment of archive reference: {}", application.getArchiveReference(), ex))
                                     .subscribe();
                         })
-                        .doOnError(ex -> log.error("Attachement of archive reference: {}", application.getArchiveReference(), ex))
+                        .doOnError(ex -> log.error("Attachment of archive reference: {}", application.getArchiveReference(), ex))
                         .subscribe());
     }
 
@@ -221,6 +224,7 @@ public class CaseHandlerService {
                                                 getId(statusEntity, "/").ifPresent(id -> {
                                                     application.getConsents().get(consent.getEvidenceCodeName()).setDocumentId(id);
                                                     repository.save(application);
+                                                    log.info("Evidence (post) of archive reference: {}", application.getArchiveReference());
                                                 });
                                             })
                                             .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
@@ -247,6 +251,7 @@ public class CaseHandlerService {
 
                                         application.setStatus(AltinnApplicationStatus.ARCHIVED);
                                         repository.save(application);
+                                        log.info("Application (put) of archive reference: {}", application.getArchiveReference());
                                     })
                                     .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                     .retryWhen(withThrowable(finalStatusPending))
