@@ -36,7 +36,7 @@ public class CaseHandlerService {
     private final AltinnClient altinnClient;
     private final AltinnApplicationRepository repository;
 
-    private final CertificateConverter certificateConverter = new CertificateConverter();
+    private final CertificateConverter certificateConverter;
 
     public final Retry<?> finalStatusPending;
 
@@ -61,10 +61,11 @@ public class CaseHandlerService {
     @Value("${fint.endpoints.evidence}")
     private String evidenceEndpoint;
 
-    public CaseHandlerService(FintClient fintClient, AltinnClient altinnClient, AltinnApplicationRepository repository, OrganisationProperties organisationProperties) {
+    public CaseHandlerService(FintClient fintClient, AltinnClient altinnClient, AltinnApplicationRepository repository, OrganisationProperties organisationProperties, CertificateConverter certificateConverter) {
         this.fintClient = fintClient;
         this.altinnClient = altinnClient;
         this.repository = repository;
+        this.certificateConverter = certificateConverter;
 
         finalStatusPending = Retry.anyOf(FinalStatusPendingException.class)
                 .exponentialBackoff(Duration.ofSeconds(1), Duration.ofMinutes(5))
@@ -116,7 +117,7 @@ public class CaseHandlerService {
                                 .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                 .retryWhen(withThrowable(finalStatusPending))
                                 .subscribe())
-                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                        .doOnError(ex -> log.error("Application (post) of archive reference: {}", application.getArchiveReference(), ex))
                         .subscribe();
             }
         };
@@ -147,10 +148,10 @@ public class CaseHandlerService {
                                             .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                    .doOnError(ex -> log.error("Form of archive reference: {}", application.getArchiveReference(), ex))
                                     .subscribe();
                         })
-                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                        .doOnError(ex -> log.error("Form of archive reference: {}", application.getArchiveReference(), ex))
                         .subscribe();
             }
         };
@@ -182,10 +183,10 @@ public class CaseHandlerService {
                                             .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                    .doOnError(ex -> log.error("Attachement of archive reference: {}", application.getArchiveReference(), ex))
                                     .subscribe();
                         })
-                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                        .doOnError(ex -> log.error("Attachement of archive reference: {}", application.getArchiveReference(), ex))
                         .subscribe());
     }
 
@@ -198,20 +199,8 @@ public class CaseHandlerService {
                             byte[] bytes = null;
 
                             if (consent.getEvidenceCodeName().equals(BANKRUPTCY)) {
-                                // TODO Remove temporary logging below, and be aware of the Bernie Hack Policy
-                                log.info("We're very soon populating our byte array with bankrupt goodies. The font in CertificateConverter are right now: {}", certificateConverter.getFontFile());
-                                if (certificateConverter.getFontFile() == null) {
-                                    certificateConverter.setFontFile("/data/times.ttf");
-                                    log.warn("Bearnie Hack Policy is true, font file manually enforced: {}", certificateConverter.getFontFile());
-                                }
                                 bytes = certificateConverter.convertBankruptCertificate(evidence, application);
                             } else if (consent.getEvidenceCodeName().equals(ARREARS)) {
-                                // TODO Remove temporary logging below, and be aware of the Bernie Hack Policy
-                                log.info("We're very soon populating our byte array with tax goodies. The font in CertificateConverter are right now: {}", certificateConverter.getFontFile());
-                                if (certificateConverter.getFontFile() == null) {
-                                    certificateConverter.setFontFile("/data/times.ttf");
-                                    log.warn("Bearnie Hack Policy is true, font file manually enforced: {}", certificateConverter.getFontFile());
-                                }
                                 bytes = certificateConverter.convertTaxCertificate(evidence, application);
                             }
 
@@ -237,10 +226,10 @@ public class CaseHandlerService {
                                             .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(ex -> log.error(ex.getMessage()))
+                                    .doOnError(ex -> log.error("Evidence of archive reference: {}", application.getArchiveReference(), ex))
                                     .subscribe();
                         })
-                        .doOnError(ex -> log.error(ex.getMessage()))
+                        .doOnError(ex -> log.error("Evidence of archive reference: {}", application.getArchiveReference(), ex))
                         .subscribe());
     }
 
@@ -262,10 +251,10 @@ public class CaseHandlerService {
                                     .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                     .retryWhen(withThrowable(finalStatusPending))
                                     .subscribe())
-                            .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                            .doOnError(ex -> log.error("Application (put) of archive reference: {}", application.getArchiveReference(), ex))
                             .subscribe();
                 })
-                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                .doOnError(ex -> log.error("Application (put) of archive reference: {}", application.getArchiveReference(), ex))
                 .subscribe();
     }
 
