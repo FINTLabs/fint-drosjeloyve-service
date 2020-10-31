@@ -36,7 +36,7 @@ public class DrosjeloyveResourceFactory {
             resource.setJournalpost(new ArrayList<>());
         }
 
-        resource.getJournalpost().addAll(Arrays.asList(application(application, organisation), policeCertificates(application, organisation)));
+        resource.setJournalpost(Arrays.asList(application(application, organisation), policeCertificates(application, organisation)));
 
         return resource;
     }
