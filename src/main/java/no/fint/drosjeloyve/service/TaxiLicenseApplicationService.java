@@ -13,6 +13,8 @@ import reactor.core.publisher.Flux;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.Predicate;
 
 @Slf4j
@@ -28,11 +30,14 @@ public class TaxiLicenseApplicationService {
         this.caseHandlerService = caseHandlerService;
     }
 
-    @Scheduled(initialDelayString = "${scheduling.initial-delay}", fixedDelayString = "${scheduling.fixed-delay}")
+    //@Scheduled(initialDelayString = "${scheduling.initial-delay}", fixedDelayString = "${scheduling.fixed-delay}")
+    @Scheduled(cron = "${scheduling.cron}")
     public void run() {
         List<AltinnApplication> applications = repository.findAllByStatus(AltinnApplicationStatus.CONSENTS_ACCEPTED);
 
         log.info("Found {} application(s) ready for submission", applications.size());
+
+        ConcurrentMap<String, Integer> limits = new ConcurrentSkipListMap<>();
 
         Flux.fromIterable(applications)
                 .delayElements(Duration.ofSeconds(10))
@@ -41,6 +46,12 @@ public class TaxiLicenseApplicationService {
 
                     if (organisation == null) {
                         log.warn("No organisation found for {}", application.getRequestor());
+                        return;
+                    }
+
+                    if (organisation.getLimit() > 0
+                            && limits.merge(application.getRequestor(), 1, Integer::sum) > organisation.getLimit()) {
+                        log.info("Organization {} is above its limit of {}", organisation.getName(), organisation.getLimit());
                         return;
                     }
 
