@@ -13,5 +13,5 @@ public interface AltinnApplicationRepository extends MongoRepository<AltinnAppli
 
     List<AltinnApplication> findAllByStatus(AltinnApplicationStatus status);
 
-    Optional<AltinnApplication> findByRequestorAndSubject(String requestor, String subject);
+    List<AltinnApplication> findAllByRequestorAndSubject(String requestor, String subject);
 }

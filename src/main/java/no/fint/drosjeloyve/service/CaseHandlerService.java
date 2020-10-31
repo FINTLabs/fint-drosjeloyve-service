@@ -24,8 +24,12 @@ import reactor.retry.Retry;
 
 import java.net.URI;
 import java.time.Duration;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import static reactor.util.retry.Retry.withThrowable;
 
@@ -82,12 +86,18 @@ public class CaseHandlerService {
     }
 
     public void update(OrganisationProperties.Organisation organisation, AltinnApplication application) {
-        Optional<AltinnApplication> existingCase = repository.findByRequestorAndSubject(application.getRequestor(), application.getSubject());
+        List<AltinnApplication> existingCase = repository.findAllByRequestorAndSubject(application.getRequestor(), application.getSubject());
 
-        Optional<String> caseId = existingCase.map(AltinnApplication::getCaseId);
+        List<String> caseIds = existingCase.stream()
+                .map(AltinnApplication::getCaseId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
 
-        if (caseId.isPresent()) {
-            application.setCaseId(caseId.get());
+        if (caseIds.size() > 1) {
+            log.error("More than 1 caseId for requestor {} and subject {}", application.getRequestor(), application.getSubject());
+        } else if (caseIds.size() == 1) {
+            application.setCaseId(caseIds.get(0));
             repository.save(application);
 
             createForm()
