@@ -20,5 +20,6 @@ public class OrganisationProperties {
         private boolean deviationPolicy;
         private String skjermingshjemmel;
         private String tilgangsrestriksjon;
+        private int limit;
     }
 }
