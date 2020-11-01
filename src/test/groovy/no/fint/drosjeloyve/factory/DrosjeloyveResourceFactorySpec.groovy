@@ -38,8 +38,8 @@ class DrosjeloyveResourceFactorySpec extends Specification {
 
         updatedResource.getJournalpost().size() == 2
 
-        resource.journalpost.first().tittel == 'Drosjeløyvesøknad - subject-name - 2020-01-01'
-        resource.journalpost.first().offentligTittel == 'Drosjeløyvesøknad - subject-name - 2020-01-01'
+        resource.journalpost.first().tittel == 'Drosjeløyvesøknad - subject-name - subject'
+        resource.journalpost.first().offentligTittel == 'Drosjeløyvesøknad - subject-name - subject'
         resource.journalpost.first().journalposttype.any { it.href == '${arkiv.kodeverk.journalposttype}/systemid/I' }
         resource.journalpost.first().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
         resource.journalpost.first().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
@@ -50,21 +50,29 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         }
 
         resource.journalpost.first().dokumentbeskrivelse.size() == 2
-        resource.journalpost.first().dokumentbeskrivelse.first().tittel == 'Altinn søknadsskjema'
+        resource.journalpost.first().dokumentbeskrivelse.first().tittel == 'Drosjeløyvesøknad - subject-name'
+        resource.journalpost.first().dokumentbeskrivelse.first().dokumentstatus.first().href == '${arkiv.kodeverk.dokumentstatus}/systemid/F'
+        resource.journalpost.first().dokumentbeskrivelse.first().tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/H'
+        resource.journalpost.first().dokumentbeskrivelse.first().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
+        resource.journalpost.first().dokumentbeskrivelse.first().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
         resource.journalpost.first().dokumentbeskrivelse.first().dokumentobjekt.any { it ->
             it.format == 'PDF' &&
                     it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
                     it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
         }
         resource.journalpost.first().dokumentbeskrivelse.last().tittel == 'Konkursattest for foretak'
+        resource.journalpost.first().dokumentbeskrivelse.last().dokumentstatus.first().href == '${arkiv.kodeverk.dokumentstatus}/systemid/F'
+        resource.journalpost.first().dokumentbeskrivelse.last().tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/H'
+        resource.journalpost.first().dokumentbeskrivelse.last().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
+        resource.journalpost.first().dokumentbeskrivelse.last().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
         resource.journalpost.first().dokumentbeskrivelse.last().dokumentobjekt.any { it ->
             it.format == 'PDF' &&
                     it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
                     it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
         }
 
-        resource.journalpost.last().tittel == 'Politiattest - subject-name - 2020-01-01'
-        resource.journalpost.last().offentligTittel == 'Politiattest - subject-name - 2020-01-01'
+        resource.journalpost.last().tittel == 'Politiattest - subject-name - subject'
+        resource.journalpost.last().offentligTittel == 'Politiattest - subject-name - subject'
         resource.journalpost.last().journalposttype.any { it.href == '${arkiv.kodeverk.journalposttype}/systemid/I' }
         resource.journalpost.last().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
         resource.journalpost.last().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
@@ -76,8 +84,10 @@ class DrosjeloyveResourceFactorySpec extends Specification {
 
         resource.journalpost.last().dokumentbeskrivelse.size() == 1
         resource.journalpost.last().dokumentbeskrivelse.first().tittel == 'Politiattest for foretaket'
-        resource.journalpost.last().dokumentbeskrivelse.first().dokumentobjekt.first().format == 'PDF'
-
+        resource.journalpost.last().dokumentbeskrivelse.first().dokumentstatus.first().href == '${arkiv.kodeverk.dokumentstatus}/systemid/F'
+        resource.journalpost.last().dokumentbeskrivelse.first().tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/H'
+        resource.journalpost.last().dokumentbeskrivelse.first().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
+        resource.journalpost.last().dokumentbeskrivelse.first().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
         resource.journalpost.last().dokumentbeskrivelse.first().dokumentobjekt.any { it ->
             it.format == 'PDF' &&
                     it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&

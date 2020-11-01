@@ -24,8 +24,11 @@ import reactor.retry.Retry;
 
 import java.net.URI;
 import java.time.Duration;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import static reactor.util.retry.Retry.withThrowable;
 
@@ -36,7 +39,7 @@ public class CaseHandlerService {
     private final AltinnClient altinnClient;
     private final AltinnApplicationRepository repository;
 
-    private final CertificateConverter certificateConverter = new CertificateConverter();
+    private final CertificateConverter certificateConverter;
 
     public final Retry<?> finalStatusPending;
 
@@ -61,10 +64,11 @@ public class CaseHandlerService {
     @Value("${fint.endpoints.evidence}")
     private String evidenceEndpoint;
 
-    public CaseHandlerService(FintClient fintClient, AltinnClient altinnClient, AltinnApplicationRepository repository, OrganisationProperties organisationProperties) {
+    public CaseHandlerService(FintClient fintClient, AltinnClient altinnClient, AltinnApplicationRepository repository, OrganisationProperties organisationProperties, CertificateConverter certificateConverter) {
         this.fintClient = fintClient;
         this.altinnClient = altinnClient;
         this.repository = repository;
+        this.certificateConverter = certificateConverter;
 
         finalStatusPending = Retry.anyOf(FinalStatusPendingException.class)
                 .exponentialBackoff(Duration.ofSeconds(1), Duration.ofMinutes(5))
@@ -81,20 +85,33 @@ public class CaseHandlerService {
     }
 
     public void update(OrganisationProperties.Organisation organisation, AltinnApplication application) {
-        Optional<AltinnApplication> existingCase = repository.findByRequestorAndSubject(application.getRequestor(), application.getSubject());
+        if (application.getCaseId() == null) {
+            List<AltinnApplication> existingCase = repository.findAllByRequestorAndSubject(application.getRequestor(), application.getSubject());
 
-        Optional<String> caseId = existingCase.map(AltinnApplication::getCaseId);
+            List<String> caseIds = existingCase.stream()
+                    .map(AltinnApplication::getCaseId)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
 
-        if (caseId.isPresent()) {
-            application.setCaseId(caseId.get());
-            repository.save(application);
+            if (caseIds.size() == 1) {
+                application.setCaseId(caseIds.get(0));
+                repository.save(application);
 
+                createForm()
+                        .andThen(createAttachments())
+                        .andThen(createEvidence())
+                        .accept(organisation, application);
+            } else if (caseIds.size() == 0) {
+                create(organisation, application);
+            } else {
+                log.error("Found more than 1 caseId for requestor {} and subject {}", application.getRequestor(), application.getSubject());
+            }
+        } else {
             createForm()
                     .andThen(createAttachments())
                     .andThen(createEvidence())
                     .accept(organisation, application);
-        } else {
-            create(organisation, application);
         }
     }
 
@@ -111,12 +128,13 @@ public class CaseHandlerService {
                                     getId(statusEntity, "mappeid/").ifPresent(id -> {
                                         application.setCaseId(id);
                                         repository.save(application);
+                                        log.info("Application (post) of archive reference: {}", application.getArchiveReference());
                                     });
                                 })
                                 .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                 .retryWhen(withThrowable(finalStatusPending))
                                 .subscribe())
-                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                        .doOnError(ex -> log.error("Application (post) of archive reference: {}", application.getArchiveReference(), ex))
                         .subscribe();
             }
         };
@@ -142,15 +160,16 @@ public class CaseHandlerService {
                                                 getId(statusEntity, "/").ifPresent(id -> {
                                                     application.getForm().setDocumentId(id);
                                                     repository.save(application);
+                                                    log.info("Form (post) of archive reference: {}", application.getArchiveReference());
                                                 });
                                             })
                                             .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                    .doOnError(ex -> log.error("Form of archive reference: {}", application.getArchiveReference(), ex))
                                     .subscribe();
                         })
-                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                        .doOnError(ex -> log.error("Form of archive reference: {}", application.getArchiveReference(), ex))
                         .subscribe();
             }
         };
@@ -177,15 +196,16 @@ public class CaseHandlerService {
                                                 getId(statusEntity, "/").ifPresent(id -> {
                                                     application.getAttachments().get(attachment.getAttachmentId()).setDocumentId(id);
                                                     repository.save(application);
+                                                    log.info("Attachment (post) of archive reference: {}", application.getArchiveReference());
                                                 });
                                             })
                                             .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                    .doOnError(ex -> log.error("Attachment of archive reference: {}", application.getArchiveReference(), ex))
                                     .subscribe();
                         })
-                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                        .doOnError(ex -> log.error("Attachment of archive reference: {}", application.getArchiveReference(), ex))
                         .subscribe());
     }
 
@@ -220,15 +240,16 @@ public class CaseHandlerService {
                                                 getId(statusEntity, "/").ifPresent(id -> {
                                                     application.getConsents().get(consent.getEvidenceCodeName()).setDocumentId(id);
                                                     repository.save(application);
+                                                    log.info("Evidence (post) of archive reference: {}", application.getArchiveReference());
                                                 });
                                             })
                                             .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                                    .doOnError(ex -> log.error("Evidence of archive reference: {}", application.getArchiveReference(), ex))
                                     .subscribe();
                         })
-                        .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                        .doOnError(ex -> log.error("Evidence of archive reference: {}", application.getArchiveReference(), ex))
                         .subscribe());
     }
 
@@ -246,14 +267,15 @@ public class CaseHandlerService {
 
                                         application.setStatus(AltinnApplicationStatus.ARCHIVED);
                                         repository.save(application);
+                                        log.info("Application (put) of archive reference: {}", application.getArchiveReference());
                                     })
                                     .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
                                     .retryWhen(withThrowable(finalStatusPending))
                                     .subscribe())
-                            .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                            .doOnError(ex -> log.error("Application (put) of archive reference: {}", application.getArchiveReference(), ex))
                             .subscribe();
                 })
-                .doOnError(WebClientResponseException.class, ex -> log.error(ex.getMessage()))
+                .doOnError(ex -> log.error("Application (put) of archive reference: {}", application.getArchiveReference(), ex))
                 .subscribe();
     }
 

@@ -8,38 +8,61 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.pdfa.PdfADocument;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.drosjeloyve.model.AltinnApplication;
 import no.fint.drosjeloyve.model.ebevis.Evidence;
 import no.fint.drosjeloyve.model.ebevis.EvidenceStatus;
 import no.fint.drosjeloyve.model.ebevis.EvidenceValue;
 import no.fint.drosjeloyve.model.ebevis.vocab.ValueType;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
+@Component
 public class CertificateConverter {
     private static final String TAX_TITLE = "Skatteattest";
     private static final String BANKRUPT_TITLE = "Bekreftelse fra Konkursregisteret";
     private static final String MISSING_OR_FAULTY_DATA = "<Feil eller mangler i mottatte data>";
 
-    private final String fontFile;
+    @Value("${fint.font:/data/times.ttf}")
+    @Setter
+    @Getter
+    private String fontFile;
 
     public CertificateConverter() {
-        this.fontFile = this.getClass().getResource("/times.ttf").getFile();
+        log.info("Congratulation with your brand new instance of {}. The font file seem right now to be: {}",
+                CertificateConverter.class.getCanonicalName(), fontFile);
+    }
+
+    @PostConstruct
+    public void init() {
+        if (this.fontFile == null) {
+            log.warn("The font file seems to be null? It can cause trouble. You're hereby warned.");
+        } else {
+            log.info("All good. The font file value is: {}. Hopefully you'll be happy with that.", this.fontFile);
+        }
     }
 
     public byte[] convertTaxCertificate(Evidence evidence, AltinnApplication application) {
         try {
             File pdfFile = File.createTempFile("tax", ".pdf");
             pdfFile.deleteOnExit();
+            log.info("We're abount to produce some tax certificate PDF ... ");
 
             Document document = createDocument(pdfFile);
             Paragraph paragraph = new Paragraph(TAX_TITLE).setFontSize(36);
@@ -66,6 +89,7 @@ public class CertificateConverter {
 
             document.close();
 
+            log.info("Happy go lucky, tax certificate byte array on its way! :-)");
             return Files.readAllBytes(pdfFile.toPath());
         } catch (IOException e) {
             log.error("Ups, it's PDF trouble in the tower :-/", e);
@@ -78,6 +102,7 @@ public class CertificateConverter {
         try {
             File pdfFile = File.createTempFile("bankrupt", ".pdf");
             pdfFile.deleteOnExit();
+            log.info("We're abount to produce some bankrupt certificate PDF ... ");
 
             Document document = createDocument(pdfFile);
             document.add(new Paragraph("Brønnøysundregistrene").setFontSize(18).setItalic());
@@ -97,6 +122,7 @@ public class CertificateConverter {
 
             document.close();
 
+            log.info("Happy go lucky, tax certificate byte array on its way! :-)");
             return Files.readAllBytes(pdfFile.toPath());
         } catch (IOException e) {
             log.error("Ups, it's PDF trouble in the tower :-/", e);
@@ -109,14 +135,18 @@ public class CertificateConverter {
         PdfADocument pdfADocument = new PdfADocument(new PdfWriter(pdfFile),
                 PdfAConformanceLevel.PDF_A_1A,
                 new PdfOutputIntent(new PdfDictionary()));
+        log.info("PdfADocument: {}", pdfADocument);
 
         Document document = new Document(pdfADocument);
         pdfADocument.setTagged();
         pdfADocument.getCatalog().setLang(new PdfString("no"));
+        log.info("Document tagged ...");
 
         PdfFont pdfFont = PdfFontFactory.createFont(fontFile, PdfEncodings.WINANSI, true);
         document.setFont(pdfFont);
+        log.info("Font set (filename: {}): {}", fontFile, pdfFont);
 
+        log.info("About to return a document: {}", document);
         return document;
     }
 
