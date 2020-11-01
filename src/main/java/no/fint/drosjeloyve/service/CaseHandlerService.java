@@ -27,7 +27,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -86,26 +85,33 @@ public class CaseHandlerService {
     }
 
     public void update(OrganisationProperties.Organisation organisation, AltinnApplication application) {
-        List<AltinnApplication> existingCase = repository.findAllByRequestorAndSubject(application.getRequestor(), application.getSubject());
+        if (application.getCaseId() == null) {
+            List<AltinnApplication> existingCase = repository.findAllByRequestorAndSubject(application.getRequestor(), application.getSubject());
 
-        List<String> caseIds = existingCase.stream()
-                .map(AltinnApplication::getCaseId)
-                .filter(Objects::nonNull)
-                .distinct()
-                .collect(Collectors.toList());
+            List<String> caseIds = existingCase.stream()
+                    .map(AltinnApplication::getCaseId)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
 
-        if (caseIds.size() == 1) {
-            application.setCaseId(caseIds.get(0));
-            repository.save(application);
+            if (caseIds.size() == 1) {
+                application.setCaseId(caseIds.get(0));
+                repository.save(application);
 
+                createForm()
+                        .andThen(createAttachments())
+                        .andThen(createEvidence())
+                        .accept(organisation, application);
+            } else if (caseIds.size() == 0) {
+                create(organisation, application);
+            } else {
+                log.error("Found more than 1 caseId for requestor {} and subject {}", application.getRequestor(), application.getSubject());
+            }
+        } else {
             createForm()
                     .andThen(createAttachments())
                     .andThen(createEvidence())
                     .accept(organisation, application);
-        } else if (caseIds.size() == 0) {
-            create(organisation, application);
-        } else {
-            log.error("Found more than 1 caseId for requestor {} and subject {}", application.getRequestor(), application.getSubject());
         }
     }
 
