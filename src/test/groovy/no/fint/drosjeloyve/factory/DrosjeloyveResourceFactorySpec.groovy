@@ -109,7 +109,8 @@ class DrosjeloyveResourceFactorySpec extends Specification {
     def newOrganisation() {
         return new OrganisationProperties.Organisation(
                 skjermingshjemmel: 'skjermingshjemmel',
-                tilgangsrestriksjon: 'tilgangsrestriksjon'
+                tilgangsrestriksjon: 'tilgangsrestriksjon',
+                variantformat: 'A'
         )
     }
 

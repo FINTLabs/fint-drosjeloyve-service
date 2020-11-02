@@ -109,7 +109,7 @@ public class DrosjeloyveResourceFactory {
 
         resource.setTittel(String.format("Drosjeløyvesøknad - %s", application.getSubjectName()));
 
-        DokumentobjektResource dokumentobjektResource = getDokumentobjektResource("PDF", application.getForm().getDocumentId());
+        DokumentobjektResource dokumentobjektResource = getDokumentobjektResource("PDF", application.getForm().getDocumentId(), organisation.getVariantformat());
         resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
 
         return resource;
@@ -124,7 +124,7 @@ public class DrosjeloyveResourceFactory {
 
         String format = StringUtils.substringAfter(attachment.getFileName(), ".").toUpperCase();
 
-        DokumentobjektResource dokumentobjektResource = getDokumentobjektResource(format, attachment.getDocumentId());
+        DokumentobjektResource dokumentobjektResource = getDokumentobjektResource(format, attachment.getDocumentId(), organisation.getVariantformat());
         resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
 
         return resource;
@@ -141,7 +141,7 @@ public class DrosjeloyveResourceFactory {
             resource.setTittel("Konkursattest for foretak");
         }
 
-        DokumentobjektResource dokumentobjektResource = getDokumentobjektResource("PDF", consent.getDocumentId());
+        DokumentobjektResource dokumentobjektResource = getDokumentobjektResource("PDF", consent.getDocumentId(), organisation.getVariantformat());
         resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
 
         return resource;
@@ -158,11 +158,11 @@ public class DrosjeloyveResourceFactory {
         resource.setSkjerming(skjermingResource);
     }
 
-    private static DokumentobjektResource getDokumentobjektResource(String format, String id) {
+    private static DokumentobjektResource getDokumentobjektResource(String format, String id, String variantFormat) {
         DokumentobjektResource resource = new DokumentobjektResource();
 
         resource.setFormat(format);
-        resource.addVariantFormat(Link.with(Variantformat.class, "systemid", "A"));
+        resource.addVariantFormat(Link.with(Variantformat.class, "systemid", variantFormat));
         resource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", id));
 
         return resource;
