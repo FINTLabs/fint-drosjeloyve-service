@@ -41,7 +41,7 @@ public class TaxiLicenseApplicationService {
 
         Flux.fromIterable(applications)
                 .sort(Comparator.comparing(AltinnApplication::getArchivedDate))
-                .delayElements(Duration.ofSeconds(10))
+                .delayElements(Duration.ofSeconds(20))
                 .subscribe(application -> {
                     OrganisationProperties.Organisation organisation = organisationProperties.getOrganisations().get(application.getRequestor());
 
