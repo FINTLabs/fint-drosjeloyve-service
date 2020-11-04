@@ -10,6 +10,7 @@ import no.fint.drosjeloyve.model.AltinnApplication;
 import no.fint.drosjeloyve.model.AltinnApplicationStatus;
 import no.fint.drosjeloyve.repository.AltinnApplicationRepository;
 import no.fint.drosjeloyve.util.CertificateConverter;
+import no.fint.drosjeloyve.util.ContentDetector;
 import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -186,6 +187,15 @@ public class CaseHandlerService {
                                 return;
                             }
 
+                            String mediaType = ContentDetector.getMediaType(bytes, attachment);
+                            String fileName = ContentDetector.getFileName(mediaType, attachment);
+
+                            application.getAttachments().computeIfPresent(attachment.getAttachmentId(), (key, value) -> {
+                                value.setAttachmentType(mediaType);
+                                value.setFileName(fileName);
+                                return value;
+                            });
+
                             fintClient.postFile(organisation, bytes, MediaType.parseMediaType(attachment.getAttachmentType()), attachment.getFileName(), dokumentfilEndpoint)
                                     .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
                                             .doOnSuccess(statusEntity -> {
@@ -194,7 +204,10 @@ public class CaseHandlerService {
                                                 }
 
                                                 getId(statusEntity, "/").ifPresent(id -> {
-                                                    application.getAttachments().get(attachment.getAttachmentId()).setDocumentId(id);
+                                                    application.getAttachments().computeIfPresent(attachment.getAttachmentId(), (key, value) -> {
+                                                        value.setDocumentId(id);
+                                                        return value;
+                                                    });
                                                     repository.save(application);
                                                     log.info("Attachment (post) of archive reference: {}", application.getArchiveReference());
                                                 });
@@ -238,7 +251,10 @@ public class CaseHandlerService {
                                                 }
 
                                                 getId(statusEntity, "/").ifPresent(id -> {
-                                                    application.getConsents().get(consent.getEvidenceCodeName()).setDocumentId(id);
+                                                    application.getConsents().computeIfPresent(consent.getEvidenceCodeName(), (key, value) -> {
+                                                        value.setDocumentId(id);
+                                                        return value;
+                                                    });
                                                     repository.save(application);
                                                     log.info("Evidence (post) of archive reference: {}", application.getArchiveReference());
                                                 });
