@@ -22,6 +22,9 @@ public class DrosjeloyveResourceFactory {
 
     private static final Set<String> BANKRUPTCY_ARREARS_COMPANY = new HashSet<>(Arrays.asList("RestanserDrosje", "KonkursDrosje"));
 
+    public static final String BANKRUPTCY = "KonkursDrosje";
+    public static final String ARREARS = "RestanserDrosje";
+
     public static DrosjeloyveResource ofBasic(AltinnApplication application) {
         DrosjeloyveResource resource = new DrosjeloyveResource();
 
@@ -77,6 +80,12 @@ public class DrosjeloyveResourceFactory {
                 .map(attachment -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(attachment, organisation))
                 .forEach(resource.getDokumentbeskrivelse()::add);
 
+        resource.getDokumentbeskrivelse().stream()
+                .map(DokumentbeskrivelseResource::getTilknyttetRegistreringSom)
+                .flatMap(List::stream)
+                .findFirst()
+                .ifPresent(link -> link.setVerdi(Link.with(TilknyttetRegistreringSom.class, "systemid", "H").getHref()));
+
         return resource;
     }
 
@@ -109,6 +118,8 @@ public class DrosjeloyveResourceFactory {
 
         resource.setTittel(String.format("Drosjeløyvesøknad - %s", application.getSubjectName()));
 
+        resource.addTilknyttetRegistreringSom(Link.with(TilknyttetRegistreringSom.class, "systemid", "H"));
+
         DokumentobjektResource dokumentobjektResource = getDokumentobjektResource("PDF", application.getForm().getDocumentId(), organisation.getVariantformat());
         resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
 
@@ -121,6 +132,8 @@ public class DrosjeloyveResourceFactory {
         setDokumentbeskrivelseDefaults(resource, organisation);
 
         resource.setTittel(attachment.getAttachmentTypeNameLanguage());
+
+        resource.addTilknyttetRegistreringSom(Link.with(TilknyttetRegistreringSom.class, "systemid", "V"));
 
         String format = StringUtils.substringAfter(attachment.getFileName(), ".").toUpperCase();
 
@@ -135,11 +148,13 @@ public class DrosjeloyveResourceFactory {
 
         setDokumentbeskrivelseDefaults(resource, organisation);
 
-        if (consent.getEvidenceCodeName().equals("RestanserDrosje")) {
+        if (consent.getEvidenceCodeName().equals(ARREARS)) {
             resource.setTittel("Skatteattest for foretak");
         } else {
             resource.setTittel("Konkursattest for foretak");
         }
+
+        resource.addTilknyttetRegistreringSom(Link.with(TilknyttetRegistreringSom.class, "systemid", "V"));
 
         DokumentobjektResource dokumentobjektResource = getDokumentobjektResource("PDF", consent.getDocumentId(), organisation.getVariantformat());
         resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
@@ -149,7 +164,6 @@ public class DrosjeloyveResourceFactory {
 
     private static void setDokumentbeskrivelseDefaults(DokumentbeskrivelseResource resource, OrganisationProperties.Organisation organisation) {
         resource.addDokumentstatus(Link.with(DokumentStatus.class, "systemid", "F"));
-        resource.addTilknyttetRegistreringSom(Link.with(TilknyttetRegistreringSom.class, "systemid", "H"));
 
         SkjermingResource skjermingResource = new SkjermingResource();
         skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getSkjermingshjemmel()));
