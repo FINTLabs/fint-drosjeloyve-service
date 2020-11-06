@@ -62,7 +62,7 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         }
         resource.journalpost.first().dokumentbeskrivelse.last().tittel == 'Konkursattest for foretak'
         resource.journalpost.first().dokumentbeskrivelse.last().dokumentstatus.first().href == '${arkiv.kodeverk.dokumentstatus}/systemid/F'
-        resource.journalpost.first().dokumentbeskrivelse.last().tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/H'
+        resource.journalpost.first().dokumentbeskrivelse.last().tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/V'
         resource.journalpost.first().dokumentbeskrivelse.last().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
         resource.journalpost.first().dokumentbeskrivelse.last().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
         resource.journalpost.first().dokumentbeskrivelse.last().dokumentobjekt.any { it ->
@@ -82,13 +82,24 @@ class DrosjeloyveResourceFactorySpec extends Specification {
                     it.korrespondanseparttype.any { it.href == '${arkiv.kodeverk.korrespondanseparttype}/systemid/EA' }
         }
 
-        resource.journalpost.last().dokumentbeskrivelse.size() == 1
+        resource.journalpost.last().dokumentbeskrivelse.size() == 2
         resource.journalpost.last().dokumentbeskrivelse.first().tittel == 'Politiattest for foretaket'
         resource.journalpost.last().dokumentbeskrivelse.first().dokumentstatus.first().href == '${arkiv.kodeverk.dokumentstatus}/systemid/F'
         resource.journalpost.last().dokumentbeskrivelse.first().tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/H'
         resource.journalpost.last().dokumentbeskrivelse.first().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
         resource.journalpost.last().dokumentbeskrivelse.first().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
         resource.journalpost.last().dokumentbeskrivelse.first().dokumentobjekt.any { it ->
+            it.format == 'PDF' &&
+                    it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
+                    it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
+        }
+
+        resource.journalpost.last().dokumentbeskrivelse.last().tittel == 'Politiattest for innehaver/daglig leder'
+        resource.journalpost.last().dokumentbeskrivelse.last().dokumentstatus.first().href == '${arkiv.kodeverk.dokumentstatus}/systemid/F'
+        resource.journalpost.last().dokumentbeskrivelse.last().tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/V'
+        resource.journalpost.last().dokumentbeskrivelse.last().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
+        resource.journalpost.last().dokumentbeskrivelse.last().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
+        resource.journalpost.last().dokumentbeskrivelse.last().dokumentobjekt.any { it ->
             it.format == 'PDF' &&
                     it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
                     it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
@@ -101,7 +112,8 @@ class DrosjeloyveResourceFactorySpec extends Specification {
                 subject: 'subject',
                 subjectName: 'subject-name',
                 form: new AltinnApplication.Form(documentId: 'document-id'),
-                attachments: [(1): new AltinnApplication.Attachment(attachmentTypeName: 'PolitiattestForForetaket', attachmentTypeNameLanguage: 'Politiattest for foretaket', fileName: 'filename.pdf', documentId: 'document-id')],
+                attachments: [(1): new AltinnApplication.Attachment(attachmentTypeName: 'PolitiattestForForetaket', attachmentTypeNameLanguage: 'Politiattest for foretaket', fileName: 'filename.pdf', documentId: 'document-id'),
+                              (2): new AltinnApplication.Attachment(attachmentTypeName: 'PolitiattestInnehaverDagligLeder', attachmentTypeNameLanguage: 'Politiattest for innehaver/daglig leder', fileName: 'filename.pdf', documentId: 'document-id')],
                 consents: [('konkurs-drosje'): new AltinnApplication.Consent(documentId: 'document-id', evidenceCodeName: 'KonkursDrosje')]
         )
     }
@@ -109,7 +121,8 @@ class DrosjeloyveResourceFactorySpec extends Specification {
     def newOrganisation() {
         return new OrganisationProperties.Organisation(
                 skjermingshjemmel: 'skjermingshjemmel',
-                tilgangsrestriksjon: 'tilgangsrestriksjon'
+                tilgangsrestriksjon: 'tilgangsrestriksjon',
+                variantformat: 'A'
         )
     }
 

@@ -20,6 +20,7 @@ public class OrganisationProperties {
         private boolean deviationPolicy;
         private String skjermingshjemmel;
         private String tilgangsrestriksjon;
+        private String variantformat;
         private int limit;
     }
 }
