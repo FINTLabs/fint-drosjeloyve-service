@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,11 +19,16 @@ public class AltinnApplication {
     private String archiveReference;
     private String caseId;
     private String accreditationId;
+    private OffsetDateTime accreditationDate;
+    private Integer accreditationCount;
     private LocalDateTime archivedDate;
     private String requestor;
     private String requestorName;
     private String subject;
     private String subjectName;
+    private Address businessAddress;
+    private String phone;
+    private String email;
     private String serviceCode;
     private Integer languageCode;
     private AltinnApplicationStatus status;
@@ -61,5 +67,12 @@ public class AltinnApplication {
         private ConsentStatus status;
         private String evidenceCodeName;
         private String documentId;
+    }
+
+    @Data
+    public static class Address {
+        private String address;
+        private String postCode;
+        private String postalArea;
     }
 }
