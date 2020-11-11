@@ -38,10 +38,6 @@ public class DrosjeloyveResourceFactory {
     }
 
     public static DrosjeloyveResource ofComplete(DrosjeloyveResource resource, AltinnApplication application, OrganisationProperties.Organisation organisation) {
-        if (resource.getOrganisasjonsnavn() == null) {
-            resource.setOrganisasjonsnavn(application.getSubjectName());
-        }
-
         resource.setJournalpost(Arrays.asList(application(application, organisation), policeCertificates(application, organisation)));
 
         return resource;
