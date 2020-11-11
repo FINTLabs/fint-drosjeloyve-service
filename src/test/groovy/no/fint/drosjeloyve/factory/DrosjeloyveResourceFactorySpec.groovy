@@ -19,6 +19,7 @@ class DrosjeloyveResourceFactorySpec extends Specification {
 
         then:
         resource.getOrganisasjonsnummer() == 'subject'
+        resource.getOrganisasjonsnavn() == 'subject-name'
         resource.getTittel() == 'subject-name'
     }
 
@@ -35,6 +36,7 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.mappeId.identifikatorverdi == 'mappe-id'
         resource.tittel == 'subject-name'
         resource.organisasjonsnummer == 'subject'
+        resource.organisasjonsnavn == 'subject-name'
 
         updatedResource.getJournalpost().size() == 2
 
@@ -46,6 +48,11 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.journalpost.first().korrespondansepart.any { it ->
             it.korrespondansepartNavn == 'subject-name' &&
                     it.organisasjonsnummer == 'subject' &&
+                    it.adresse.adresselinje == ['address'] &&
+                    it.adresse.postnummer == 'post-code' &&
+                    it.adresse.poststed == 'postal-area' &&
+                    it.kontaktinformasjon.epostadresse == 'email' &&
+                    it.kontaktinformasjon.mobiltelefonnummer == 'phone' &&
                     it.korrespondanseparttype.any { it.href == '${arkiv.kodeverk.korrespondanseparttype}/systemid/EA' }
         }
 
@@ -79,6 +86,11 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.journalpost.last().korrespondansepart.any { it ->
             it.korrespondansepartNavn == 'subject-name' &&
                     it.organisasjonsnummer == 'subject' &&
+                    it.adresse.adresselinje == ['address'] &&
+                    it.adresse.postnummer == 'post-code' &&
+                    it.adresse.poststed == 'postal-area' &&
+                    it.kontaktinformasjon.epostadresse == 'email' &&
+                    it.kontaktinformasjon.mobiltelefonnummer == 'phone' &&
                     it.korrespondanseparttype.any { it.href == '${arkiv.kodeverk.korrespondanseparttype}/systemid/EA' }
         }
 
@@ -111,6 +123,13 @@ class DrosjeloyveResourceFactorySpec extends Specification {
                 archivedDate: LocalDateTime.parse('2020-01-01T00:00:00'),
                 subject: 'subject',
                 subjectName: 'subject-name',
+                businessAddress: new AltinnApplication.Address(
+                        address: 'address',
+                        postCode: 'post-code',
+                        postalArea: 'postal-area'
+                ),
+                phone: 'phone',
+                email: 'email',
                 form: new AltinnApplication.Form(documentId: 'document-id'),
                 attachments: [(1): new AltinnApplication.Attachment(attachmentTypeName: 'PolitiattestForForetaket', attachmentTypeNameLanguage: 'Politiattest for foretaket', fileName: 'filename.pdf', documentId: 'document-id'),
                               (2): new AltinnApplication.Attachment(attachmentTypeName: 'PolitiattestInnehaverDagligLeder', attachmentTypeNameLanguage: 'Politiattest for innehaver/daglig leder', fileName: 'filename.pdf', documentId: 'document-id')],
@@ -130,7 +149,8 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         return new DrosjeloyveResource(
                 mappeId: new Identifikator(identifikatorverdi: 'mappe-id'),
                 tittel: 'subject-name',
-                organisasjonsnummer: 'subject'
+                organisasjonsnummer: 'subject',
+                organisasjonsnavn: 'subject-name'
         )
     }
 }

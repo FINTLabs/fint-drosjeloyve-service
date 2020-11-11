@@ -6,9 +6,11 @@ import no.fint.model.arkiv.kodeverk.*;
 import no.fint.model.arkiv.noark.Dokumentfil;
 import no.fint.model.arkiv.noark.Skjerming;
 import no.fint.model.arkiv.noark.Tilgang;
+import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.*;
 import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
+import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -29,14 +31,15 @@ public class DrosjeloyveResourceFactory {
         DrosjeloyveResource resource = new DrosjeloyveResource();
 
         resource.setOrganisasjonsnummer(application.getSubject());
+        resource.setOrganisasjonsnavn(application.getSubjectName());
         resource.setTittel(application.getSubjectName());
 
         return resource;
     }
 
     public static DrosjeloyveResource ofComplete(DrosjeloyveResource resource, AltinnApplication application, OrganisationProperties.Organisation organisation) {
-        if (resource.getJournalpost() == null) {
-            resource.setJournalpost(new ArrayList<>());
+        if (resource.getOrganisasjonsnavn() == null) {
+            resource.setOrganisasjonsnavn(application.getSubjectName());
         }
 
         resource.setJournalpost(Arrays.asList(application(application, organisation), policeCertificates(application, organisation)));
@@ -104,6 +107,21 @@ public class DrosjeloyveResourceFactory {
         KorrespondansepartResource korrespondansepartResource = new KorrespondansepartResource();
         korrespondansepartResource.setKorrespondansepartNavn(application.getSubjectName());
         korrespondansepartResource.setOrganisasjonsnummer(application.getSubject());
+
+        Optional.ofNullable(application.getBusinessAddress())
+                .ifPresent(address -> {
+                    AdresseResource adresseResource = new AdresseResource();
+                    adresseResource.setAdresselinje(Collections.singletonList(address.getAddress()));
+                    adresseResource.setPostnummer(address.getPostCode());
+                    adresseResource.setPoststed(address.getPostalArea());
+                    korrespondansepartResource.setAdresse(adresseResource);
+                });
+
+        Kontaktinformasjon kontaktinformasjon = new Kontaktinformasjon();
+        kontaktinformasjon.setEpostadresse(application.getEmail());
+        kontaktinformasjon.setMobiltelefonnummer(application.getPhone());
+        korrespondansepartResource.setKontaktinformasjon(kontaktinformasjon);
+
         korrespondansepartResource.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", "EA"));
 
         resource.setKorrespondansepart(Collections.singletonList(korrespondansepartResource));
