@@ -31,7 +31,6 @@ public class DrosjeloyveResourceFactory {
         DrosjeloyveResource resource = new DrosjeloyveResource();
 
         resource.setOrganisasjonsnummer(application.getSubject());
-        resource.setOrganisasjonsnavn(application.getSubjectName());
         resource.setTittel(application.getSubjectName());
 
         return resource;

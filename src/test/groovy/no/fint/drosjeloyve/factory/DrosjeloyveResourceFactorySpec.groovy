@@ -19,7 +19,6 @@ class DrosjeloyveResourceFactorySpec extends Specification {
 
         then:
         resource.getOrganisasjonsnummer() == 'subject'
-        resource.getOrganisasjonsnavn() == 'subject-name'
         resource.getTittel() == 'subject-name'
     }
 
@@ -36,7 +35,6 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.mappeId.identifikatorverdi == 'mappe-id'
         resource.tittel == 'subject-name'
         resource.organisasjonsnummer == 'subject'
-        resource.organisasjonsnavn == 'subject-name'
 
         updatedResource.getJournalpost().size() == 2
 
@@ -149,8 +147,7 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         return new DrosjeloyveResource(
                 mappeId: new Identifikator(identifikatorverdi: 'mappe-id'),
                 tittel: 'subject-name',
-                organisasjonsnummer: 'subject',
-                organisasjonsnavn: 'subject-name'
+                organisasjonsnummer: 'subject'
         )
     }
 }
