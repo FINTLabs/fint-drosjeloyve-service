@@ -35,7 +35,7 @@ public class TaxiLicenseApplicationService {
     public void run() {
         List<AltinnApplication> applications = repository.findAllByStatus(AltinnApplicationStatus.CONSENTS_ACCEPTED);
 
-        log.info("Found {} application(s) ready for submission", applications.size());
+        log.info("Found {} application(s)", applications.size());
 
         ConcurrentMap<String, Integer> limits = new ConcurrentSkipListMap<>();
 
@@ -46,7 +46,7 @@ public class TaxiLicenseApplicationService {
                     OrganisationProperties.Organisation organisation = organisationProperties.getOrganisations().get(application.getRequestor());
 
                     if (organisation == null) {
-                        log.warn("No organisation found for {}", application.getRequestor());
+                        log.warn("No organisation found for {} ({})", application.getRequestorName(), application.getRequestor());
                         return;
                     }
 
