@@ -131,10 +131,10 @@ public class CaseHandlerService {
                                         log.info("Application (post) of archive reference: {}", application.getArchiveReference());
                                     });
                                 })
-                                .doOnError(WebClientResponseException.class, ex -> log.error("Application (status) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                                .doOnError(WebClientResponseException.class, ex -> log.error("Application (status) of archive reference: {}", application.getArchiveReference(), ex))
                                 .retryWhen(withThrowable(finalStatusPending))
                                 .subscribe())
-                        .doOnError(WebClientResponseException.class, ex -> log.error("Application (post) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                        .doOnError(WebClientResponseException.class, ex -> log.error("Application (post) of archive reference: {}", application.getArchiveReference(), ex))
                         .subscribe();
             }
         };
@@ -163,10 +163,10 @@ public class CaseHandlerService {
                                                     log.info("Form (post) of archive reference: {}", application.getArchiveReference());
                                                 });
                                             })
-                                            .doOnError(WebClientResponseException.class, ex -> log.error("Form (status) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                                            .doOnError(WebClientResponseException.class, ex -> log.error("Form (status) of archive reference: {}", application.getArchiveReference(), ex))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(WebClientResponseException.class, ex -> log.error("Form (post) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                                    .doOnError(WebClientResponseException.class, ex -> log.error("Form (post) of archive reference: {}", application.getArchiveReference(), ex))
                                     .subscribe();
                         })
                         .doOnError(WebClientResponseException.class, ex -> log.error("Form (get) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
@@ -202,10 +202,10 @@ public class CaseHandlerService {
                                                     log.info("Attachment (post) of archive reference: {}", application.getArchiveReference());
                                                 });
                                             })
-                                            .doOnError(WebClientResponseException.class, ex -> log.error("Attachment (status) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                                            .doOnError(WebClientResponseException.class, ex -> log.error("Attachment (status) of archive reference: {}", application.getArchiveReference(), ex))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(WebClientResponseException.class, ex -> log.error("Attachment (post) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                                    .doOnError(WebClientResponseException.class, ex -> log.error("Attachment (post) of archive reference: {}", application.getArchiveReference(), ex))
                                     .subscribe();
                         })
                         .doOnError(WebClientResponseException.class, ex -> log.error("Attachment (get) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
@@ -249,10 +249,10 @@ public class CaseHandlerService {
                                                     log.info("Evidence (post) of archive reference: {}", application.getArchiveReference());
                                                 });
                                             })
-                                            .doOnError(WebClientResponseException.class, ex -> log.error("Evidence (status) of archive reference: {} - {}", ex.getResponseBodyAsString(), ex))
+                                            .doOnError(WebClientResponseException.class, ex -> log.error("Evidence (status) of archive reference: {}", application.getArchiveReference(), ex))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(WebClientResponseException.class, ex -> log.error("Evidence (post) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                                    .doOnError(WebClientResponseException.class, ex -> log.error("Evidence (post) of archive reference: {}", application.getArchiveReference(), ex))
                                     .subscribe();
                         })
                         .doOnError(WebClientResponseException.class, ex -> log.error("Evidence (get) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
@@ -275,13 +275,13 @@ public class CaseHandlerService {
                                         repository.save(application);
                                         log.info("Application (put) of archive reference: {}", application.getArchiveReference());
                                     })
-                                    .doOnError(WebClientResponseException.class, ex -> log.error("Application (status) of archive reference: {} - {}", ex.getResponseBodyAsString(), ex))
+                                    .doOnError(WebClientResponseException.class, ex -> log.error("Application (status) of archive reference: {}", application.getArchiveReference(), ex))
                                     .retryWhen(withThrowable(finalStatusPending))
                                     .subscribe())
-                            .doOnError(WebClientResponseException.class, ex -> log.error("Application (put) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                            .doOnError(WebClientResponseException.class, ex -> log.error("Application (put) of archive reference: {}", application.getArchiveReference(), ex))
                             .subscribe();
                 })
-                .doOnError(WebClientResponseException.class, ex -> log.error("Application (get) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                .doOnError(WebClientResponseException.class, ex -> log.error("Application (get) of archive reference: {}", application.getArchiveReference(), ex))
                 .subscribe();
     }
 
