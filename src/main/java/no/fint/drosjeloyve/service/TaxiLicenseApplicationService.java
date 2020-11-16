@@ -56,11 +56,11 @@ public class TaxiLicenseApplicationService {
                     }
 
                     if (isComplete.test(application)) {
-                        log.info("Attempting final submit for application {}", application.getArchiveReference());
+                        log.info("Attempting final put for application {}", application.getArchiveReference());
 
                         caseHandlerService.submit(organisation, application);
                     } else {
-                        log.info("Attempting initial submit for application {}", application.getArchiveReference());
+                        log.info("Attempting initial post for application {}", application.getArchiveReference());
 
                         if (organisation.isDeviationPolicy()) {
                             caseHandlerService.update(organisation, application);
