@@ -50,7 +50,7 @@ class DrosjeloyveResourceFactorySpec extends Specification {
                     it.adresse.postnummer == 'post-code' &&
                     it.adresse.poststed == 'postal-area' &&
                     it.kontaktinformasjon.epostadresse == 'email' &&
-                    it.kontaktinformasjon.mobiltelefonnummer == 'phone' &&
+                    it.kontaktinformasjon.telefonnummer == 'phone' &&
                     it.korrespondanseparttype.any { it.href == '${arkiv.kodeverk.korrespondanseparttype}/systemid/EA' }
         }
 
@@ -88,7 +88,7 @@ class DrosjeloyveResourceFactorySpec extends Specification {
                     it.adresse.postnummer == 'post-code' &&
                     it.adresse.poststed == 'postal-area' &&
                     it.kontaktinformasjon.epostadresse == 'email' &&
-                    it.kontaktinformasjon.mobiltelefonnummer == 'phone' &&
+                    it.kontaktinformasjon.telefonnummer == 'phone' &&
                     it.korrespondanseparttype.any { it.href == '${arkiv.kodeverk.korrespondanseparttype}/systemid/EA' }
         }
 

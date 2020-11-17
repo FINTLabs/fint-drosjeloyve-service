@@ -114,7 +114,7 @@ public class DrosjeloyveResourceFactory {
 
         Kontaktinformasjon kontaktinformasjon = new Kontaktinformasjon();
         kontaktinformasjon.setEpostadresse(application.getEmail());
-        kontaktinformasjon.setMobiltelefonnummer(application.getPhone());
+        kontaktinformasjon.setTelefonnummer(application.getPhone());
         korrespondansepartResource.setKontaktinformasjon(kontaktinformasjon);
 
         korrespondansepartResource.addKorrespondanseparttype(Link.with(KorrespondansepartType.class, "systemid", "EA"));
