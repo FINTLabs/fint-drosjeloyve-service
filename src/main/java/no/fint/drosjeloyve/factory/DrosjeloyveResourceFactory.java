@@ -94,10 +94,18 @@ public class DrosjeloyveResourceFactory {
         resource.setOffentligTittel(title);
 
         SkjermingResource skjermingResource = new SkjermingResource();
-        skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getSkjermingshjemmel()));
-        skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getTilgangsrestriksjon()));
 
-        resource.setSkjerming(skjermingResource);
+        if (!organisation.getSkjermingshjemmel().equals("none")) {
+            skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getSkjermingshjemmel()));
+        }
+
+        if (!organisation.getTilgangsrestriksjon().equals("none")) {
+            skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getTilgangsrestriksjon()));
+        }
+
+        if (!skjermingResource.getLinks().isEmpty()) {
+            resource.setSkjerming(skjermingResource);
+        }
 
         KorrespondansepartResource korrespondansepartResource = new KorrespondansepartResource();
         korrespondansepartResource.setKorrespondansepartNavn(application.getSubjectName());
