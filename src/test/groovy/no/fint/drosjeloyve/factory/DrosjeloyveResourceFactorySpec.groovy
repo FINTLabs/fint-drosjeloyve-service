@@ -58,8 +58,8 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.journalpost.first().dokumentbeskrivelse.first().tittel == 'Drosjeløyvesøknad - subject-name'
         resource.journalpost.first().dokumentbeskrivelse.first().dokumentstatus.first().href == '${arkiv.kodeverk.dokumentstatus}/systemid/F'
         resource.journalpost.first().dokumentbeskrivelse.first().tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/H'
-        resource.journalpost.first().dokumentbeskrivelse.first().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
-        resource.journalpost.first().dokumentbeskrivelse.first().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
+        resource.journalpost.first().dokumentbeskrivelse.first().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/soknadsskjema' }
+        resource.journalpost.first().dokumentbeskrivelse.first().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/soknadsskjema-tilgangsrestriksjon' }
         resource.journalpost.first().dokumentbeskrivelse.first().dokumentobjekt.any { it ->
             it.format == 'PDF' &&
                     it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
@@ -68,8 +68,8 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.journalpost.first().dokumentbeskrivelse.last().tittel == 'Konkursattest for foretak'
         resource.journalpost.first().dokumentbeskrivelse.last().dokumentstatus.first().href == '${arkiv.kodeverk.dokumentstatus}/systemid/F'
         resource.journalpost.first().dokumentbeskrivelse.last().tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/V'
-        resource.journalpost.first().dokumentbeskrivelse.last().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
-        resource.journalpost.first().dokumentbeskrivelse.last().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
+        resource.journalpost.first().dokumentbeskrivelse.last().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/konkursattest' }
+        resource.journalpost.first().dokumentbeskrivelse.last().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/konkursattest-tilgangsrestriksjon' }
         resource.journalpost.first().dokumentbeskrivelse.last().dokumentobjekt.any { it ->
             it.format == 'PDF' &&
                     it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
@@ -96,8 +96,8 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.journalpost.last().dokumentbeskrivelse.first().tittel == 'Politiattest for foretaket'
         resource.journalpost.last().dokumentbeskrivelse.first().dokumentstatus.first().href == '${arkiv.kodeverk.dokumentstatus}/systemid/F'
         resource.journalpost.last().dokumentbeskrivelse.first().tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/H'
-        resource.journalpost.last().dokumentbeskrivelse.first().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
-        resource.journalpost.last().dokumentbeskrivelse.first().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
+        resource.journalpost.last().dokumentbeskrivelse.first().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/politiattest' }
+        resource.journalpost.last().dokumentbeskrivelse.first().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/politiattest-tilgangsrestriksjon' }
         resource.journalpost.last().dokumentbeskrivelse.first().dokumentobjekt.any { it ->
             it.format == 'PDF' &&
                     it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
@@ -107,8 +107,8 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.journalpost.last().dokumentbeskrivelse.last().tittel == 'Politiattest for innehaver/daglig leder'
         resource.journalpost.last().dokumentbeskrivelse.last().dokumentstatus.first().href == '${arkiv.kodeverk.dokumentstatus}/systemid/F'
         resource.journalpost.last().dokumentbeskrivelse.last().tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/V'
-        resource.journalpost.last().dokumentbeskrivelse.last().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/skjermingshjemmel' }
-        resource.journalpost.last().dokumentbeskrivelse.last().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/tilgangsrestriksjon' }
+        resource.journalpost.last().dokumentbeskrivelse.last().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/politiattest' }
+        resource.journalpost.last().dokumentbeskrivelse.last().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/politiattest-tilgangsrestriksjon' }
         resource.journalpost.last().dokumentbeskrivelse.last().dokumentobjekt.any { it ->
             it.format == 'PDF' &&
                     it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
@@ -139,7 +139,12 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         return new OrganisationProperties.Organisation(
                 skjermingshjemmel: 'skjermingshjemmel',
                 tilgangsrestriksjon: 'tilgangsrestriksjon',
-                variantformat: 'A'
+                variantformat: 'A',
+                politiattest: new OrganisationProperties.LegalBasis(skjermingshjemmel: 'politiattest', tilgangsrestriksjon: 'politiattest-tilgangsrestriksjon'),
+                skatteattest: new OrganisationProperties.LegalBasis(skjermingshjemmel: 'skatteattest', tilgangsrestriksjon: 'skatteattest-tilgangsrestriksjon'),
+                konkursattest: new OrganisationProperties.LegalBasis(skjermingshjemmel: 'konkursattest', tilgangsrestriksjon: 'konkursattest-tilgangsrestriksjon'),
+                domForelegg: new OrganisationProperties.LegalBasis(skjermingshjemmel: 'dom-forelegg', tilgangsrestriksjon: 'dom-forelegg-tilgangsrestriksjon'),
+                soknadsskjema: new OrganisationProperties.LegalBasis(skjermingshjemmel: 'soknadsskjema', tilgangsrestriksjon: 'soknadsskjema-tilgangsrestriksjon')
         )
     }
 

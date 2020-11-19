@@ -21,6 +21,17 @@ public class OrganisationProperties {
         private String skjermingshjemmel;
         private String tilgangsrestriksjon;
         private String variantformat;
+        private LegalBasis politiattest;
+        private LegalBasis skatteattest;
+        private LegalBasis konkursattest;
+        private LegalBasis domForelegg;
+        private LegalBasis soknadsskjema;
         private int limit;
+    }
+
+    @Data
+    public static class LegalBasis {
+        private String skjermingshjemmel;
+        private String tilgangsrestriksjon;
     }
 }

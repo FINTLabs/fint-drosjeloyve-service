@@ -127,11 +127,25 @@ public class DrosjeloyveResourceFactory {
     private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication application, OrganisationProperties.Organisation organisation) {
         DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
 
-        setDokumentbeskrivelseDefaults(resource, organisation);
+        SkjermingResource skjermingResource = new SkjermingResource();
+
+        if (!organisation.getSoknadsskjema().getSkjermingshjemmel().equals("none")) {
+            skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getSoknadsskjema().getSkjermingshjemmel()));
+        }
+
+        if (!organisation.getSoknadsskjema().getTilgangsrestriksjon().equals("none")) {
+            skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getSoknadsskjema().getTilgangsrestriksjon()));
+        }
+
+        if (!skjermingResource.getLinks().isEmpty()) {
+            resource.setSkjerming(skjermingResource);
+        }
 
         resource.setTittel(String.format("Drosjeløyvesøknad - %s", application.getSubjectName()));
 
         resource.addTilknyttetRegistreringSom(Link.with(TilknyttetRegistreringSom.class, "systemid", "H"));
+
+        resource.addDokumentstatus(Link.with(DokumentStatus.class, "systemid", "F"));
 
         DokumentobjektResource dokumentobjektResource = getDokumentobjektResource("PDF", application.getForm().getDocumentId(), organisation.getVariantformat());
         resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
@@ -142,9 +156,49 @@ public class DrosjeloyveResourceFactory {
     private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication.Attachment attachment, OrganisationProperties.Organisation organisation) {
         DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
 
-        setDokumentbeskrivelseDefaults(resource, organisation);
+        SkjermingResource skjermingResource = new SkjermingResource();
+
+        if (attachment.getAttachmentTypeName().startsWith("Politiattest")) {
+            if (!organisation.getPolitiattest().getSkjermingshjemmel().equals("none")) {
+                skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getPolitiattest().getSkjermingshjemmel()));
+            }
+
+            if (!organisation.getPolitiattest().getTilgangsrestriksjon().equals("none")) {
+                skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getPolitiattest().getTilgangsrestriksjon()));
+            }
+        } else if (attachment.getAttachmentTypeName().equals("SkatteattestInnehaverDagligLeder")) {
+            if (!organisation.getSkatteattest().getSkjermingshjemmel().equals("none")) {
+                skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getSkatteattest().getSkjermingshjemmel()));
+            }
+
+            if (!organisation.getSkatteattest().getTilgangsrestriksjon().equals("none")) {
+                skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getSkatteattest().getTilgangsrestriksjon()));
+            }
+        } else if (attachment.getAttachmentTypeName().equals("KonkursattestInnehaverDagligLeder")) {
+            if (!organisation.getKonkursattest().getSkjermingshjemmel().equals("none")) {
+                skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getKonkursattest().getSkjermingshjemmel()));
+            }
+
+            if (!organisation.getKonkursattest().getTilgangsrestriksjon().equals("none")) {
+                skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getKonkursattest().getTilgangsrestriksjon()));
+            }
+        } else if (attachment.getAttachmentTypeName().equals("KopiAvDomForelegg")) {
+            if (!organisation.getDomForelegg().getSkjermingshjemmel().equals("none")) {
+                skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getDomForelegg().getSkjermingshjemmel()));
+            }
+
+            if (!organisation.getDomForelegg().getTilgangsrestriksjon().equals("none")) {
+                skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getDomForelegg().getTilgangsrestriksjon()));
+            }
+        }
+
+        if (!skjermingResource.getLinks().isEmpty()) {
+            resource.setSkjerming(skjermingResource);
+        }
 
         resource.setTittel(attachment.getAttachmentTypeNameLanguage());
+
+        resource.addDokumentstatus(Link.with(DokumentStatus.class, "systemid", "F"));
 
         resource.addTilknyttetRegistreringSom(Link.with(TilknyttetRegistreringSom.class, "systemid", "V"));
 
@@ -159,13 +213,35 @@ public class DrosjeloyveResourceFactory {
     private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication.Consent consent, OrganisationProperties.Organisation organisation) {
         DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
 
-        setDokumentbeskrivelseDefaults(resource, organisation);
+        SkjermingResource skjermingResource = new SkjermingResource();
 
         if (consent.getEvidenceCodeName().equals(ARREARS)) {
             resource.setTittel("Skatteattest for foretak");
-        } else {
+
+            if (!organisation.getSkatteattest().getSkjermingshjemmel().equals("none")) {
+                skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getSkatteattest().getSkjermingshjemmel()));
+            }
+
+            if (!organisation.getSkatteattest().getSkjermingshjemmel().equals("none")) {
+                skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getSkatteattest().getTilgangsrestriksjon()));
+            }
+        } else if (consent.getEvidenceCodeName().equals(BANKRUPTCY)){
             resource.setTittel("Konkursattest for foretak");
+
+            if (!organisation.getKonkursattest().getSkjermingshjemmel().equals("none")) {
+                skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getKonkursattest().getSkjermingshjemmel()));
+            }
+
+            if (!organisation.getKonkursattest().getSkjermingshjemmel().equals("none")) {
+                skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getKonkursattest().getTilgangsrestriksjon()));
+            }
         }
+
+        if (!skjermingResource.getLinks().isEmpty()) {
+            resource.setSkjerming(skjermingResource);
+        }
+
+        resource.addDokumentstatus(Link.with(DokumentStatus.class, "systemid", "F"));
 
         resource.addTilknyttetRegistreringSom(Link.with(TilknyttetRegistreringSom.class, "systemid", "V"));
 
@@ -173,16 +249,6 @@ public class DrosjeloyveResourceFactory {
         resource.setDokumentobjekt(Collections.singletonList(dokumentobjektResource));
 
         return resource;
-    }
-
-    private static void setDokumentbeskrivelseDefaults(DokumentbeskrivelseResource resource, OrganisationProperties.Organisation organisation) {
-        resource.addDokumentstatus(Link.with(DokumentStatus.class, "systemid", "F"));
-
-        SkjermingResource skjermingResource = new SkjermingResource();
-        skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getSkjermingshjemmel()));
-        skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getTilgangsrestriksjon()));
-
-        resource.setSkjerming(skjermingResource);
     }
 
     private static DokumentobjektResource getDokumentobjektResource(String format, String id, String variantFormat) {
