@@ -11,7 +11,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/applications")
+@RequestMapping("/api/applications")
 public class AltinnApplicationController {
     private final AltinnApplicationRepository repository;
 

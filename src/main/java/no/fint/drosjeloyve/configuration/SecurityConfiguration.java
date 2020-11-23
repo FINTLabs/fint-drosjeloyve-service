@@ -34,7 +34,7 @@ public class SecurityConfiguration {
     public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http) {
         return http
                 .authorizeExchange()
-                .pathMatchers("/applications").permitAll()
+                .pathMatchers("/api/*").permitAll()
                 .anyExchange().denyAll()
                 .and()
                 .httpBasic().disable()
