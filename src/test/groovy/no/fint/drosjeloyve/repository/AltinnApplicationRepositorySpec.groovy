@@ -15,7 +15,7 @@ class AltinnApplicationRepositorySpec extends Specification {
     @Autowired
     AltinnApplicationRepository repository
 
-    LocalDateTime now = LocalDateTime.now()
+    LocalDateTime now = LocalDateTime.of(1970,01,01,00,00,00)
 
     void setup() {
         repository.saveAll(Arrays.asList(

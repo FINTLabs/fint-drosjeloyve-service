@@ -35,7 +35,7 @@ class AltinnApplicationControllerSpec extends Specification {
 
         then:
         client.get()
-                .uri("/applications")
+                .uri("/api/applications")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
