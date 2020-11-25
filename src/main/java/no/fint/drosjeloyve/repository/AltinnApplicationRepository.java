@@ -14,6 +14,6 @@ public interface AltinnApplicationRepository extends MongoRepository<AltinnAppli
 
     List<AltinnApplication> findAllByRequestorAndSubject(String requestor, String subject);
 
-    @Query(value = "{}", fields = "{archiveReference: 0, caseId: 1, requestor: 1, requestorName: 1, subject: 1, subjectName: 1, status: 1, archivedDate: 1, updatedDate: 1}")
+    @Query(value = "{}", fields = "{archiveReference: 1, caseId: 1, requestor: 1, requestorName: 1, subject: 1, subjectName: 1, status: 1, archivedDate: 1, updatedDate: 1}")
     List<AltinnApplication> findAllMinified();
 }
