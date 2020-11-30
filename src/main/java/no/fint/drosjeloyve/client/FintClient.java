@@ -64,13 +64,13 @@ public class FintClient {
                         .toBodilessEntity());
     }
 
-    public Mono<ResponseEntity<Void>> getStatus(OrganisationProperties.Organisation organisation, URI location) {
+    public Mono<ResponseEntity<?>> getStatus(OrganisationProperties.Organisation organisation, URI location) {
         return authorizedClient(organisation).flatMap(client ->
-                webClient.head()
+                webClient.get()
                         .uri(location)
                         .attributes(oauth2AuthorizedClient(client))
                         .retrieve()
-                        .toBodilessEntity());
+                        .toEntity(Object.class));
     }
 
     public <T extends FintLinks> Mono<T> getResource(OrganisationProperties.Organisation organisation, Class<T> clazz, String uri, String id) {

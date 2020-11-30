@@ -19,8 +19,8 @@ class AltinnApplicationRepositorySpec extends Specification {
 
     void setup() {
         repository.saveAll(Arrays.asList(
-                new AltinnApplication(archiveReference: 'archive-reference-1', caseId: 'case-id', requestor: 'requestor', requestorName: 'requestor-name', subject: 'subject', subjectName: 'subject-name', status: AltinnApplicationStatus.NEW, archivedDate: now, updatedDate: now),
-                new AltinnApplication(archiveReference: 'archive-reference-2', caseId: 'case-id', requestor: 'requestor', requestorName: 'requestor-name', subject: 'subject', subjectName: 'subject-name', status: AltinnApplicationStatus.CONSENTS_REQUESTED, archivedDate: now, updatedDate: now)))
+                new AltinnApplication(archiveReference: 'archive-reference-1', caseId: 'case-id', requestor: 'requestor', requestorName: 'requestor-name', subject: 'subject', subjectName: 'subject-name', status: AltinnApplicationStatus.NEW, archivedDate: now, updatedDate: now, phone: 'phone'),
+                new AltinnApplication(archiveReference: 'archive-reference-2', caseId: 'case-id', requestor: 'requestor', requestorName: 'requestor-name', subject: 'subject', subjectName: 'subject-name', status: AltinnApplicationStatus.CONSENTS_REQUESTED, archivedDate: now, updatedDate: now, phone: 'phone')))
     }
 
     void cleanup() {
@@ -49,7 +49,7 @@ class AltinnApplicationRepositorySpec extends Specification {
 
         then:
         documents.size() == 2
-        documents.first().archiveReference == null
+        documents.first().archiveReference == 'archive-reference-1'
         documents.first().caseId == 'case-id'
         documents.first().requestor == 'requestor'
         documents.first().requestorName == 'requestor-name'
@@ -58,5 +58,6 @@ class AltinnApplicationRepositorySpec extends Specification {
         documents.first().status == AltinnApplicationStatus.NEW
         documents.first().archivedDate == now
         documents.first().updatedDate == now
+        documents.first().phone == null
     }
 }
