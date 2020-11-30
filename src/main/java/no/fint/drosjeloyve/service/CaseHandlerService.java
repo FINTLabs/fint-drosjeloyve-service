@@ -285,7 +285,7 @@ public class CaseHandlerService {
                 .subscribe();
     }
 
-    private Optional<String> getId(ResponseEntity<Void> responseEntity, String separator) {
+    private Optional<String> getId(ResponseEntity<?> responseEntity, String separator) {
         return Optional.of(responseEntity.getHeaders())
                 .map(HttpHeaders::getLocation)
                 .map(URI::toString)
