@@ -3,6 +3,7 @@ package no.fint.drosjeloyve.client;
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
 import no.fint.model.resource.FintLinks;
 import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -64,13 +65,13 @@ public class FintClient {
                         .toBodilessEntity());
     }
 
-    public Mono<ResponseEntity<?>> getStatus(OrganisationProperties.Organisation organisation, URI location) {
+    public Mono<ResponseEntity<Void>> getStatus(OrganisationProperties.Organisation organisation, URI location) {
         return authorizedClient(organisation).flatMap(client ->
-                webClient.get()
+                webClient.head()
                         .uri(location)
                         .attributes(oauth2AuthorizedClient(client))
                         .retrieve()
-                        .toEntity(Object.class));
+                        .toBodilessEntity());
     }
 
     public <T extends FintLinks> Mono<T> getResource(OrganisationProperties.Organisation organisation, Class<T> clazz, String uri, String id) {
