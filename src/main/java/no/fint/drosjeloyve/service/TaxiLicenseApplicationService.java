@@ -50,6 +50,11 @@ public class TaxiLicenseApplicationService {
                         return;
                     }
 
+                    if (!organisation.isEnabled()) {
+                        log.warn("Organisation {} ({}) is not active", application.getRequestorName(), application.getRequestor());
+                        return;
+                    }
+
                     if (organisation.getLimit() > 0 && limits.merge(application.getRequestor(), 1, Integer::sum) > organisation.getLimit()) {
                         log.info("Organization {} is above its limit of {}", organisation.getName(), organisation.getLimit());
                         return;

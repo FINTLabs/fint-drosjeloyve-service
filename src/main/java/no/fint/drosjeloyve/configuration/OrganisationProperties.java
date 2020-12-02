@@ -14,6 +14,7 @@ public class OrganisationProperties {
     @Data
     public static class Organisation {
         private String name;
+        private boolean enabled;
         private String registration;
         private String username;
         private String password;
