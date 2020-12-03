@@ -35,7 +35,7 @@ public class TaxiLicenseApplicationService {
     public void run() {
         List<AltinnApplication> applications = repository.findAllByStatus(AltinnApplicationStatus.CONSENTS_ACCEPTED);
 
-        log.info("Found {} application(s) ready for submission", applications.size());
+        log.info("Found {} application(s)", applications.size());
 
         ConcurrentMap<String, Integer> limits = new ConcurrentSkipListMap<>();
 
@@ -46,7 +46,12 @@ public class TaxiLicenseApplicationService {
                     OrganisationProperties.Organisation organisation = organisationProperties.getOrganisations().get(application.getRequestor());
 
                     if (organisation == null) {
-                        log.warn("No organisation found for {}", application.getRequestor());
+                        log.warn("No organisation found for {} ({})", application.getRequestorName(), application.getRequestor());
+                        return;
+                    }
+
+                    if (!organisation.isEnabled()) {
+                        log.warn("Organisation {} ({}) is not active", application.getRequestorName(), application.getRequestor());
                         return;
                     }
 
@@ -56,11 +61,11 @@ public class TaxiLicenseApplicationService {
                     }
 
                     if (isComplete.test(application)) {
-                        log.info("Attempting final submit for application {}", application.getArchiveReference());
+                        log.info("Attempting final put for application {}", application.getArchiveReference());
 
                         caseHandlerService.submit(organisation, application);
                     } else {
-                        log.info("Attempting initial submit for application {}", application.getArchiveReference());
+                        log.info("Attempting initial post for application {}", application.getArchiveReference());
 
                         if (organisation.isDeviationPolicy()) {
                             caseHandlerService.update(organisation, application);

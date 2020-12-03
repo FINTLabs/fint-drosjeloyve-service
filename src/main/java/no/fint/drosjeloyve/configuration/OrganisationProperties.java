@@ -14,6 +14,7 @@ public class OrganisationProperties {
     @Data
     public static class Organisation {
         private String name;
+        private boolean enabled;
         private String registration;
         private String username;
         private String password;
@@ -21,6 +22,17 @@ public class OrganisationProperties {
         private String skjermingshjemmel;
         private String tilgangsrestriksjon;
         private String variantformat;
+        private LegalBasis politiattest;
+        private LegalBasis skatteattest;
+        private LegalBasis konkursattest;
+        private LegalBasis domForelegg;
+        private LegalBasis soknadsskjema;
         private int limit;
+    }
+
+    @Data
+    public static class LegalBasis {
+        private String skjermingshjemmel;
+        private String tilgangsrestriksjon;
     }
 }

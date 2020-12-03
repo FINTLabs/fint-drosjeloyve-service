@@ -62,7 +62,6 @@ public class CertificateConverter {
         try {
             File pdfFile = File.createTempFile("tax", ".pdf");
             pdfFile.deleteOnExit();
-            log.info("We're abount to produce some tax certificate PDF ... ");
 
             Document document = createDocument(pdfFile);
             Paragraph paragraph = new Paragraph(TAX_TITLE).setFontSize(36);
@@ -89,7 +88,6 @@ public class CertificateConverter {
 
             document.close();
 
-            log.info("Happy go lucky, tax certificate byte array on its way! :-)");
             return Files.readAllBytes(pdfFile.toPath());
         } catch (IOException e) {
             log.error("Ups, it's PDF trouble in the tower :-/", e);
@@ -102,7 +100,6 @@ public class CertificateConverter {
         try {
             File pdfFile = File.createTempFile("bankrupt", ".pdf");
             pdfFile.deleteOnExit();
-            log.info("We're abount to produce some bankrupt certificate PDF ... ");
 
             Document document = createDocument(pdfFile);
             document.add(new Paragraph("Brønnøysundregistrene").setFontSize(18).setItalic());
@@ -122,7 +119,6 @@ public class CertificateConverter {
 
             document.close();
 
-            log.info("Happy go lucky, tax certificate byte array on its way! :-)");
             return Files.readAllBytes(pdfFile.toPath());
         } catch (IOException e) {
             log.error("Ups, it's PDF trouble in the tower :-/", e);
