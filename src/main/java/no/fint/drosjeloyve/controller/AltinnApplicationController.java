@@ -1,8 +1,8 @@
 package no.fint.drosjeloyve.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.drosjeloyve.model.AltinnApplication;
-import no.fint.drosjeloyve.model.AltinnApplicationStatus;
+import no.fint.altinn.model.AltinnApplication;
+import no.fint.altinn.model.AltinnApplicationStatus;
 import no.fint.drosjeloyve.repository.AltinnApplicationRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;

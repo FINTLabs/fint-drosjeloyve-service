@@ -1,10 +1,10 @@
 package no.fint.drosjeloyve.service;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.altinn.model.AltinnApplication;
+import no.fint.altinn.model.AltinnApplicationStatus;
 import no.fint.drosjeloyve.client.FintClient;
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
-import no.fint.drosjeloyve.model.AltinnApplication;
-import no.fint.drosjeloyve.model.AltinnApplicationStatus;
 import no.fint.drosjeloyve.repository.AltinnApplicationRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

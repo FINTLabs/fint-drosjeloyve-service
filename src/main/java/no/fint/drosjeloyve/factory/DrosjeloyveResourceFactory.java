@@ -1,7 +1,7 @@
 package no.fint.drosjeloyve.factory;
 
+import no.fint.altinn.model.AltinnApplication;
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
-import no.fint.drosjeloyve.model.AltinnApplication;
 import no.fint.model.arkiv.kodeverk.*;
 import no.fint.model.arkiv.noark.Dokumentfil;
 import no.fint.model.arkiv.noark.Skjerming;

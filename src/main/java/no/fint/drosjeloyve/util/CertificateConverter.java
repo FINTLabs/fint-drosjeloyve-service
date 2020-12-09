@@ -11,11 +11,11 @@ import com.itextpdf.pdfa.PdfADocument;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import no.fint.drosjeloyve.model.AltinnApplication;
-import no.fint.drosjeloyve.model.ebevis.Evidence;
-import no.fint.drosjeloyve.model.ebevis.EvidenceStatus;
-import no.fint.drosjeloyve.model.ebevis.EvidenceValue;
-import no.fint.drosjeloyve.model.ebevis.vocab.ValueType;
+import no.fint.altinn.model.AltinnApplication;
+import no.fint.altinn.model.ebevis.Evidence;
+import no.fint.altinn.model.ebevis.EvidenceStatus;
+import no.fint.altinn.model.ebevis.EvidenceValue;
+import no.fint.altinn.model.ebevis.vocab.ValueType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

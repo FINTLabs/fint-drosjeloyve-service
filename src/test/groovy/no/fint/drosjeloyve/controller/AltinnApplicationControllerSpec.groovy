@@ -1,7 +1,7 @@
 package no.fint.drosjeloyve.controller
 
-import no.fint.drosjeloyve.model.AltinnApplication
-import no.fint.drosjeloyve.model.AltinnApplicationStatus
+import no.fint.altinn.model.AltinnApplication
+import no.fint.altinn.model.AltinnApplicationStatus
 import no.fint.drosjeloyve.repository.AltinnApplicationRepository
 import org.spockframework.spring.SpringBean
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest

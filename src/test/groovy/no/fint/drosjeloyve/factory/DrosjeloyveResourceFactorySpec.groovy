@@ -1,7 +1,7 @@
 package no.fint.drosjeloyve.factory
 
+import no.fint.altinn.model.AltinnApplication
 import no.fint.drosjeloyve.configuration.OrganisationProperties
-import no.fint.drosjeloyve.model.AltinnApplication
 import no.fint.model.felles.kompleksedatatyper.Identifikator
 import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource
 import spock.lang.Specification

@@ -1,7 +1,7 @@
 package no.fint.drosjeloyve.repository
 
-import no.fint.drosjeloyve.model.AltinnApplication
-import no.fint.drosjeloyve.model.AltinnApplicationStatus
+import no.fint.altinn.model.AltinnApplication
+import no.fint.altinn.model.AltinnApplicationStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.data.mongodb.repository.Query
