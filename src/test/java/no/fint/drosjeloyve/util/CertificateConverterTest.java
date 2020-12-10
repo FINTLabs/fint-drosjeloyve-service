@@ -1,7 +1,7 @@
 package no.fint.drosjeloyve.util;
 
-import no.fint.drosjeloyve.model.AltinnApplication;
-import no.fint.drosjeloyve.model.ebevis.Evidence;
+import no.fint.altinn.model.AltinnApplication;
+import no.fint.altinn.model.ebevis.Evidence;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;

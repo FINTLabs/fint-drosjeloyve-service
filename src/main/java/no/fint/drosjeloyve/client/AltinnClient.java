@@ -1,7 +1,7 @@
 package no.fint.drosjeloyve.client;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.drosjeloyve.model.ebevis.Evidence;
+import no.fint.altinn.model.ebevis.Evidence;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;

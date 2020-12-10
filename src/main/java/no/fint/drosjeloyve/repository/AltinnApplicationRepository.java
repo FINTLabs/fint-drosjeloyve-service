@@ -1,7 +1,7 @@
 package no.fint.drosjeloyve.repository;
 
-import no.fint.drosjeloyve.model.AltinnApplication;
-import no.fint.drosjeloyve.model.AltinnApplicationStatus;
+import no.fint.altinn.model.AltinnApplication;
+import no.fint.altinn.model.AltinnApplicationStatus;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;

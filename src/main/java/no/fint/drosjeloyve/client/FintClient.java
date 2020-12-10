@@ -3,7 +3,6 @@ package no.fint.drosjeloyve.client;
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
 import no.fint.model.resource.FintLinks;
 import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
