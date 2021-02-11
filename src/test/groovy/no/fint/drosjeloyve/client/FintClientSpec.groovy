@@ -109,7 +109,7 @@ class FintClientSpec extends Specification {
                 .setBody(new ObjectMapper().writeValueAsString(resource)))
 
         when:
-        def setup = fintClient.getStatus(organisation, URI.create('http://localhost:' + mockWebServer.getPort()))
+        def setup = fintClient.getStatus(organisation, Object.class, URI.create('http://localhost:' + mockWebServer.getPort()))
 
         then:
         StepVerifier

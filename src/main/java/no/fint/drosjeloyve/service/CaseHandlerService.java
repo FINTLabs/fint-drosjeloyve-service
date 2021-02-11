@@ -119,7 +119,7 @@ public class CaseHandlerService {
         return (organisation, application) -> {
             if (application.getCaseId() == null) {
                 fintClient.postResource(organisation, DrosjeloyveResourceFactory.ofBasic(application), drosjeloyveEndpoint)
-                        .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                        .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, Object.class, responseEntity.getHeaders().getLocation())
                                 .doOnSuccess(statusEntity -> {
                                     if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
                                         throw new FinalStatusPendingException();
@@ -131,10 +131,10 @@ public class CaseHandlerService {
                                         log.info("Application (post) of archive reference: {}", application.getArchiveReference());
                                     });
                                 })
-                                .doOnError(WebClientResponseException.class, ex -> log.error("Application (status) of archive reference: {}", application.getArchiveReference(), ex))
+                                .doOnError(WebClientResponseException.class, throwable -> log.error("Application (status) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                                 .retryWhen(withThrowable(finalStatusPending))
                                 .subscribe())
-                        .doOnError(WebClientResponseException.class, ex -> log.error("Application (post) of archive reference: {}", application.getArchiveReference(), ex))
+                        .doOnError(WebClientResponseException.class, throwable -> log.error("Application (post) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                         .subscribe();
             }
         };
@@ -151,7 +151,7 @@ public class CaseHandlerService {
                             }
 
                             fintClient.postFile(organisation, bytes, MediaType.APPLICATION_PDF, "søknadsskjema.pdf", dokumentfilEndpoint)
-                                    .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                                    .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, Object.class, responseEntity.getHeaders().getLocation())
                                             .doOnSuccess(statusEntity -> {
                                                 if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
                                                     throw new FinalStatusPendingException();
@@ -163,13 +163,13 @@ public class CaseHandlerService {
                                                     log.info("Form (post) of archive reference: {}", application.getArchiveReference());
                                                 });
                                             })
-                                            .doOnError(WebClientResponseException.class, ex -> log.error("Form (status) of archive reference: {}", application.getArchiveReference(), ex))
+                                            .doOnError(WebClientResponseException.class, throwable -> log.error("Form (status) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(WebClientResponseException.class, ex -> log.error("Form (post) of archive reference: {}", application.getArchiveReference(), ex))
+                                    .doOnError(WebClientResponseException.class, throwable -> log.error("Form (post) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                                     .subscribe();
                         })
-                        .doOnError(WebClientResponseException.class, ex -> log.error("Form (get) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                        .doOnError(WebClientResponseException.class, throwable -> log.error("Form (get) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                         .subscribe();
             }
         };
@@ -187,7 +187,7 @@ public class CaseHandlerService {
                             }
 
                             fintClient.postFile(organisation, bytes, MediaType.parseMediaType(attachment.getAttachmentType()), attachment.getFileName(), dokumentfilEndpoint)
-                                    .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                                    .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, Object.class, responseEntity.getHeaders().getLocation())
                                             .doOnSuccess(statusEntity -> {
                                                 if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
                                                     throw new FinalStatusPendingException();
@@ -202,13 +202,13 @@ public class CaseHandlerService {
                                                     log.info("Attachment (post) of archive reference: {}", application.getArchiveReference());
                                                 });
                                             })
-                                            .doOnError(WebClientResponseException.class, ex -> log.error("Attachment (status) of archive reference: {}", application.getArchiveReference(), ex))
+                                            .doOnError(WebClientResponseException.class, throwable -> log.error("Attachment (status) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(WebClientResponseException.class, ex -> log.error("Attachment (post) of archive reference: {}", application.getArchiveReference(), ex))
+                                    .doOnError(WebClientResponseException.class, throwable -> log.error("Attachment (post) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                                     .subscribe();
                         })
-                        .doOnError(WebClientResponseException.class, ex -> log.error("Attachment (get) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                        .doOnError(WebClientResponseException.class, throwable -> log.error("Attachment (get) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                         .subscribe());
     }
 
@@ -234,7 +234,7 @@ public class CaseHandlerService {
                             String filename = consent.getEvidenceCodeName().concat(".pdf");
 
                             fintClient.postFile(organisation, bytes, MediaType.APPLICATION_PDF, filename, dokumentfilEndpoint)
-                                    .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                                    .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, Object.class, responseEntity.getHeaders().getLocation())
                                             .doOnSuccess(statusEntity -> {
                                                 if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
                                                     throw new FinalStatusPendingException();
@@ -249,13 +249,13 @@ public class CaseHandlerService {
                                                     log.info("Evidence (post) of archive reference: {}", application.getArchiveReference());
                                                 });
                                             })
-                                            .doOnError(WebClientResponseException.class, ex -> log.error("Evidence (status) of archive reference: {}", application.getArchiveReference(), ex))
+                                            .doOnError(WebClientResponseException.class, throwable -> log.error("Evidence (status) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                                             .retryWhen(withThrowable(finalStatusPending))
                                             .subscribe())
-                                    .doOnError(WebClientResponseException.class, ex -> log.error("Evidence (post) of archive reference: {}", application.getArchiveReference(), ex))
+                                    .doOnError(WebClientResponseException.class, throwable -> log.error("Evidence (post) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                                     .subscribe();
                         })
-                        .doOnError(WebClientResponseException.class, ex -> log.error("Evidence (get) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                        .doOnError(WebClientResponseException.class, throwable -> log.error("Evidence (get) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                         .subscribe());
     }
 
@@ -265,7 +265,7 @@ public class CaseHandlerService {
                     DrosjeloyveResource drosjeloyveResource = DrosjeloyveResourceFactory.ofComplete(resource, application, organisation);
 
                     fintClient.putResource(organisation, drosjeloyveResource, drosjeloyveMappeIdEndpoint, application.getCaseId())
-                            .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
+                            .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, Object.class, responseEntity.getHeaders().getLocation())
                                     .doOnSuccess(statusEntity -> {
                                         if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
                                             throw new FinalStatusPendingException();
@@ -278,10 +278,10 @@ public class CaseHandlerService {
                                     .doOnError(WebClientResponseException.class, ex -> log.error("Application (status) of archive reference: {}", application.getArchiveReference(), ex))
                                     .retryWhen(withThrowable(finalStatusPending))
                                     .subscribe())
-                            .doOnError(WebClientResponseException.class, ex -> log.error("Application (put) of archive reference: {}", application.getArchiveReference(), ex))
+                            .doOnError(WebClientResponseException.class, throwable -> log.error("Application (put) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                             .subscribe();
                 })
-                .doOnError(WebClientResponseException.class, ex -> log.error("Application (get) of archive reference: {} - {}", application.getArchiveReference(), ex.getResponseBodyAsString(), ex))
+                .doOnError(WebClientResponseException.class, throwable -> log.error("Application (get) of archive reference {} for organisation {} ({}) - {} - {}", application.getArchiveReference(), application.getRequestorName(), application.getRequestor(), throwable.getMessage(), throwable.getResponseBodyAsString()))
                 .subscribe();
     }
 
