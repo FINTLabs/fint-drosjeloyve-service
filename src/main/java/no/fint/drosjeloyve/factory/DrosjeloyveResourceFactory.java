@@ -17,7 +17,7 @@ import java.util.*;
 
 public class DrosjeloyveResourceFactory {
     private static final Set<String> POLICE_CERTIFICATES = new HashSet<>(Arrays.asList("PolitiattestForForetaket",
-            "PolitiattestInnehaverDagligLeder", "PolitiattestTransportleder", "KopiAvDomForelegg"));
+            "PolitiattestInnehaverDagligLeder", "PolitiattestInnehaver", "PolitiattestTransportleder", "KopiAvDomForelegg"));
 
     private static final Set<String> BANKRUPTCY_ARREARS_MANAGER = new HashSet<>(Arrays.asList("KonkursattestInnehaverDagligLeder",
             "SkatteattestInnehaverDagligLeder"));
