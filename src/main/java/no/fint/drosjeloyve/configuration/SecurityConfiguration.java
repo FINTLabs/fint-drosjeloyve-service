@@ -76,8 +76,8 @@ public class SecurityConfiguration {
         HttpClient httpClient = HttpClient.create(ConnectionProvider.builder("laidback").maxLifeTime(Duration.ofHours(1)).maxIdleTime(Duration.ofMinutes(1)).build())
                 .tcpConfiguration(tcpClient -> tcpClient.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 300000)
                         .doOnConnected(connection -> connection
-                                .addHandlerLast(new ReadTimeoutHandler(60))
-                                .addHandlerLast(new WriteTimeoutHandler(60))));
+                                .addHandlerLast(new ReadTimeoutHandler(120))
+                                .addHandlerLast(new WriteTimeoutHandler(120))));
 
         return new ReactorClientHttpConnector(httpClient);
     }
