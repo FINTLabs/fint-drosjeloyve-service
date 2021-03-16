@@ -10,7 +10,7 @@ import no.fint.drosjeloyve.configuration.OrganisationProperties;
 import no.fint.drosjeloyve.factory.DrosjeloyveResourceFactory;
 import no.fint.drosjeloyve.repository.AltinnApplicationRepository;
 import no.fint.drosjeloyve.util.CertificateConverter;
-import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
+import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -260,9 +260,9 @@ public class CaseHandlerService {
     }
 
     public void submit(OrganisationProperties.Organisation organisation, AltinnApplication application) {
-        fintClient.getResource(organisation, DrosjeloyveResource.class, drosjeloyveMappeIdEndpoint, application.getCaseId())
+        fintClient.getResource(organisation, SoknadDrosjeloyveResource.class, drosjeloyveMappeIdEndpoint, application.getCaseId())
                 .doOnSuccess(resource -> {
-                    DrosjeloyveResource drosjeloyveResource = DrosjeloyveResourceFactory.ofComplete(resource, application, organisation);
+                    SoknadDrosjeloyveResource drosjeloyveResource = DrosjeloyveResourceFactory.ofComplete(resource, application, organisation);
 
                     fintClient.putResource(organisation, drosjeloyveResource, drosjeloyveMappeIdEndpoint, application.getCaseId())
                             .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, Object.class, responseEntity.getHeaders().getLocation())
