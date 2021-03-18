@@ -9,7 +9,7 @@ import no.fint.model.arkiv.noark.Tilgang;
 import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
 import no.fint.model.resource.Link;
 import no.fint.model.resource.arkiv.noark.*;
-import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource;
+import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource;
 import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,16 +27,17 @@ public class DrosjeloyveResourceFactory {
     public static final String BANKRUPTCY = "KonkursDrosje";
     public static final String ARREARS = "RestanserDrosje";
 
-    public static DrosjeloyveResource ofBasic(AltinnApplication application) {
-        DrosjeloyveResource resource = new DrosjeloyveResource();
+    public static SoknadDrosjeloyveResource ofBasic(AltinnApplication application) {
+        SoknadDrosjeloyveResource resource = new SoknadDrosjeloyveResource();
 
         resource.setOrganisasjonsnummer(application.getSubject());
+        resource.setOrganisasjonsnavn(application.getSubjectName());
         resource.setTittel(application.getSubjectName());
 
         return resource;
     }
 
-    public static DrosjeloyveResource ofComplete(DrosjeloyveResource resource, AltinnApplication application, OrganisationProperties.Organisation organisation) {
+    public static SoknadDrosjeloyveResource ofComplete(SoknadDrosjeloyveResource resource, AltinnApplication application, OrganisationProperties.Organisation organisation) {
         resource.setJournalpost(Arrays.asList(application(application, organisation), policeCertificates(application, organisation)));
 
         return resource;

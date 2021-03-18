@@ -2,7 +2,7 @@ package no.fint.drosjeloyve.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.fint.drosjeloyve.configuration.OrganisationProperties
-import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource
+import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.springframework.http.HttpHeaders
@@ -48,7 +48,7 @@ class FintClientSpec extends Specification {
                 .addHeader(HttpHeaders.LOCATION, 'status-location'))
 
         when:
-        def setup = fintClient.postResource(organisation, new DrosjeloyveResource(), _ as String)
+        def setup = fintClient.postResource(organisation, new SoknadDrosjeloyveResource(), _ as String)
 
         then:
         StepVerifier
@@ -86,7 +86,7 @@ class FintClientSpec extends Specification {
                 .addHeader(HttpHeaders.LOCATION, 'status-location'))
 
         when:
-        def setup = fintClient.putResource(organisation, new DrosjeloyveResource(), _ as String, _ as String)
+        def setup = fintClient.putResource(organisation, new SoknadDrosjeloyveResource(), _ as String, _ as String)
 
         then:
         StepVerifier
@@ -100,7 +100,7 @@ class FintClientSpec extends Specification {
 
     def "get status returns location of and the updated resource"() {
         given:
-        DrosjeloyveResource resource = new DrosjeloyveResource()
+        SoknadDrosjeloyveResource resource = new SoknadDrosjeloyveResource()
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.CREATED.value())
@@ -123,7 +123,7 @@ class FintClientSpec extends Specification {
 
     def "get resource returns resource"() {
         given:
-        DrosjeloyveResource resource = new DrosjeloyveResource()
+        SoknadDrosjeloyveResource resource = new SoknadDrosjeloyveResource()
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.OK.value())
@@ -131,7 +131,7 @@ class FintClientSpec extends Specification {
                 .setBody(new ObjectMapper().writeValueAsString(resource)))
 
         when:
-        def setup = fintClient.getResource(organisation, DrosjeloyveResource.class, _ as String, _ as String)
+        def setup = fintClient.getResource(organisation, SoknadDrosjeloyveResource.class, _ as String, _ as String)
 
         then:
         StepVerifier
@@ -146,7 +146,7 @@ class FintClientSpec extends Specification {
                 .setResponseCode(HttpStatus.NOT_FOUND.value()))
 
         when:
-        def setup = fintClient.getResource(organisation, DrosjeloyveResource.class, _ as String, _ as String)
+        def setup = fintClient.getResource(organisation, SoknadDrosjeloyveResource.class, _ as String, _ as String)
 
         then:
         StepVerifier

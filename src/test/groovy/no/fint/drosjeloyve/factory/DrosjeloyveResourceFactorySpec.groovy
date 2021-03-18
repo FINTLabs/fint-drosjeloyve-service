@@ -3,7 +3,7 @@ package no.fint.drosjeloyve.factory
 import no.fint.altinn.model.AltinnApplication
 import no.fint.drosjeloyve.configuration.OrganisationProperties
 import no.fint.model.felles.kompleksedatatyper.Identifikator
-import no.fint.model.resource.arkiv.samferdsel.DrosjeloyveResource
+import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -35,6 +35,7 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.mappeId.identifikatorverdi == 'mappe-id'
         resource.tittel == 'subject-name'
         resource.organisasjonsnummer == 'subject'
+        resource.organisasjonsnavn == 'subject-name'
 
         updatedResource.getJournalpost().size() == 2
 
@@ -149,10 +150,11 @@ class DrosjeloyveResourceFactorySpec extends Specification {
     }
 
     def newDrosjeloyveResource() {
-        return new DrosjeloyveResource(
+        return new SoknadDrosjeloyveResource(
                 mappeId: new Identifikator(identifikatorverdi: 'mappe-id'),
                 tittel: 'subject-name',
-                organisasjonsnummer: 'subject'
+                organisasjonsnummer: 'subject',
+                organisasjonsnavn: 'subject-name'
         )
     }
 }
