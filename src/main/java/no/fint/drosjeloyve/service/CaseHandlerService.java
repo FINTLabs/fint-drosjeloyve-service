@@ -3,10 +3,10 @@ package no.fint.drosjeloyve.service;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.altinn.model.AltinnApplication;
 import no.fint.altinn.model.AltinnApplicationStatus;
-import no.fint.drosjeloyve.exception.FinalStatusPendingException;
 import no.fint.drosjeloyve.client.AltinnClient;
 import no.fint.drosjeloyve.client.FintClient;
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
+import no.fint.drosjeloyve.exception.*;
 import no.fint.drosjeloyve.factory.DrosjeloyveResourceFactory;
 import no.fint.drosjeloyve.repository.AltinnApplicationRepository;
 import no.fint.drosjeloyve.util.CertificateConverter;
@@ -122,7 +122,7 @@ public class CaseHandlerService {
                         .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, Object.class, responseEntity.getHeaders().getLocation())
                                 .doOnSuccess(statusEntity -> {
                                     if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
-                                        throw new FinalStatusPendingException();
+                                        throw new CreateApplicationStillPending();
                                     }
 
                                     getId(statusEntity, "mappeid/").ifPresent(id -> {
@@ -154,7 +154,7 @@ public class CaseHandlerService {
                                     .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
                                             .doOnSuccess(statusEntity -> {
                                                 if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
-                                                    throw new FinalStatusPendingException();
+                                                    throw new CreateFormStillPending();
                                                 }
 
                                                 getId(statusEntity, "/").ifPresent(id -> {
@@ -190,7 +190,7 @@ public class CaseHandlerService {
                                     .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
                                             .doOnSuccess(statusEntity -> {
                                                 if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
-                                                    throw new FinalStatusPendingException();
+                                                    throw new CreateAttachmentStillPending();
                                                 }
 
                                                 getId(statusEntity, "/").ifPresent(id -> {
@@ -237,7 +237,7 @@ public class CaseHandlerService {
                                     .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, responseEntity.getHeaders().getLocation())
                                             .doOnSuccess(statusEntity -> {
                                                 if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
-                                                    throw new FinalStatusPendingException();
+                                                    throw new CreateEvidenceStillPending();
                                                 }
 
                                                 getId(statusEntity, "/").ifPresent(id -> {
@@ -268,7 +268,7 @@ public class CaseHandlerService {
                             .doOnSuccess(responseEntity -> fintClient.getStatus(organisation, Object.class, responseEntity.getHeaders().getLocation())
                                     .doOnSuccess(statusEntity -> {
                                         if (statusEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
-                                            throw new FinalStatusPendingException();
+                                            throw new SubmitApplicationStillPending();
                                         }
 
                                         application.setStatus(AltinnApplicationStatus.ARCHIVED);
