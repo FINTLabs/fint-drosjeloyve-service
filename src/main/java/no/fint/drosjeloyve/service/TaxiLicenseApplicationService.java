@@ -70,11 +70,11 @@ public class TaxiLicenseApplicationService {
                     OrganisationProperties.Organisation organisation = organisationProperties.getOrganisations().get(application.getRequestor());
 
                     if (isComplete.test(application)) {
-                        log.info("Attempting final put for application {}", application.getArchiveReference());
+                        log.info("{}: Attempting final put for application {}", organisation.getName(), application.getArchiveReference());
 
                         caseHandlerService.submit(organisation, application);
                     } else {
-                        log.info("Attempting initial post for application {}", application.getArchiveReference());
+                        log.info("{}: Attempting initial post for application {}", organisation.getName(), application.getArchiveReference());
 
                         if (organisation.isDeviationPolicy()) {
                             caseHandlerService.update(organisation, application);

@@ -3,10 +3,10 @@ package no.fint.drosjeloyve.service;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.altinn.model.AltinnApplication;
 import no.fint.altinn.model.AltinnApplicationStatus;
-import no.fint.drosjeloyve.exception.FinalStatusPendingException;
 import no.fint.drosjeloyve.client.AltinnClient;
 import no.fint.drosjeloyve.client.FintClient;
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
+import no.fint.drosjeloyve.exception.FinalStatusPendingException;
 import no.fint.drosjeloyve.factory.DrosjeloyveResourceFactory;
 import no.fint.drosjeloyve.repository.AltinnApplicationRepository;
 import no.fint.drosjeloyve.util.CertificateConverter;
@@ -73,7 +73,7 @@ public class CaseHandlerService {
         finalStatusPending = Retry.anyOf(FinalStatusPendingException.class)
                 .exponentialBackoff(Duration.ofSeconds(1), Duration.ofMinutes(5))
                 .timeout(Duration.ofMinutes(30))
-                .doOnRetry(exception -> log.info("{}", exception));
+                .doOnRetry(exception -> log.debug("{}", exception));
     }
 
     public void create(OrganisationProperties.Organisation organisation, AltinnApplication application) {
