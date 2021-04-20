@@ -46,6 +46,11 @@ public class AltinnApplicationController {
                         (k, v) -> k, HashMap::new));
     }
 
+    @GetMapping("{application:AR[\\d]{9,}}")
+    public AltinnApplication getApplication(@PathVariable String application) {
+        return repository.findById(application).orElseThrow(IllegalArgumentException::new);
+    }
+
     @DeleteMapping("{application:AR[\\d]{9,}}")
     public AltinnApplication resetApplicationDocuments(@PathVariable String application) {
         final AltinnApplication altinnApplication = repository.findById(application).orElseThrow(IllegalArgumentException::new);

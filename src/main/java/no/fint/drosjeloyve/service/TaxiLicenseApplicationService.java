@@ -89,7 +89,7 @@ public class TaxiLicenseApplicationService {
         return limit > 0 ? limit : Integer.MAX_VALUE;
     }
 
-    private final Predicate<AltinnApplication> isComplete = application ->
+    public final Predicate<AltinnApplication> isComplete = application ->
             Objects.nonNull(application.getCaseId()) && Objects.nonNull(application.getForm().getDocumentId()) &&
                     application.getConsents().values().stream().map(AltinnApplication.Consent::getDocumentId).allMatch(Objects::nonNull) &&
                     application.getAttachments().values().stream().map(AltinnApplication.Attachment::getDocumentId).allMatch(Objects::nonNull);
