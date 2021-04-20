@@ -83,8 +83,6 @@ public class TaxiLicenseApplicationService {
                         }
                     }
                 });
-
-        log.info("Done.");
     }
 
     private int limit(int limit) {

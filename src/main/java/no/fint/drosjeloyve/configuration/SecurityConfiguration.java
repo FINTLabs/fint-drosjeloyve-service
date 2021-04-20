@@ -33,6 +33,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(final ServerHttpSecurity http) {
         return http
+                .csrf().disable()
                 .authorizeExchange()
                 .anyExchange().permitAll()
                 .and()
