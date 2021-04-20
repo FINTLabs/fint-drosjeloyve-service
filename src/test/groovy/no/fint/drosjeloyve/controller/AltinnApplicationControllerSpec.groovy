@@ -2,7 +2,9 @@ package no.fint.drosjeloyve.controller
 
 import no.fint.altinn.model.AltinnApplication
 import no.fint.altinn.model.AltinnApplicationStatus
+import no.fint.drosjeloyve.configuration.OrganisationProperties
 import no.fint.drosjeloyve.repository.AltinnApplicationRepository
+import no.fint.drosjeloyve.service.CaseHandlerService
 import org.spockframework.spring.SpringBean
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -21,7 +23,13 @@ class AltinnApplicationControllerSpec extends Specification {
     @SpringBean
     AltinnApplicationRepository repository = Mock()
 
-    AltinnApplicationController controller = new AltinnApplicationController(repository)
+    @SpringBean
+    OrganisationProperties properties = Mock()
+
+    @SpringBean
+    CaseHandlerService caseHandlerService = Mock()
+
+    AltinnApplicationController controller = new AltinnApplicationController(repository, properties, caseHandlerService)
 
     WebTestClient client
 
