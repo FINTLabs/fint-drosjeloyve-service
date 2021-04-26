@@ -24,6 +24,9 @@ public class TaxiLicenseApplicationService {
     private final CaseHandlerService caseHandlerService;
     private final int interval;
 
+    @Value("${fint.drosjeloyve.scheduled:true}")
+    private Boolean isScheduled;
+
     public TaxiLicenseApplicationService(
             OrganisationProperties organisationProperties,
             AltinnApplicationRepository repository,
@@ -37,52 +40,54 @@ public class TaxiLicenseApplicationService {
 
     @Scheduled(cron = "${scheduling.cron}")
     public void run() {
-        final Set<String> enabledOrganisations = organisationProperties
-                .getOrganisations()
-                .entrySet()
-                .stream()
-                .filter(it -> it.getValue().isEnabled())
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toSet());
+        if (isScheduled) {
+            final Set<String> enabledOrganisations = organisationProperties
+                    .getOrganisations()
+                    .entrySet()
+                    .stream()
+                    .filter(it -> it.getValue().isEnabled())
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toSet());
 
-        final Map<String, AtomicInteger> limits = organisationProperties
-                .getOrganisations()
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        it -> new AtomicInteger(limit(it.getValue().getLimit()))
-                ));
+            final Map<String, AtomicInteger> limits = organisationProperties
+                    .getOrganisations()
+                    .entrySet()
+                    .stream()
+                    .collect(Collectors.toMap(
+                            Map.Entry::getKey,
+                            it -> new AtomicInteger(limit(it.getValue().getLimit()))
+                    ));
 
-        List<AltinnApplication> applications =
-                repository.findAllByStatus(AltinnApplicationStatus.CONSENTS_ACCEPTED)
-                        .stream()
-                        .filter(it -> enabledOrganisations.contains(it.getRequestor()))
-                        .filter(it -> limits.get(it.getRequestor()).decrementAndGet() > 0)
-                        .sorted(Comparator.comparing(AltinnApplication::getArchivedDate))
-                        .collect(Collectors.toList());
+            List<AltinnApplication> applications =
+                    repository.findAllByStatus(AltinnApplicationStatus.CONSENTS_ACCEPTED)
+                            .stream()
+                            .filter(it -> enabledOrganisations.contains(it.getRequestor()))
+                            .filter(it -> limits.get(it.getRequestor()).decrementAndGet() > 0)
+                            .sorted(Comparator.comparing(AltinnApplication::getArchivedDate))
+                            .collect(Collectors.toList());
 
-        log.info("Found {} application(s)", applications.size());
+            log.info("Found {} application(s)", applications.size());
 
-        Flux.fromIterable(applications)
-                .delayElements(Duration.ofSeconds(interval))
-                .subscribe(application -> {
-                    OrganisationProperties.Organisation organisation = organisationProperties.getOrganisations().get(application.getRequestor());
+            Flux.fromIterable(applications)
+                    .delayElements(Duration.ofSeconds(interval))
+                    .subscribe(application -> {
+                        OrganisationProperties.Organisation organisation = organisationProperties.getOrganisations().get(application.getRequestor());
 
-                    if (isComplete.test(application)) {
-                        log.info("{}: Attempting final put for application {}", organisation.getName(), application.getArchiveReference());
+                        if (isComplete.test(application)) {
+                            log.info("{}: Attempting final put for application {}", organisation.getName(), application.getArchiveReference());
 
-                        caseHandlerService.submit(organisation, application);
-                    } else {
-                        log.info("{}: Attempting initial post for application {}", organisation.getName(), application.getArchiveReference());
-
-                        if (organisation.isDeviationPolicy()) {
-                            caseHandlerService.update(organisation, application);
+                            caseHandlerService.submit(organisation, application);
                         } else {
-                            caseHandlerService.create(organisation, application);
+                            log.info("{}: Attempting initial post for application {}", organisation.getName(), application.getArchiveReference());
+
+                            if (organisation.isDeviationPolicy()) {
+                                caseHandlerService.update(organisation, application);
+                            } else {
+                                caseHandlerService.create(organisation, application);
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     private int limit(int limit) {
