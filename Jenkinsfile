@@ -3,11 +3,8 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                script {
-                    props=readProperties file: 'gradle.properties'
-                }
                 withDockerRegistry([credentialsId: 'fintlabsacr.azurecr.io', url: 'https://fintlabsacr.azurecr.io']) {
-                    sh "docker build --tag ${GIT_COMMIT} --build-arg apiVersion=${props.apiVersion} ."
+                    sh "docker build --tag ${GIT_COMMIT} ."
                 }
             }
         }
