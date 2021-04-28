@@ -38,7 +38,7 @@ public class TaxiLicenseApplicationService {
         this.interval = interval;
     }
 
-    //@Scheduled(cron = "${scheduling.cron}")
+    @Scheduled(cron = "${scheduling.cron}")
     public void run() {
         if (isScheduled) {
             final Set<String> enabledOrganisations = organisationProperties
