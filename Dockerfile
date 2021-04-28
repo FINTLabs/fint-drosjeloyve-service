@@ -5,7 +5,7 @@ USER root
 COPY . .
 COPY --from=node /src/build/ src/main/resources/public/
 ARG apiVersion
-RUN gradle --no-daemon -PapiVersion=${apiVersion} build
+RUN gradle --no-daemon -PapiVersion=${apiVersion} clean build
 
 FROM gcr.io/distroless/java:8
 ENV JAVA_TOOL_OPTIONS -XX:+ExitOnOutOfMemoryError
