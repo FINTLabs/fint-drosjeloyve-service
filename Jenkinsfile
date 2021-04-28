@@ -6,7 +6,9 @@ pipeline {
                 script {
                     props=readProperties file: 'gradle.properties'
                 }
-                sh "docker build --tag ${GIT_COMMIT} --build-arg apiVersion=${props.apiVersion} ."
+                withDockerRegistry([credentialsId: 'fintlabsacr.azurecr.io', url: 'https://fintlabsacr.azurecr.io']) {
+                    sh "docker build --tag ${GIT_COMMIT} --build-arg apiVersion=${props.apiVersion} ."
+                }
             }
         }
         stage('Publish') {
