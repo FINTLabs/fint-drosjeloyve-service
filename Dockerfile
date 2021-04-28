@@ -1,6 +1,6 @@
 FROM fintlabsacr.azurecr.io/drosjeloyve-frontend as node
 
-FROM gradle:6.7.0-jdk8 as builder
+FROM gradle:6.6.1-jdk8 as builder
 USER root
 COPY . .
 COPY --from=node /src/build/ src/main/resources/public/
