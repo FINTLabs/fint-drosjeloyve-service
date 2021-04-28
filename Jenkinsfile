@@ -3,29 +3,27 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                script {
-                    props=readProperties file: 'gradle.properties'
+                withDockerRegistry([credentialsId: 'fintlabsacr.azurecr.io', url: 'https://fintlabsacr.azurecr.io']) {
+                    sh "docker pull fintlabsacr.azurecr.io/drosjeloyve-frontend:latest"
+                    sh "docker build --tag ${GIT_COMMIT} ."
                 }
-                sh "docker build --tag ${GIT_COMMIT} --build-arg apiVersion=${props.apiVersion} ."
             }
         }
         stage('Publish') {
-            when {
-                branch 'main'
-            }
+            when { branch 'main' }
             steps {
-                sh "docker tag ${GIT_COMMIT} fintlabsacr.azurecr.io/drosjeloyve-service:build.${BUILD_NUMBER}"
                 withDockerRegistry([credentialsId: 'fintlabsacr.azurecr.io', url: 'https://fintlabsacr.azurecr.io']) {
-                    sh "docker push fintlabsacr.azurecr.io/drosjeloyve-service:build.${BUILD_NUMBER}"
+                    sh "docker tag ${GIT_COMMIT} fintlabsacr.azurecr.io/drosjeloyve:build.${BUILD_NUMBER}"
+                    sh "docker push fintlabsacr.azurecr.io/drosjeloyve:build.${BUILD_NUMBER}"
                 }
             }
         }
         stage('Publish PR') {
             when { changeRequest() }
             steps {
-                sh "docker tag ${GIT_COMMIT} fintlabsacr.azurecr.io/drosjeloyve-service:${BRANCH_NAME}.${BUILD_NUMBER}"
                 withDockerRegistry([credentialsId: 'fintlabsacr.azurecr.io', url: 'https://fintlabsacr.azurecr.io']) {
-                    sh "docker push fintlabsacr.azurecr.io/drosjeloyve-service:${BRANCH_NAME}.${BUILD_NUMBER}"
+                    sh "docker tag ${GIT_COMMIT} fintlabsacr.azurecr.io/drosjeloyve:${BRANCH_NAME}.${BUILD_NUMBER}"
+                    sh "docker push fintlabsacr.azurecr.io/drosjeloyve:${BRANCH_NAME}.${BUILD_NUMBER}"
                 }
             }
         }
@@ -37,9 +35,9 @@ pipeline {
                 script {
                     VERSION = TAG_NAME[1..-1]
                 }
-                sh "docker tag ${GIT_COMMIT} fintlabsacr.azurecr.io/drosjeloyve-service:${VERSION}"
                 withDockerRegistry([credentialsId: 'fintlabsacr.azurecr.io', url: 'https://fintlabsacr.azurecr.io']) {
-                    sh "docker push fintlabsacr.azurecr.io/drosjeloyve-service:${VERSION}"
+                    sh "docker tag ${GIT_COMMIT} fintlabsacr.azurecr.io/drosjeloyve:${VERSION}"
+                    sh "docker push fintlabsacr.azurecr.io/drosjeloyve:${VERSION}"
                 }
             }
         }

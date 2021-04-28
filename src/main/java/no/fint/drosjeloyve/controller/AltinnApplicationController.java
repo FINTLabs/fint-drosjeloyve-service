@@ -28,8 +28,12 @@ public class AltinnApplicationController {
     }
 
     @GetMapping("applications")
-    public List<AltinnApplication> getAltinnApplications() {
-        return repository.findAllMinified();
+    public List<AltinnApplication> getAltinnApplications(@RequestHeader(required = false, name = "x-requestor") String requestor) {
+        if (StringUtils.isEmpty(requestor)) {
+            return repository.findAllMinified();
+        } else {
+            return repository.findAllByRequestor(requestor);
+        }
     }
 
     @GetMapping("status")
@@ -38,10 +42,11 @@ public class AltinnApplicationController {
     }
 
     @GetMapping("organisations")
-    public Map<String, String> getOrganisations() {
+    public Map<String, String> getOrganisations(@RequestHeader(required = false, name = "x-requestor") String requestor) {
         return repository.findAll()
                 .stream()
                 .filter(altinnApplication -> StringUtils.isNotBlank(altinnApplication.getRequestor()))
+                .filter(altinnApplication -> !StringUtils.isNotEmpty(requestor) || altinnApplication.getRequestor().equals(requestor))
                 .collect(Collectors.toMap(AltinnApplication::getRequestor, AltinnApplication::getRequestorName,
                         (k, v) -> k, HashMap::new));
     }
