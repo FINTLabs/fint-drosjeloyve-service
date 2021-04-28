@@ -24,7 +24,7 @@ public class TaxiLicenseApplicationService {
     private final CaseHandlerService caseHandlerService;
     private final int interval;
 
-    @Value("${fint.drosjeloyve.scheduled:true}")
+    @Value("${fint.drosjeloyve.scheduled:false}")
     private Boolean isScheduled;
 
     public TaxiLicenseApplicationService(
@@ -38,7 +38,7 @@ public class TaxiLicenseApplicationService {
         this.interval = interval;
     }
 
-    @Scheduled(cron = "${scheduling.cron}")
+    //@Scheduled(cron = "${scheduling.cron}")
     public void run() {
         if (isScheduled) {
             final Set<String> enabledOrganisations = organisationProperties
