@@ -1,0 +1,69 @@
+{
+  "evidenceStatus": {
+    "evidenceCodeName": "RestanserV2",
+    "status": {
+      "code": 1,
+      "description": "The information is available for harvest"
+    },
+    "validFrom": "2022-02-21T07:45:44.2146117+00:00",
+    "validTo": "2022-03-23T06:23:18.759Z"
+  },
+  "evidenceValues": [
+    {
+      "evidenceValueName": "levert",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:47:25.0152575Z",
+      "value": "2022-03-01T09:47:24.702007",
+      "valueType": "dateTime"
+    },
+    {
+      "evidenceValueName": "forespurteOrganisasjon",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:47:25.0152648Z",
+      "value": "999999999",
+      "valueType": "string"
+    },
+    {
+      "evidenceValueName": "arbeidsgiveravgiftForfaltOgUbetalt",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:47:25.0152653Z",
+      "value": "6000 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "forskuddstrekkForfaltOgUbetalt",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:47:25.0152657Z",
+      "value": "5000 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "forskuddsskattForfaltOgUbetalt",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:47:25.015266Z",
+      "value": "4000 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "restskattForfaltOgUbetalt",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:47:25.0152665Z",
+      "value": "3000 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "gebyrForfaltOgUbetalt",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:47:25.0152669Z",
+      "value": "2000 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "merverdiavgiftForfaltOgUbetalt",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:47:25.0152672Z",
+      "value": "1000 NOK",
+      "valueType": "amount"
+    }
+  ]
+}

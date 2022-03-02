@@ -1,0 +1,97 @@
+{
+  "evidenceStatus": {
+    "evidenceCodeName": "RestanserDrosje",
+    "status": {
+      "code": 1,
+      "description": "The information is available for harvest"
+    },
+    "validFrom": "2022-02-21T07:45:56.5975888+00:00",
+    "validTo": "2022-03-23T06:23:18.759Z"
+  },
+  "evidenceValues": [
+    {
+      "evidenceValueName": "skattForfaltOgUbetalt",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:58:46.1775528Z",
+      "value": "6500 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "skattRenterOgGebyrer",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:58:46.1775576Z",
+      "value": "6000 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "arbeidsgiveravgiftForfaltOgUbetalt",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:58:46.177558Z",
+      "value": "5500 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "arbeidsgiveravgiftRenterOgGebyrer",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:58:46.1775582Z",
+      "value": "5000 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "merverdiavgiftForfaltOgUbetalt",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:58:46.1775584Z",
+      "value": "4500 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "merverdiavgiftRenterOgGebyrer",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:58:46.1775589Z",
+      "value": "4000 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "forskuddstrekkForfaltOgUbetalt",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:58:46.1775592Z",
+      "value": "3500 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "forskuddstrekkRenterOgGebyrer",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:58:46.1775594Z",
+      "value": "3000 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "ansvarskravSkattForfaltOgUbetalt",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:58:46.1775597Z",
+      "value": "2500 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "ansvarskravSkattRenterOgGebyrer",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:58:46.17756Z",
+      "value": "2000 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "ansvarskravMvaForfaltOgUbetalt",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:58:46.1775603Z",
+      "value": "1500 NOK",
+      "valueType": "amount"
+    },
+    {
+      "evidenceValueName": "ansvarskravMvaRenterOgGebyrer",
+      "source": "Skatteetaten",
+      "timestamp": "2022-03-01T08:58:46.1775681Z",
+      "value": "1000 NOK",
+      "valueType": "amount"
+    }
+  ]
+}
