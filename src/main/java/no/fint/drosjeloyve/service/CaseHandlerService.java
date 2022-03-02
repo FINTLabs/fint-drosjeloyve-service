@@ -44,7 +44,7 @@ public class CaseHandlerService {
     public final Retry<?> finalStatusPending;
 
     private static final String BANKRUPTCY = "KonkursDrosje";
-    private static final String ARREARS = "RestanserDrosje";
+    private static final String ARREARS = "RestanserV2";
 
     @Value("${fint.endpoints.drosjeloyve}")
     private String drosjeloyveEndpoint;

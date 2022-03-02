@@ -22,10 +22,10 @@ public class DrosjeloyveResourceFactory {
     private static final Set<String> BANKRUPTCY_ARREARS_MANAGER = new HashSet<>(Arrays.asList("KonkursattestInnehaverDagligLeder",
             "SkatteattestInnehaverDagligLeder"));
 
-    private static final Set<String> BANKRUPTCY_ARREARS_COMPANY = new HashSet<>(Arrays.asList("RestanserDrosje", "KonkursDrosje"));
+    private static final Set<String> BANKRUPTCY_ARREARS_COMPANY = new HashSet<>(Arrays.asList("RestanserV2", "KonkursDrosje"));
 
     public static final String BANKRUPTCY = "KonkursDrosje";
-    public static final String ARREARS = "RestanserDrosje";
+    public static final String ARREARS = "RestanserV2";
 
     public static SoknadDrosjeloyveResource ofBasic(AltinnApplication application) {
         SoknadDrosjeloyveResource resource = new SoknadDrosjeloyveResource();
