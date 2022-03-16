@@ -24,9 +24,7 @@ import reactor.retry.Retry;
 
 import java.net.URI;
 import java.time.Duration;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -44,7 +42,7 @@ public class CaseHandlerService {
     public final Retry<?> finalStatusPending;
 
     private static final String BANKRUPTCY = "KonkursDrosje";
-    private static final String ARREARS = "RestanserDrosje";
+    private static final Set<String> ARREARS = new HashSet<>(Arrays.asList("RestanserDrosje", "RestanserV2"));
 
     @Value("${fint.endpoints.drosjeloyve}")
     private String drosjeloyveEndpoint;
@@ -222,7 +220,7 @@ public class CaseHandlerService {
 
                             if (consent.getEvidenceCodeName().equals(BANKRUPTCY)) {
                                 bytes = certificateConverter.convertBankruptCertificate(evidence, application);
-                            } else if (consent.getEvidenceCodeName().equals(ARREARS)) {
+                            } else if (ARREARS.contains(consent.getEvidenceCodeName())) {
                                 bytes = certificateConverter.convertTaxCertificate(evidence, application);
                             }
 

@@ -22,10 +22,10 @@ public class DrosjeloyveResourceFactory {
     private static final Set<String> BANKRUPTCY_ARREARS_MANAGER = new HashSet<>(Arrays.asList("KonkursattestInnehaverDagligLeder",
             "SkatteattestInnehaverDagligLeder"));
 
-    private static final Set<String> BANKRUPTCY_ARREARS_COMPANY = new HashSet<>(Arrays.asList("RestanserDrosje", "KonkursDrosje"));
+    private static final Set<String> BANKRUPTCY_ARREARS_COMPANY = new HashSet<>(Arrays.asList("RestanserDrosje", "RestanserV2", "KonkursDrosje"));
 
     public static final String BANKRUPTCY = "KonkursDrosje";
-    public static final String ARREARS = "RestanserDrosje";
+    public static final Set<String> ARREARS = new HashSet<>(Arrays.asList("RestanserDrosje", "RestanserV2"));
 
     public static SoknadDrosjeloyveResource ofBasic(AltinnApplication application) {
         SoknadDrosjeloyveResource resource = new SoknadDrosjeloyveResource();
@@ -224,7 +224,7 @@ public class DrosjeloyveResourceFactory {
 
         SkjermingResource skjermingResource = new SkjermingResource();
 
-        if (consent.getEvidenceCodeName().equals(ARREARS)) {
+        if (ARREARS.contains(consent.getEvidenceCodeName())) {
             resource.setTittel("Skatteattest for foretak");
 
             if (!organisation.getSkatteattest().getSkjermingshjemmel().equals("none")) {

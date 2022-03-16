@@ -165,8 +165,10 @@ public class CertificateConverter {
             document.add(new Paragraph(String.format("Kilde: %s", MISSING_OR_FAULTY_DATA)));
         } else if (evidenceCodeName.equals("KonkursDrosje")) {
             document.add(new Paragraph(String.format("Kilde: %s %s", getSource(values.get("Organisasjonsnavn")), getDate(values.get("Organisasjonsnavn")))));
-        } else if (evidenceCodeName.equals("RestanserDrosje")) {
+        }else if (evidenceCodeName.equals("RestanserDrosje")) {
             document.add(new Paragraph(String.format("Kilde: %s %s", getSource(values.get("skattForfaltOgUbetalt")), getDate(values.get("skattForfaltOgUbetalt")))));
+        } else if (evidenceCodeName.equals("RestanserV2")) {
+            document.add(new Paragraph(String.format("Kilde: %s %s", getSource(values.get("levert")), getDate(values.get("levert")))));
         }
 
         values.entrySet().stream()
@@ -206,20 +208,30 @@ public class CertificateConverter {
     }
 
     private static final Map<String, String> evidenceValueMapping = Stream.of(
-            new AbstractMap.SimpleImmutableEntry<>("UnderAvvikling", "Under avvikling"),
-            new AbstractMap.SimpleImmutableEntry<>("Konkurs", "Konkurs"),
-            new AbstractMap.SimpleImmutableEntry<>("UnderTvangsavviklingEllerTvangsopplosning", "Under tvangsavvikling eller tvangsoppløsning"),
-            new AbstractMap.SimpleImmutableEntry<>("skattForfaltOgUbetalt", "Skatt forfalt og ubetalt"),
-            new AbstractMap.SimpleImmutableEntry<>("skattRenterOgGebyrer", "Skatt renter og gebyr"),
-            new AbstractMap.SimpleImmutableEntry<>("arbeidsgiveravgiftForfaltOgUbetalt", "Arbeidsgiveravgift forfalt og ubetalt"),
-            new AbstractMap.SimpleImmutableEntry<>("arbeidsgiveravgiftRenterOgGebyrer", "Arbeidsgiveravgift renter og gebyr"),
-            new AbstractMap.SimpleImmutableEntry<>("merverdiavgiftForfaltOgUbetalt", "Merverdiavgift forfalt og ubetalt"),
-            new AbstractMap.SimpleImmutableEntry<>("merverdiavgiftRenterOgGebyrer", "Merverdiavgift renter og gebyr"),
-            new AbstractMap.SimpleImmutableEntry<>("forskuddstrekkForfaltOgUbetalt", "Forskuddstrekk forfalt og ubetalt"),
-            new AbstractMap.SimpleImmutableEntry<>("forskuddstrekkRenterOgGebyrer", "Forskuddstrekk renter og gebyr"),
-            new AbstractMap.SimpleImmutableEntry<>("ansvarskravSkattForfaltOgUbetalt", "Ansvarskrav skatt forfalt og ubetalt"),
-            new AbstractMap.SimpleImmutableEntry<>("ansvarskravSkattRenterOgGebyrer", "Ansvarskrav skatt renter og gebyr"),
-            new AbstractMap.SimpleImmutableEntry<>("ansvarskravMvaForfaltOgUbetalt", "Ansvarskrav mva forfalt og ubetalt"),
-            new AbstractMap.SimpleImmutableEntry<>("ansvarskravMvaRenterOgGebyrer", "Ansvarskrav mva renter og gebyr"))
+                    // KonkursDrosje
+                    new AbstractMap.SimpleImmutableEntry<>("UnderAvvikling", "Under avvikling"),
+                    new AbstractMap.SimpleImmutableEntry<>("Konkurs", "Konkurs"),
+                    new AbstractMap.SimpleImmutableEntry<>("UnderTvangsavviklingEllerTvangsopplosning", "Under tvangsavvikling eller tvangsoppløsning"),
+                    // RestanserDrosje
+                    new AbstractMap.SimpleImmutableEntry<>("skattForfaltOgUbetalt", "Skatt forfalt og ubetalt"),
+                    new AbstractMap.SimpleImmutableEntry<>("skattRenterOgGebyrer", "Skatt renter og gebyr"),
+                    new AbstractMap.SimpleImmutableEntry<>("arbeidsgiveravgiftForfaltOgUbetalt", "Arbeidsgiveravgift forfalt og ubetalt"),
+                    new AbstractMap.SimpleImmutableEntry<>("arbeidsgiveravgiftRenterOgGebyrer", "Arbeidsgiveravgift renter og gebyr"),
+                    new AbstractMap.SimpleImmutableEntry<>("merverdiavgiftForfaltOgUbetalt", "Merverdiavgift forfalt og ubetalt"),
+                    new AbstractMap.SimpleImmutableEntry<>("merverdiavgiftRenterOgGebyrer", "Merverdiavgift renter og gebyr"),
+                    new AbstractMap.SimpleImmutableEntry<>("forskuddstrekkForfaltOgUbetalt", "Forskuddstrekk forfalt og ubetalt"),
+                    new AbstractMap.SimpleImmutableEntry<>("forskuddstrekkRenterOgGebyrer", "Forskuddstrekk renter og gebyr"),
+                    new AbstractMap.SimpleImmutableEntry<>("ansvarskravSkattForfaltOgUbetalt", "Ansvarskrav skatt forfalt og ubetalt"),
+                    new AbstractMap.SimpleImmutableEntry<>("ansvarskravSkattRenterOgGebyrer", "Ansvarskrav skatt renter og gebyr"),
+                    new AbstractMap.SimpleImmutableEntry<>("ansvarskravMvaForfaltOgUbetalt", "Ansvarskrav mva forfalt og ubetalt"),
+                    new AbstractMap.SimpleImmutableEntry<>("ansvarskravMvaRenterOgGebyrer", "Ansvarskrav mva renter og gebyr"),
+                    // RestanserV2
+                    new AbstractMap.SimpleImmutableEntry<>("arbeidsgiveravgiftForfaltOgUbetalt", "Arbeidsgiveravgift forfalt og ubetalt"),
+                    new AbstractMap.SimpleImmutableEntry<>("forskuddstrekkForfaltOgUbetalt", "Forskuddstrekk forfalt og ubetalt"),
+                    new AbstractMap.SimpleImmutableEntry<>("forskuddsskattForfaltOgUbetalt", "Forskuddsskatt forfalt og ubetalt"),
+                    new AbstractMap.SimpleImmutableEntry<>("restskattForfaltOgUbetalt", "Restskatt forfalt og ubetalt"),
+                    new AbstractMap.SimpleImmutableEntry<>("gebyrForfaltOgUbetalt", "Gebyr forfalt og ubetalt"),
+                    new AbstractMap.SimpleImmutableEntry<>("merverdiavgiftForfaltOgUbetalt", "Merverdiavgift forfalt og ubetalt"))
+            .distinct()
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 }
