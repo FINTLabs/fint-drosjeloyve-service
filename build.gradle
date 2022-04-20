@@ -17,7 +17,7 @@ configurations {
 }
 
 repositories {
-    //mavenLocal()
+    mavenLocal()
     maven { url "https://repo.fintlabs.no/releases" }
     mavenCentral()
 }
