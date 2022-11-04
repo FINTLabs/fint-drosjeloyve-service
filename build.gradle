@@ -51,6 +51,6 @@ dependencies {
     implementation 'com.itextpdf:itext7-core:7.1.17'
 
     implementation 'no.fint:fint-felles-resource-model-java:3.10.0'
-    implementation 'no.fint:fint-arkiv-resource-model-java:3.10.0'
+    implementation 'no.fint:fint-arkiv-resource-model-java:3.11.10'
     implementation 'no.fint:fint-model-resource:0.4.1'
 }
