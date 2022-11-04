@@ -38,4 +38,8 @@ spring:
           fint:
             token-uri: https://idp.felleskomponent.no/nidp/oauth/nam/token
 
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, shutdown, prometheus

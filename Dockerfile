@@ -8,6 +8,7 @@ RUN gradle --no-daemon clean build
 
 FROM gcr.io/distroless/java:8
 ENV JAVA_TOOL_OPTIONS -XX:+ExitOnOutOfMemoryError
-COPY --from=builder /home/gradle/src/main/resources/times.ttf /data/times.ttf
-COPY --from=builder /home/gradle/build/libs/fint-drosjeloyve-service-*.jar /data/fint-drosjeloyve-service.jar
-CMD ["/data/fint-drosjeloyve-service.jar"]
+WORKDIR /app
+COPY --from=builder /home/gradle/src/main/resources/times.ttf /app/times.ttf
+COPY --from=builder /home/gradle/build/libs/fint-drosjeloyve-service.jar /app/fint-drosjeloyve-service.jar
+CMD ["/app/fint-drosjeloyve-service.jar"]
