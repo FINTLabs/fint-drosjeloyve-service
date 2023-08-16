@@ -27,6 +27,8 @@ public class DrosjeloyveResourceFactory {
     public static final String BANKRUPTCY = "KonkursDrosje";
     public static final Set<String> ARREARS = new HashSet<>(Arrays.asList("RestanserDrosje", "RestanserV2"));
 
+    public static final String DOCUMENTATION_PROFESSIONAL_COMPETENCE = "DokumentasjonFagkompetanse";
+
     public static SoknadDrosjeloyveResource ofBasic(AltinnApplication application) {
         SoknadDrosjeloyveResource resource = new SoknadDrosjeloyveResource();
 
@@ -63,6 +65,18 @@ public class DrosjeloyveResourceFactory {
                 .filter(consent -> BANKRUPTCY_ARREARS_COMPANY.contains(consent.getEvidenceCodeName()))
                 .map(consent -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(consent, organisation))
                 .forEach(resource.getDokumentbeskrivelse()::add);
+
+        application.getAttachments().values().stream()
+                .filter(attachment -> DOCUMENTATION_PROFESSIONAL_COMPETENCE.contains(attachment.getAttachmentTypeName()))
+                .map(attachment -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(attachment, organisation))
+                .forEach(resource.getDokumentbeskrivelse()::add);
+
+        resource.getDokumentbeskrivelse().stream()
+                .map(DokumentbeskrivelseResource::getTilknyttetRegistreringSom)
+                .flatMap(List::stream)
+                .findFirst()
+                .ifPresent(link -> link.setVerdi(Link.with(TilknyttetRegistreringSom.class, "systemid", "H").getHref()));
+
 
         return resource;
     }
@@ -190,6 +204,14 @@ public class DrosjeloyveResourceFactory {
 
             if (!organisation.getKonkursattest().getTilgangsrestriksjon().equals("none")) {
                 skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getKonkursattest().getTilgangsrestriksjon()));
+            }
+        } else if (attachment.getAttachmentTypeName().equals("DokumentasjonFagkompetanse")) {
+            if (!organisation.getKonkursattest().getSkjermingshjemmel().equals("none")) {
+                skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getFagkompetanse().getSkjermingshjemmel()));
+            }
+
+            if (!organisation.getKonkursattest().getTilgangsrestriksjon().equals("none")) {
+                skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getFagkompetanse().getTilgangsrestriksjon()));
             }
         } else if (attachment.getAttachmentTypeName().equals("KopiAvDomForelegg")) {
             if (!organisation.getDomForelegg().getSkjermingshjemmel().equals("none")) {
