@@ -25,6 +25,7 @@ public class OrganisationProperties {
         private LegalBasis politiattest;
         private LegalBasis skatteattest;
         private LegalBasis konkursattest;
+        private LegalBasis fagkompetanse;
         private LegalBasis domForelegg;
         private LegalBasis soknadsskjema;
         private int limit;

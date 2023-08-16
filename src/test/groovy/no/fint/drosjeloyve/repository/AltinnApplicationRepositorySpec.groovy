@@ -4,7 +4,6 @@ import no.fint.altinn.model.AltinnApplication
 import no.fint.altinn.model.AltinnApplicationStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
-import org.springframework.data.mongodb.repository.Query
 import spock.lang.Specification
 
 import java.time.LocalDateTime
