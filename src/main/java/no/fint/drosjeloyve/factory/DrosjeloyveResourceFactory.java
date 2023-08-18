@@ -71,7 +71,7 @@ public class DrosjeloyveResourceFactory {
                 .forEach(resource.getDokumentbeskrivelse()::add);
 
         application.getAttachments().values().stream()
-                .filter(attachment -> DOCUMENTATION_PROFESSIONAL_COMPETENCE.contains(attachment.getAttachmentTypeName()))
+                .filter(attachment -> DOCUMENTATION_PROFESSIONAL_COMPETENCE.equals(attachment.getAttachmentTypeName()))
                 .map(attachment -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(attachment, organisation))
                 .forEach(resource.getDokumentbeskrivelse()::add);
 
