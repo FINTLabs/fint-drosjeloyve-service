@@ -1,5 +1,6 @@
 package no.fint.drosjeloyve.factory;
 
+import lombok.extern.slf4j.Slf4j;
 import no.fint.altinn.model.AltinnApplication;
 import no.fint.drosjeloyve.configuration.OrganisationProperties;
 import no.fint.model.arkiv.kodeverk.*;
@@ -15,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
+@Slf4j
 public class DrosjeloyveResourceFactory {
     private static final Set<String> POLICE_CERTIFICATES = new HashSet<>(Arrays.asList("PolitiattestForForetaket",
             "PolitiattestInnehaverDagligLeder", "PolitiattestInnehaver", "PolitiattestTransportleder", "KopiAvDomForelegg"));
@@ -49,10 +51,12 @@ public class DrosjeloyveResourceFactory {
         JournalpostResource resource = new JournalpostResource();
 
         String title = String.format("Drosjeløyvesøknad - %s - %s", application.getSubjectName(), application.getSubject());
+        log.debug("Journalpost title: {}", title);
 
         setJournalPostDefaults(application, organisation, resource, title);
 
         DokumentbeskrivelseResource dokumentbeskrivelseResource = toDokumentbeskrivelseResource(application, organisation);
+
 
         resource.getDokumentbeskrivelse().add(dokumentbeskrivelseResource);
 
@@ -149,7 +153,6 @@ public class DrosjeloyveResourceFactory {
 
     private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication application, OrganisationProperties.Organisation organisation) {
         DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
-
         SkjermingResource skjermingResource = new SkjermingResource();
 
         if (!organisation.getSoknadsskjema().getSkjermingshjemmel().equals("none")) {
@@ -165,6 +168,7 @@ public class DrosjeloyveResourceFactory {
         }
 
         resource.setTittel(String.format("Drosjeløyvesøknad - %s", application.getSubjectName()));
+        log.debug("Dokumentbeskrivelse, tittel: {}", resource.getTittel());
 
         resource.addTilknyttetRegistreringSom(Link.with(TilknyttetRegistreringSom.class, "systemid", "H"));
 
@@ -178,7 +182,6 @@ public class DrosjeloyveResourceFactory {
 
     private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication.Attachment attachment, OrganisationProperties.Organisation organisation) {
         DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
-
         SkjermingResource skjermingResource = new SkjermingResource();
 
         if (attachment.getAttachmentTypeName().startsWith("Politiattest")) {
@@ -228,6 +231,7 @@ public class DrosjeloyveResourceFactory {
         }
 
         resource.setTittel(attachment.getAttachmentTypeNameLanguage());
+        log.debug("Dokumentbeskrivelse, tittel: {}", resource.getTittel());
 
         resource.addDokumentstatus(Link.with(DokumentStatus.class, "systemid", "F"));
 
@@ -243,7 +247,6 @@ public class DrosjeloyveResourceFactory {
 
     private static DokumentbeskrivelseResource toDokumentbeskrivelseResource(AltinnApplication.Consent consent, OrganisationProperties.Organisation organisation) {
         DokumentbeskrivelseResource resource = new DokumentbeskrivelseResource();
-
         SkjermingResource skjermingResource = new SkjermingResource();
 
         if (ARREARS.contains(consent.getEvidenceCodeName())) {
