@@ -66,22 +66,23 @@ class DrosjeloyveResourceFactorySpec extends Specification {
                     it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
                     it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
         }
-        resource.journalpost.first().dokumentbeskrivelse.get(1).tittel == 'Konkursattest for foretak'
+
+        resource.journalpost.first().dokumentbeskrivelse.get(1).tittel == 'Dokumentasjon fagkompetanse'
         resource.journalpost.first().dokumentbeskrivelse.get(1).dokumentstatus.first().href == '${arkiv.kodeverk.dokumentstatus}/systemid/F'
         resource.journalpost.first().dokumentbeskrivelse.get(1).tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/V'
-        resource.journalpost.first().dokumentbeskrivelse.get(1).skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/konkursattest' }
-        resource.journalpost.first().dokumentbeskrivelse.get(1).skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/konkursattest-tilgangsrestriksjon' }
+        resource.journalpost.first().dokumentbeskrivelse.get(1).skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/fagkompetanse' }
+        resource.journalpost.first().dokumentbeskrivelse.get(1).skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/fagkompetanse-tilgangsrestriksjon' }
         resource.journalpost.first().dokumentbeskrivelse.get(1).dokumentobjekt.any { it ->
             it.format == 'PDF' &&
                     it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
                     it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
         }
 
-        resource.journalpost.first().dokumentbeskrivelse.get(2).tittel == 'Dokumentasjon fagkompetanse'
+        resource.journalpost.first().dokumentbeskrivelse.get(2).tittel == 'Konkursattest for foretak'
         resource.journalpost.first().dokumentbeskrivelse.get(2).dokumentstatus.first().href == '${arkiv.kodeverk.dokumentstatus}/systemid/F'
         resource.journalpost.first().dokumentbeskrivelse.get(2).tilknyttetRegistreringSom.first().href == '${arkiv.kodeverk.tilknyttetregistreringsom}/systemid/V'
-        resource.journalpost.first().dokumentbeskrivelse.get(2).skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/fagkompetanse' }
-        resource.journalpost.first().dokumentbeskrivelse.get(2).skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/fagkompetanse-tilgangsrestriksjon' }
+        resource.journalpost.first().dokumentbeskrivelse.get(2).skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/konkursattest' }
+        resource.journalpost.first().dokumentbeskrivelse.get(2).skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/konkursattest-tilgangsrestriksjon' }
         resource.journalpost.first().dokumentbeskrivelse.get(2).dokumentobjekt.any { it ->
             it.format == 'PDF' &&
                     it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
