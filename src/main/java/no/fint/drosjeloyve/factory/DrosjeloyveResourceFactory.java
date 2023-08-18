@@ -60,7 +60,7 @@ public class DrosjeloyveResourceFactory {
         resource.getDokumentbeskrivelse().add(dokumentbeskrivelseResource);
 
         application.getAttachments().values().stream()
-                .filter(attachment -> BANKRUPTCY_ARREARS_MANAGER.contains(attachment.getAttachmentTypeName()))
+                .filter(attachment -> BANKRUPTCY_ARREARS_MANAGER.contains(attachment.getAttachmentTypeName()) || attachment.getAttachmentTypeName().equals(DOCUMENTATION_PROFESSIONAL_COMPETENCE))
                 .map(attachment -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(attachment, organisation))
                 .forEach(resource.getDokumentbeskrivelse()::add);
 
@@ -69,10 +69,10 @@ public class DrosjeloyveResourceFactory {
                 .map(consent -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(consent, organisation))
                 .forEach(resource.getDokumentbeskrivelse()::add);
 
-        application.getAttachments().values().stream()
-                .filter(attachment -> attachment.getAttachmentTypeName().equals(DOCUMENTATION_PROFESSIONAL_COMPETENCE))
-                .map(attachment -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(attachment, organisation))
-                .forEach(resource.getDokumentbeskrivelse()::add);
+//        application.getAttachments().values().stream()
+//                .filter(attachment -> attachment.getAttachmentTypeName().equals(DOCUMENTATION_PROFESSIONAL_COMPETENCE))
+//                .map(attachment -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(attachment, organisation))
+//                .forEach(resource.getDokumentbeskrivelse()::add);
 
         resource.getDokumentbeskrivelse().stream()
                 .map(DokumentbeskrivelseResource::getTilknyttetRegistreringSom)
