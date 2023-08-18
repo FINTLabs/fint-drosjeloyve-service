@@ -60,7 +60,8 @@ public class DrosjeloyveResourceFactory {
         resource.getDokumentbeskrivelse().add(dokumentbeskrivelseResource);
 
         application.getAttachments().values().stream()
-                .filter(attachment -> BANKRUPTCY_ARREARS_MANAGER.contains(attachment.getAttachmentTypeName()) || attachment.getAttachmentTypeName().equals(DOCUMENTATION_PROFESSIONAL_COMPETENCE))
+                .filter(attachment -> BANKRUPTCY_ARREARS_MANAGER.contains(attachment.getAttachmentTypeName()) ||
+                        attachment.getAttachmentTypeName().equals(DOCUMENTATION_PROFESSIONAL_COMPETENCE))
                 .map(attachment -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(attachment, organisation))
                 .forEach(resource.getDokumentbeskrivelse()::add);
 
@@ -68,11 +69,6 @@ public class DrosjeloyveResourceFactory {
                 .filter(consent -> BANKRUPTCY_ARREARS_COMPANY.contains(consent.getEvidenceCodeName()))
                 .map(consent -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(consent, organisation))
                 .forEach(resource.getDokumentbeskrivelse()::add);
-
-//        application.getAttachments().values().stream()
-//                .filter(attachment -> attachment.getAttachmentTypeName().equals(DOCUMENTATION_PROFESSIONAL_COMPETENCE))
-//                .map(attachment -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(attachment, organisation))
-//                .forEach(resource.getDokumentbeskrivelse()::add);
 
         resource.getDokumentbeskrivelse().stream()
                 .map(DokumentbeskrivelseResource::getTilknyttetRegistreringSom)
@@ -208,7 +204,6 @@ public class DrosjeloyveResourceFactory {
                 skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getKonkursattest().getTilgangsrestriksjon()));
             }
         } else if (attachment.getAttachmentTypeName().equals("DokumentasjonFagkompetanse")) {
-            log.debug("Woohoo, we found some documentation of the drivers professional competence!");
             if (!organisation.getFagkompetanse().getSkjermingshjemmel().equals("none")) {
                 skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getFagkompetanse().getSkjermingshjemmel()));
             }
