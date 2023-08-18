@@ -209,11 +209,11 @@ public class DrosjeloyveResourceFactory {
             }
         } else if (attachment.getAttachmentTypeName().equals("DokumentasjonFagkompetanse")) {
             log.debug("Woohoo, we found some documentation of the drivers professional competence!");
-            if (!organisation.getKonkursattest().getSkjermingshjemmel().equals("none")) {
+            if (!organisation.getFagkompetanse().getSkjermingshjemmel().equals("none")) {
                 skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getFagkompetanse().getSkjermingshjemmel()));
             }
 
-            if (!organisation.getKonkursattest().getTilgangsrestriksjon().equals("none")) {
+            if (!organisation.getFagkompetanse().getTilgangsrestriksjon().equals("none")) {
                 skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getFagkompetanse().getTilgangsrestriksjon()));
             }
         } else if (attachment.getAttachmentTypeName().equals("KopiAvDomForelegg")) {
