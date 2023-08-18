@@ -57,7 +57,6 @@ public class DrosjeloyveResourceFactory {
 
         DokumentbeskrivelseResource dokumentbeskrivelseResource = toDokumentbeskrivelseResource(application, organisation);
 
-
         resource.getDokumentbeskrivelse().add(dokumentbeskrivelseResource);
 
         application.getAttachments().values().stream()
@@ -71,7 +70,7 @@ public class DrosjeloyveResourceFactory {
                 .forEach(resource.getDokumentbeskrivelse()::add);
 
         application.getAttachments().values().stream()
-                .filter(attachment -> DOCUMENTATION_PROFESSIONAL_COMPETENCE.equals(attachment.getAttachmentTypeName()))
+                .filter(attachment -> attachment.getAttachmentTypeName().equals(DOCUMENTATION_PROFESSIONAL_COMPETENCE))
                 .map(attachment -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(attachment, organisation))
                 .forEach(resource.getDokumentbeskrivelse()::add);
 
@@ -209,6 +208,7 @@ public class DrosjeloyveResourceFactory {
                 skjermingResource.addTilgangsrestriksjon(Link.with(Tilgang.class, "systemid", organisation.getKonkursattest().getTilgangsrestriksjon()));
             }
         } else if (attachment.getAttachmentTypeName().equals("DokumentasjonFagkompetanse")) {
+            log.debug("Woohoo, we found some documentation of the drivers professional competence!");
             if (!organisation.getKonkursattest().getSkjermingshjemmel().equals("none")) {
                 skjermingResource.addSkjermingshjemmel(Link.with(Skjerming.class, "systemid", organisation.getFagkompetanse().getSkjermingshjemmel()));
             }
