@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import no.fint.altinn.model.AltinnApplication;
 import no.fint.altinn.model.ebevis.Evidence;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URL;
 
-import static org.junit.Assert.assertNotNull;
 
 public class CertificateConverterTest {
 
@@ -25,7 +25,7 @@ public class CertificateConverterTest {
 
         byte[] pdf = converter.convertTaxCertificate(evidence, application);
 
-        assertNotNull("The byte array with the converted tax certificate should not be null!", pdf);
+        Assertions.assertNotNull(pdf, "The byte array with the converted tax certificate should not be null!");
     }
 
     @Test
@@ -39,7 +39,7 @@ public class CertificateConverterTest {
 
         byte[] pdf = converter.convertBankruptCertificate(evidence, application);
 
-        assertNotNull("The byte array with the converted bankrupt certificate should not be null!", pdf);
+        Assertions.assertNotNull(pdf, "The byte array with the converted bankrupt certificate should not be null!");
     }
 
     @Test
@@ -60,7 +60,7 @@ public class CertificateConverterTest {
         byte[] pdf = converter.convertTaxCertificate(evidence, application);
         //Files.write(new File("./RestanserDrosjeTest.pdf").toPath(), pdf);
 
-        assertNotNull("The byte array with the converted tax certificate should not be null!", pdf);
+        Assertions.assertNotNull(pdf, "The byte array with the converted tax certificate should not be null!");
     }
 
     @Test
@@ -81,7 +81,7 @@ public class CertificateConverterTest {
         byte[] pdf = converter.convertTaxCertificate(evidence, application);
         //Files.write(new File("./RestanserV2Test.pdf").toPath(), pdf);
 
-        assertNotNull("The byte array with the converted tax certificate should not be null!", pdf);
+        Assertions.assertNotNull(pdf, "The byte array with the converted tax certificate should not be null!");
     }
 
 }
