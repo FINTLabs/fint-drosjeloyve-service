@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: drosjeloyve-service
-          image: fintlabsacr.azurecr.io/fint-drosjeloyve-service:2023-08-21-415dde2
+          image: ghcr.io/fintlabs/fint-drosjeloyve-service:latest
           resources:
             limits:
               memory: "1000Mi"
