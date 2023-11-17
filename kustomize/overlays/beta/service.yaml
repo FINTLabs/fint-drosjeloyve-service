@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: drosjeloyve-service
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: 'true'
+    operator.1password.io/item-path: "vaults/aks-beta-vault/items/drosjeloyve-service"
+    operator.1password.io/item-name: "drosjeloyve-service"
+spec:
+  selector:
+    app: drosjeloyve-service
+  type: LoadBalancer
+  ports:
+    - {name: '8080', port: 8080}

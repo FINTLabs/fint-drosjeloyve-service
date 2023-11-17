@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drosjeloyve-service
+spec:
+  template:
+    spec:
+      containers:
+        - name: drosjeloyve-service
+          image: fintlabsacr.azurecr.io/fint-drosjeloyve-service:2023-08-21-415dde2
+          resources:
+            limits:
+              memory: "1000Mi"
+              cpu: "1000m"
+            requests:
+              memory: "500Mi"
+              cpu: "500m"
+          envFrom:
+            - secretRef:
+                name: drosjeloyve-service-onepassword
+          env:
+            - {name: TZ, value: Europe/Oslo}
+            - {name: logging.level.no.fint, value: 'trace'}
+            - {name: JAVA_TOOL_OPTIONS, value: '-Xmx1G -XX:+ExitOnOutOfMemoryError'}
+            - {name: fint.endpoints.drosjeloyve, value: 'https://beta.felleskomponent.no/arkiv/samferdsel/soknaddrosjeloyve'}
+            - {name: fint.endpoints.drosjeloyve-mappe-id, value: 'https://beta.felleskomponent.no/arkiv/samferdsel/soknaddrosjeloyve/mappeid/{id}'}
+            - {name: fint.endpoints.dokumentfil, value: 'https://beta.felleskomponent.no/arkiv/noark/dokumentfil'}
+            - {name: fint.endpoints.application, value: 'http://altinn-downloadqueue-service:8080/applications/{id}'}
+            - {name: fint.endpoints.attachment, value: 'http://altinn-downloadqueue-service:8080/attachments/{id}'}
+            - {name: fint.endpoints.evidence, value: 'http://altinn-ebevis-service:8080/evidence/{id}'}
+            - {name: scheduling.cron, value: '0 */5 8-16 * * MON-FRI' }
+            - {name: scheduling.interval, value: '15' }
+            - {name: fint.drosjeloyve.scheduled, value: 'true' }
+            - {name: fint.font, value: '/app/times.ttf' }
+
+            # Oslo testmiljø
+            - {name: drosjeloyve.organisations.958935420.name, value: "Oslo"}
+            - {name: drosjeloyve.organisations.958935420.enabled, value: "false"}
+            - {name: drosjeloyve.organisations.958935420.deviation-policy, value: "false"}
+            - {name: drosjeloyve.organisations.958935420.skjermingshjemmel, value: '§ 13 1. ledd, jf. fvl. § 13 1. ledd nr. 1'}
+            - {name: drosjeloyve.organisations.958935420.tilgangsrestriksjon, value: 'ISK'}
+            - {name: drosjeloyve.organisations.958935420.variantformat, value: 'P'}
+            - {name: drosjeloyve.organisations.958935420.limit, value: '10'}
+            - {name: drosjeloyve.organisations.958935420.politiattest.skjermingshjemmel, value: '§ 13 1. ledd, jf. fvl. § 13 1. ledd nr. 1'}
+            - {name: drosjeloyve.organisations.958935420.politiattest.tilgangsrestriksjon, value: 'ISK'}
+            - {name: drosjeloyve.organisations.958935420.skatteattest.skjermingshjemmel, value: '§ 13 1. ledd, jf. fvl. § 13 1. ledd nr. 1'}
+            - {name: drosjeloyve.organisations.958935420.skatteattest.tilgangsrestriksjon, value: 'ISK'}
+            - {name: drosjeloyve.organisations.958935420.konkursattest.skjermingshjemmel, value: '§ 13 1. ledd, jf. fvl. § 13 1. ledd nr. 1'}
+            - {name: drosjeloyve.organisations.958935420.konkursattest.tilgangsrestriksjon, value: 'ISK'}
+            - {name: drosjeloyve.organisations.958935420.fagkompetanse.skjermingshjemmel, value: '§ 13 1. ledd, jf. fvl. § 13 1. ledd nr. 1'}
+            - {name: drosjeloyve.organisations.958935420.fagkompetanse.tilgangsrestriksjon, value: 'ISK'}
+            - {name: drosjeloyve.organisations.958935420.dom-forelegg.skjermingshjemmel, value: '§ 13 1. ledd, jf. fvl. § 13 1. ledd nr. 1'}
+            - {name: drosjeloyve.organisations.958935420.dom-forelegg.tilgangsrestriksjon, value: 'ISK'}
+            - {name: drosjeloyve.organisations.958935420.soknadsskjema.skjermingshjemmel, value: '§ 13 1. ledd, jf. fvl. § 13 1. ledd nr. 1'}
+            - {name: drosjeloyve.organisations.958935420.soknadsskjema.tilgangsrestriksjon, value: 'ISK'}
+
+            # Agder testmiljø
+            - {name: drosjeloyve.organisations.921707134.name, value: "Agder"}
+            - {name: drosjeloyve.organisations.921707134.enabled, value: "false"}
+            - {name: drosjeloyve.organisations.921707134.deviation-policy, value: "true"}
+            - {name: drosjeloyve.organisations.921707134.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.921707134.tilgangsrestriksjon, value: 'UO'}
+            - {name: drosjeloyve.organisations.921707134.variantformat, value: 'P'}
+            - {name: drosjeloyve.organisations.921707134.limit, value: '10'}
+            - {name: drosjeloyve.organisations.921707134.politiattest.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.921707134.politiattest.tilgangsrestriksjon, value: 'UO'}
+            - {name: drosjeloyve.organisations.921707134.skatteattest.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.921707134.skatteattest.tilgangsrestriksjon, value: 'UO'}
+            - {name: drosjeloyve.organisations.921707134.konkursattest.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.921707134.konkursattest.tilgangsrestriksjon, value: 'UO'}
+            - {name: drosjeloyve.organisations.921707134.fagkompetanse.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.921707134.fagkompetanse.tilgangsrestriksjon, value: 'UO'}
+            - {name: drosjeloyve.organisations.921707134.dom-forelegg.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.921707134.dom-forelegg.tilgangsrestriksjon, value: 'UO'}
+            - {name: drosjeloyve.organisations.921707134.soknadsskjema.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.921707134.soknadsskjema.tilgangsrestriksjon, value: 'UO'}
+
+            # Tre små kinesere - N/A tt02.altinn.no :-(
+            - {name: drosjeloyve.organisations.817920632.name, value: "Trøndelag"}
+            - {name: drosjeloyve.organisations.817920632.enabled, value: "false"}
+            - {name: drosjeloyve.organisations.817920632.deviation-policy, value: "true"}
+            - {name: drosjeloyve.organisations.817920632.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.817920632.tilgangsrestriksjon, value: '200002'}
+            - {name: drosjeloyve.organisations.817920632.variantformat, value: 'P'}
+            - {name: drosjeloyve.organisations.817920632.limit, value: '10'}
+            - {name: drosjeloyve.organisations.817920632.politiattest.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.817920632.politiattest.tilgangsrestriksjon, value: '200002'}
+            - {name: drosjeloyve.organisations.817920632.skatteattest.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.817920632.skatteattest.tilgangsrestriksjon, value: '200002'}
+            - {name: drosjeloyve.organisations.817920632.konkursattest.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.817920632.konkursattest.tilgangsrestriksjon, value: '200002'}
+            - {name: drosjeloyve.organisations.817920632.fagkompetanse.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.817920632.fagkompetanse.tilgangsrestriksjon, value: '200002'}
+            - {name: drosjeloyve.organisations.817920632.dom-forelegg.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.817920632.dom-forelegg.tilgangsrestriksjon, value: '200002'}
+            - {name: drosjeloyve.organisations.817920632.soknadsskjema.skjermingshjemmel, value: '43'}
+            - {name: drosjeloyve.organisations.817920632.soknadsskjema.tilgangsrestriksjon, value: '200002'}
