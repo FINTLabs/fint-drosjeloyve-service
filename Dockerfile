@@ -1,4 +1,4 @@
-FROM fintlabsacr.azurecr.io/drosjeloyve-frontend as node
+FROM ghcr.io/fintlabs/fint-drosjeloyve-admin as node
 
 FROM gradle:6.6.1-jdk8 as builder
 USER root
