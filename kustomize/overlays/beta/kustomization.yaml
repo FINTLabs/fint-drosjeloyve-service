@@ -5,7 +5,11 @@ resources:
   - ../../base
   - onepassword.yaml
   - service.yaml
-#  - fint-adapter.yaml
+  - fint-client-agderfk-no.yaml
+  - fint-client-bym-oslo-kommune-no.yaml
+  - fint-client-mrfylke-no.yaml
+  - fint-client-rogfk-no.yaml
+  - fint-client-trondelagfylke-no.yaml
 
 patches:
 
