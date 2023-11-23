@@ -5,13 +5,13 @@ resources:
   - ../../base
   - onepassword.yaml
   - service.yaml
-  - fint-client-afk.yaml
-  - fint-client-bfk.yaml
-  - fint-client-ofk.yaml
-  - fint-client-ffk.yaml
-  - fint-client-tromsfylke.yaml
-  - fint-client-telemarkfylke.yaml
-  - fint-client-vestfoldfylke.yaml
+  - fint-client-afk-no.yaml
+  - fint-client-bfk-no.yaml
+  - fint-client-ofk-no.yaml
+  - fint-client-ffk-no.yaml
+  - fint-client-tromsfylke-no.yaml
+  - fint-client-telemarkfylke-no.yaml
+  - fint-client-vestfoldfylke-no.yaml
 
 patches:
 
