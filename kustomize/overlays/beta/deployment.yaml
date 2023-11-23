@@ -94,3 +94,13 @@ spec:
             - {name: drosjeloyve.organisations.817920632.dom-forelegg.tilgangsrestriksjon, value: '200002'}
             - {name: drosjeloyve.organisations.817920632.soknadsskjema.skjermingshjemmel, value: '43'}
             - {name: drosjeloyve.organisations.817920632.soknadsskjema.tilgangsrestriksjon, value: '200002'}
+
+            # mrfylke-no
+            - { name: drosjeloyve.organisations.944183779.username, valueFrom: { secretKeyRef: { name: 'drosjeloyve-beta-mrfylke-no', key: 'fint.core.oauth2.username' }}}
+            - { name: drosjeloyve.organisations.944183779.password, valueFrom: { secretKeyRef: { name: 'drosjeloyve-beta-mrfylke-no', key: 'fint.core.oauth2.password' }}}
+            - { name: drosjeloyve.organisations.944183779.registration, value: 'mrfylke-no' }
+            - { name: spring.security.oauth2.client.registration.mrfylke-no.client-id, valueFrom: { secretKeyRef: { name: 'drosjeloyve-beta-mrfylke-no', key: 'fint.core.oauth2.client-id' }}}
+            - { name: spring.security.oauth2.client.registration.mrfylke-no.client-secret, valueFrom: { secretKeyRef: { name: 'drosjeloyve-beta-mrfylke-no', key: 'fint.core.oauth2.client-secret' }}}
+            - { name: spring.security.oauth2.client.registration.mrfylke-no.scope, value: 'fint-client'}
+            - { name: spring.security.oauth2.client.registration.mrfylke-no.provider, value: 'fint'}
+            - { name: spring.security.oauth2.client.registration.mrfylke-no.authorization-grant-type, value: 'password'}
