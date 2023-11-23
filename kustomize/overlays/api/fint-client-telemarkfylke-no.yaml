@@ -1,0 +1,19 @@
+apiVersion: fintlabs.no/v1alpha1
+kind: FintClient
+metadata:
+  name: drosje-prod-telemarkfylke-no
+  labels:
+    app.kubernetes.io/name: drosjeloyve-service_telemarkfylke-no
+    app.kubernetes.io/instance: drosjeloyve-service_telemarkfylke-no
+    app.kubernetes.io/version: latest
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: arkiv
+    fintlabs.no/team: arkiv
+    fintlabs.no/org-id: telemarkfylke.no
+spec:
+  orgId: telemarkfylke.no
+  note: Brukes av drosjeloyve-service til å kommunisere med arkivsystemet.
+  components:
+    - arkiv_kodeverk
+    - arkiv_noark
+    - arkiv_samferdsel
