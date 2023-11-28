@@ -241,3 +241,33 @@ spec:
             - { name: drosjeloyve.organisations.817920632.dom-forelegg.tilgangsrestriksjon, value: '200002' }
             - { name: drosjeloyve.organisations.817920632.soknadsskjema.skjermingshjemmel, value: '43' }
             - { name: drosjeloyve.organisations.817920632.soknadsskjema.tilgangsrestriksjon, value: '200002' }
+
+            # AFK
+            - { name: drosjeloyve.organisations.930580783.username, valueFrom: { secretKeyRef: { name: 'drosje-prod-afk-no', key: 'fint.core.oauth2.username' }}}
+            - { name: drosjeloyve.organisations.930580783.password, valueFrom: { secretKeyRef: { name: 'drosje-prod-afk-no', key: 'fint.core.oauth2.password' }}}
+            - { name: drosjeloyve.organisations.930580783.registration, value: 'afk' }
+            - { name: spring.security.oauth2.client.registration.afk.client-id, valueFrom: { secretKeyRef: { name: 'drosje-prod-afk-no', key: 'fint.core.oauth2.client-id' }}}
+            - { name: spring.security.oauth2.client.registration.afk.client-secret, valueFrom: { secretKeyRef: { name: 'drosje-prod-afk-no', key: 'fint.core.oauth2.client-secret' }}}
+            - { name: spring.security.oauth2.client.registration.afk.scope, value: 'fint-client'}
+            - { name: spring.security.oauth2.client.registration.afk.provider, value: 'fint'}
+            - { name: spring.security.oauth2.client.registration.afk.authorization-grant-type, value: 'password'}
+
+            # BFK
+            - { name: drosjeloyve.organisations.930580260.username, valueFrom: { secretKeyRef: { name: 'drosje-prod-bfk-no', key: 'fint.core.oauth2.username' } } }
+            - { name: drosjeloyve.organisations.930580260.password, valueFrom: { secretKeyRef: { name: 'drosje-prod-bfk-no', key: 'fint.core.oauth2.password' } } }
+            - { name: drosjeloyve.organisations.930580260.registration, value: 'bfk' }
+            - { name: spring.security.oauth2.client.registration.bfk.client-id, valueFrom: { secretKeyRef: { name: 'drosje-prod-bfk-no', key: 'fint.core.oauth2.client-id' } } }
+            - { name: spring.security.oauth2.client.registration.bfk.client-secret, valueFrom: { secretKeyRef: { name: 'drosje-prod-bfk-no', key: 'fint.core.oauth2.client-secret' } } }
+            - { name: spring.security.oauth2.client.registration.bfk.scope, value: 'fint-client' }
+            - { name: spring.security.oauth2.client.registration.bfk.provider, value: 'fint' }
+            - { name: spring.security.oauth2.client.registration.bfk.authorization-grant-type, value: 'password' }
+
+            # OFK
+            - { name: drosjeloyve.organisations.930580694.username, valueFrom: { secretKeyRef: { name: 'drosje-prod-ofk-no', key: 'fint.core.oauth2.username' } } }
+            - { name: drosjeloyve.organisations.930580694.password, valueFrom: { secretKeyRef: { name: 'drosje-prod-ofk-no', key: 'fint.core.oauth2.password' } } }
+            - { name: drosjeloyve.organisations.930580694.registration, value: 'ofk' }
+            - { name: spring.security.oauth2.client.registration.ofk.client-id, valueFrom: { secretKeyRef: { name: 'drosje-prod-ofk-no', key: 'fint.core.oauth2.client-id' } } }
+            - { name: spring.security.oauth2.client.registration.ofk.client-secret, valueFrom: { secretKeyRef: { name: 'drosje-prod-ofk-no', key: 'fint.core.oauth2.client-secret' } } }
+            - { name: spring.security.oauth2.client.registration.ofk.scope, value: 'fint-client' }
+            - { name: spring.security.oauth2.client.registration.ofk.provider, value: 'fint' }
+            - { name: spring.security.oauth2.client.registration.ofk.authorization-grant-type, value: 'password' }
