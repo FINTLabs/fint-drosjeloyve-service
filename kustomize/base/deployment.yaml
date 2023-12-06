@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drosjeloyve-service
+spec:
+  selector:
+    matchLabels:
+      app: drosjeloyve-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxSurge: 1, maxUnavailable: 0}
+  template:
+    metadata:
+      labels:
+        app: drosjeloyve-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "actuator/prometheus"
+    spec:
+      containers:
+        - name: drosjeloyve-service
+          image: ghcr.io/fintlabs/fint-drosjeloyve-service:latest
+          resources:
+            limits:
+              memory: "1000Mi"
+              cpu: "1000m"
+            requests:
+              memory: "500Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          envFrom:
+            - secretRef:
+                name: drosjeloyve-service
+          env:
+            - {name: TZ, value: Europe/Oslo}
+            - {name: logging.level.no.fint, value: 'trace'}
+            - {name: JAVA_TOOL_OPTIONS, value: '-Xmx1G -XX:+ExitOnOutOfMemoryError'}
+            - {name: fint.endpoints.drosjeloyve, value: 'https://beta.felleskomponent.no/arkiv/samferdsel/soknaddrosjeloyve'}
+            - {name: fint.endpoints.drosjeloyve-mappe-id, value: 'https://beta.felleskomponent.no/arkiv/samferdsel/soknaddrosjeloyve/mappeid/{id}'}
+            - {name: fint.endpoints.dokumentfil, value: 'https://beta.felleskomponent.no/arkiv/noark/dokumentfil'}
+            - {name: fint.endpoints.application, value: 'http://altinn-downloadqueue-service:8080/applications/{id}'}
+            - {name: fint.endpoints.attachment, value: 'http://altinn-downloadqueue-service:8080/attachments/{id}'}
+            - {name: fint.endpoints.evidence, value: 'http://altinn-ebevis-service:8080/evidence/{id}'}
+            - {name: scheduling.cron, value: '0 */5 8-16 * * MON-FRI' }
+            - {name: scheduling.interval, value: '15' }
+            - {name: fint.drosjeloyve.scheduled, value: 'true' }
+            - {name: fint.font, value: '/app/times.ttf' }

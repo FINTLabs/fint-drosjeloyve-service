@@ -1,0 +1,19 @@
+apiVersion: fintlabs.no/v1alpha1
+kind: FintClient
+metadata:
+  name: drosje-prod-ffk-no
+  labels:
+    app.kubernetes.io/name: drosjeloyve-service_ffk-no
+    app.kubernetes.io/instance: drosjeloyve-service_ffk-no
+    app.kubernetes.io/version: latest
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: arkiv
+    fintlabs.no/team: arkiv
+    fintlabs.no/org-id: ffk.no
+spec:
+  orgId: ffk.no
+  note: Brukes av drosjeloyve-service til å kommunisere med arkivsystemet.
+  components:
+    - arkiv_kodeverk
+    - arkiv_noark
+    - arkiv_samferdsel

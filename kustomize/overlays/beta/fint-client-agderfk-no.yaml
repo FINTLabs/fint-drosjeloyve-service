@@ -1,0 +1,19 @@
+apiVersion: fintlabs.no/v1alpha1
+kind: FintClient
+metadata:
+  name: drosjeloyve-beta-agderfk-no
+  labels:
+    app.kubernetes.io/name: drosjeloyve-service-beta_rorgfk-no
+    app.kubernetes.io/instance: drosjeloyve-service_rorgfk-no
+    app.kubernetes.io/version: latest
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: arkiv
+    fintlabs.no/team: arkiv
+    fintlabs.no/org-id: agderfk.no
+spec:
+  orgId: agderfk.no
+  note: Brukes av drosjeloyve-service til å kommunisere med arkivsystemet.
+  components:
+    - arkiv_kodeverk
+    - arkiv_noark
+    - arkiv_samferdsel
