@@ -27,7 +27,7 @@ spec:
             - { name: fint.endpoints.application, value: 'http://altinn-downloadqueue-service:8080/applications/{id}' }
             - { name: fint.endpoints.attachment, value: 'http://altinn-downloadqueue-service:8080/attachments/{id}' }
             - { name: fint.endpoints.evidence, value: 'http://altinn-ebevis-service:8080/evidence/{id}' }
-            - { name: scheduling.cron, value: '0 0 8-16 * * MON-FRI' }
+            - { name: scheduling.cron, value: '0 0 8-15 * * MON-FRI' }
             - { name: scheduling.interval, value: '15' }
             - { name: fint.drosjeloyve.scheduled, value: 'true' }
             - { name: fint.font, value: '/app/times.ttf' }
