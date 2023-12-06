@@ -328,4 +328,3 @@ spec:
             - { name: spring.security.oauth2.client.registration.ofk.scope, value: 'fint-client' }
             - { name: spring.security.oauth2.client.registration.ofk.provider, value: 'fint' }
             - { name: spring.security.oauth2.client.registration.ofk.authorization-grant-type, value: 'password' }
-
