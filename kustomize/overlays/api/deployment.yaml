@@ -243,6 +243,25 @@ spec:
             - { name: drosjeloyve.organisations.817920632.soknadsskjema.tilgangsrestriksjon, value: '200002' }
 
             # AFK
+            - { name: drosjeloyve.organisations.930580783.name, value: "Akershus" }
+            - { name: drosjeloyve.organisations.930580783.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.930580783.deviation-policy, value: "true" }
+            - { name: drosjeloyve.organisations.930580783.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580783.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580783.variantformat, value: 'P' }
+            - { name: drosjeloyve.organisations.930580783.limit, value: '10' }
+            - { name: drosjeloyve.organisations.930580783.politiattest.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580783.politiattest.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580783.skatteattest.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580783.skatteattest.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580783.konkursattest.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580783.konkursattest.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580783.fagkompetanse.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580783.fagkompetanse.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580783.dom-forelegg.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580783.dom-forelegg.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580783.soknadsskjema.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580783.soknadsskjema.tilgangsrestriksjon, value: 'U' }
             - { name: drosjeloyve.organisations.930580783.username, valueFrom: { secretKeyRef: { name: 'drosje-prod-afk-no', key: 'fint.core.oauth2.username' }}}
             - { name: drosjeloyve.organisations.930580783.password, valueFrom: { secretKeyRef: { name: 'drosje-prod-afk-no', key: 'fint.core.oauth2.password' }}}
             - { name: drosjeloyve.organisations.930580783.registration, value: 'afk' }
@@ -271,3 +290,4 @@ spec:
             - { name: spring.security.oauth2.client.registration.ofk.scope, value: 'fint-client' }
             - { name: spring.security.oauth2.client.registration.ofk.provider, value: 'fint' }
             - { name: spring.security.oauth2.client.registration.ofk.authorization-grant-type, value: 'password' }
+
