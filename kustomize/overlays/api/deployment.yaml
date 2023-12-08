@@ -328,3 +328,32 @@ spec:
             - { name: spring.security.oauth2.client.registration.ofk.scope, value: 'fint-client' }
             - { name: spring.security.oauth2.client.registration.ofk.provider, value: 'fint' }
             - { name: spring.security.oauth2.client.registration.ofk.authorization-grant-type, value: 'password' }
+
+            # FFK
+            - { name: drosjeloyve.organisations.830090282.name, value: "Finnmark" }
+            - { name: drosjeloyve.organisations.830090282.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.830090282.deviation-policy, value: "false" }
+            - { name: drosjeloyve.organisations.830090282.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.830090282.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.830090282.variantformat, value: 'P' }
+            - { name: drosjeloyve.organisations.830090282.limit, value: '10' }
+            - { name: drosjeloyve.organisations.830090282.politiattest.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.830090282.politiattest.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.830090282.skatteattest.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.830090282.skatteattest.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.830090282.konkursattest.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.830090282.konkursattest.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.830090282.fagkompetanse.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.830090282.fagkompetanse.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.830090282.dom-forelegg.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.830090282.dom-forelegg.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.830090282.soknadsskjema.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.830090282.soknadsskjema.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.830090282.username, valueFrom: { secretKeyRef: { name: 'drosje-prod-ffk-no', key: 'fint.core.oauth2.username' } } }
+            - { name: drosjeloyve.organisations.830090282.password, valueFrom: { secretKeyRef: { name: 'drosje-prod-ffk-no', key: 'fint.core.oauth2.password' } } }
+            - { name: drosjeloyve.organisations.830090282.registration, value: 'ffk' }
+            - { name: spring.security.oauth2.client.registration.ffk.client-id, valueFrom: { secretKeyRef: { name: 'drosje-prod-ffk-no', key: 'fint.core.oauth2.client-id' } } }
+            - { name: spring.security.oauth2.client.registration.ffk.client-secret, valueFrom: { secretKeyRef: { name: 'drosje-prod-ffk-no', key: 'fint.core.oauth2.client-secret' } } }
+            - { name: spring.security.oauth2.client.registration.ffk.scope, value: 'fint-client' }
+            - { name: spring.security.oauth2.client.registration.ffk.provider, value: 'fint' }
+            - { name: spring.security.oauth2.client.registration.ffk.authorization-grant-type, value: 'password' }
