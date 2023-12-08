@@ -357,3 +357,32 @@ spec:
             - { name: spring.security.oauth2.client.registration.ffk.scope, value: 'fint-client' }
             - { name: spring.security.oauth2.client.registration.ffk.provider, value: 'fint' }
             - { name: spring.security.oauth2.client.registration.ffk.authorization-grant-type, value: 'password' }
+
+            # Vestfold
+            - { name: drosjeloyve.organisations.929882385.name, value: "Vestfold" }
+            - { name: drosjeloyve.organisations.929882385.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.929882385.deviation-policy, value: "false" }
+            - { name: drosjeloyve.organisations.929882385.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.929882385.tilgangsrestriksjon, value: '200008' }
+            - { name: drosjeloyve.organisations.929882385.variantformat, value: 'P' }
+            - { name: drosjeloyve.organisations.929882385.limit, value: '10' }
+            - { name: drosjeloyve.organisations.929882385.politiattest.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.929882385.politiattest.tilgangsrestriksjon, value: '200008' }
+            - { name: drosjeloyve.organisations.929882385.skatteattest.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.929882385.skatteattest.tilgangsrestriksjon, value: '200008' }
+            - { name: drosjeloyve.organisations.929882385.konkursattest.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.929882385.konkursattest.tilgangsrestriksjon, value: '200008' }
+            - { name: drosjeloyve.organisations.929882385.fagkompetanse.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.929882385.fagkompetanse.tilgangsrestriksjon, value: '200008' }
+            - { name: drosjeloyve.organisations.929882385.dom-forelegg.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.929882385.dom-forelegg.tilgangsrestriksjon, value: '200008' }
+            - { name: drosjeloyve.organisations.929882385.soknadsskjema.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.929882385.soknadsskjema.tilgangsrestriksjon, value: '200008' }
+            - { name: drosjeloyve.organisations.929882385.username, valueFrom: { secretKeyRef: { name: 'drosje-prod-vestfoldfylke-no', key: 'fint.core.oauth2.username' } } }
+            - { name: drosjeloyve.organisations.929882385.password, valueFrom: { secretKeyRef: { name: 'drosje-prod-vestfoldfylke-no', key: 'fint.core.oauth2.password' } } }
+            - { name: drosjeloyve.organisations.929882385.registration, value: 'vestfoldfylke' }
+            - { name: spring.security.oauth2.client.registration.vestfoldfylke.client-id, valueFrom: { secretKeyRef: { name: 'drosje-prod-vestfoldfylke-no', key: 'fint.core.oauth2.client-id' } } }
+            - { name: spring.security.oauth2.client.registration.vestfoldfylke.client-secret, valueFrom: { secretKeyRef: { name: 'drosje-prod-vestfoldfylke-no', key: 'fint.core.oauth2.client-secret' } } }
+            - { name: spring.security.oauth2.client.registration.vestfoldfylke.scope, value: 'fint-client' }
+            - { name: spring.security.oauth2.client.registration.vestfoldfylke.provider, value: 'fint' }
+            - { name: spring.security.oauth2.client.registration.vestfoldfylke.authorization-grant-type, value: 'password' }
