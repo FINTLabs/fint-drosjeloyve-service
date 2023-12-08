@@ -407,11 +407,11 @@ spec:
             - { name: drosjeloyve.organisations.929882989.dom-forelegg.tilgangsrestriksjon, value: '200003' }
             - { name: drosjeloyve.organisations.929882989.soknadsskjema.skjermingshjemmel, value: '43' }
             - { name: drosjeloyve.organisations.929882989.soknadsskjema.tilgangsrestriksjon, value: '200003' }
-            - { name: drosjeloyve.organisations.929882989.username, valueFrom: { secretKeyRef: { name: 'drosje-prod-telemarfylke-no', key: 'fint.core.oauth2.username' } } }
-            - { name: drosjeloyve.organisations.929882989.password, valueFrom: { secretKeyRef: { name: 'drosje-prod-telemarfylke-no', key: 'fint.core.oauth2.password' } } }
-            - { name: drosjeloyve.organisations.929882989.registration, value: 'telemarfylke' }
-            - { name: spring.security.oauth2.client.registration.telemarfylke.client-id, valueFrom: { secretKeyRef: { name: 'drosje-prod-telemarfylke-no', key: 'fint.core.oauth2.client-id' } } }
-            - { name: spring.security.oauth2.client.registration.telemarfylke.client-secret, valueFrom: { secretKeyRef: { name: 'drosje-prod-telemarfylke-no', key: 'fint.core.oauth2.client-secret' } } }
-            - { name: spring.security.oauth2.client.registration.telemarfylke.scope, value: 'fint-client' }
-            - { name: spring.security.oauth2.client.registration.telemarfylke.provider, value: 'fint' }
-            - { name: spring.security.oauth2.client.registration.telemarfylke.authorization-grant-type, value: 'password' }
+            - { name: drosjeloyve.organisations.929882989.username, valueFrom: { secretKeyRef: { name: 'drosje-prod-telemarkfylke-no', key: 'fint.core.oauth2.username' } } }
+            - { name: drosjeloyve.organisations.929882989.password, valueFrom: { secretKeyRef: { name: 'drosje-prod-telemarkfylke-no', key: 'fint.core.oauth2.password' } } }
+            - { name: drosjeloyve.organisations.929882989.registration, value: 'telemarkfylke' }
+            - { name: spring.security.oauth2.client.registration.telemarkfylke.client-id, valueFrom: { secretKeyRef: { name: 'drosje-prod-telemarkfylke-no', key: 'fint.core.oauth2.client-id' } } }
+            - { name: spring.security.oauth2.client.registration.telemarkfylke.client-secret, valueFrom: { secretKeyRef: { name: 'drosje-prod-telemarkfylke-no', key: 'fint.core.oauth2.client-secret' } } }
+            - { name: spring.security.oauth2.client.registration.telemarkfylke.scope, value: 'fint-client' }
+            - { name: spring.security.oauth2.client.registration.telemarkfylke.provider, value: 'fint' }
+            - { name: spring.security.oauth2.client.registration.telemarkfylke.authorization-grant-type, value: 'password' }
