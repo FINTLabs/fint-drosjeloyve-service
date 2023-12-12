@@ -415,3 +415,33 @@ spec:
             - { name: spring.security.oauth2.client.registration.telemarkfylke.scope, value: 'fint-client' }
             - { name: spring.security.oauth2.client.registration.telemarkfylke.provider, value: 'fint' }
             - { name: spring.security.oauth2.client.registration.telemarkfylke.authorization-grant-type, value: 'password' }
+
+
+            # Troms
+            - { name: drosjeloyve.organisations.930068128.name, value: "Troms" }
+            - { name: drosjeloyve.organisations.930068128.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.930068128.deviation-policy, value: "false" }
+            - { name: drosjeloyve.organisations.930068128.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.930068128.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.930068128.variantformat, value: 'P' }
+            - { name: drosjeloyve.organisations.930068128.limit, value: '10' }
+            - { name: drosjeloyve.organisations.930068128.politiattest.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.930068128.politiattest.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.930068128.skatteattest.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.930068128.skatteattest.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.930068128.konkursattest.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.930068128.konkursattest.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.930068128.fagkompetanse.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.930068128.fagkompetanse.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.930068128.dom-forelegg.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.930068128.dom-forelegg.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.930068128.soknadsskjema.skjermingshjemmel, value: '68' }
+            - { name: drosjeloyve.organisations.930068128.soknadsskjema.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.930068128.username, valueFrom: { secretKeyRef: { name: 'drosje-prod-tromsfylke-no', key: 'fint.core.oauth2.username' } } }
+            - { name: drosjeloyve.organisations.930068128.password, valueFrom: { secretKeyRef: { name: 'drosje-prod-tromsfylke-no', key: 'fint.core.oauth2.password' } } }
+            - { name: drosjeloyve.organisations.930068128.registration, value: 'tromsfylke' }
+            - { name: spring.security.oauth2.client.registration.tromsfylke.client-id, valueFrom: { secretKeyRef: { name: 'drosje-prod-tromsfylke-no', key: 'fint.core.oauth2.client-id' } } }
+            - { name: spring.security.oauth2.client.registration.tromsfylke.client-secret, valueFrom: { secretKeyRef: { name: 'drosje-prod-tromsfylke-no', key: 'fint.core.oauth2.client-secret' } } }
+            - { name: spring.security.oauth2.client.registration.tromsfylke.scope, value: 'fint-client' }
+            - { name: spring.security.oauth2.client.registration.tromsfylke.provider, value: 'fint' }
+            - { name: spring.security.oauth2.client.registration.tromsfylke.authorization-grant-type, value: 'password' }
