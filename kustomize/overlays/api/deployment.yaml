@@ -55,7 +55,7 @@ spec:
 
             # Viken
             - { name: drosjeloyve.organisations.921693230.name, value: "Viken" }
-            - { name: drosjeloyve.organisations.921693230.enabled, value: "true" }
+            - { name: drosjeloyve.organisations.921693230.enabled, value: "false" }
             - { name: drosjeloyve.organisations.921693230.deviation-policy, value: "true" }
             - { name: drosjeloyve.organisations.921693230.skjermingshjemmel, value: 'U:Offl§13jfFvl§131' }
             - { name: drosjeloyve.organisations.921693230.tilgangsrestriksjon, value: 'U' }
@@ -160,7 +160,7 @@ spec:
 
             # Vestfold og Telemark
             - { name: drosjeloyve.organisations.821227062.name, value: "Vestfold og Telemark" }
-            - { name: drosjeloyve.organisations.821227062.enabled, value: "true" }
+            - { name: drosjeloyve.organisations.821227062.enabled, value: "false" }
             - { name: drosjeloyve.organisations.821227062.deviation-policy, value: "false" }
             - { name: drosjeloyve.organisations.821227062.skjermingshjemmel, value: '43' }
             - { name: drosjeloyve.organisations.821227062.tilgangsrestriksjon, value: '200002' }
@@ -202,7 +202,7 @@ spec:
 
             # Joker Nord (tffk)
             - { name: drosjeloyve.organisations.922420866.name, value: "Troms og Finnmark" }
-            - { name: drosjeloyve.organisations.922420866.enabled, value: "true" }
+            - { name: drosjeloyve.organisations.922420866.enabled, value: "false" }
             - { name: drosjeloyve.organisations.922420866.deviation-policy, value: "false" }
             - { name: drosjeloyve.organisations.922420866.skjermingshjemmel, value: '43' }
             - { name: drosjeloyve.organisations.922420866.tilgangsrestriksjon, value: '18' }
@@ -415,7 +415,6 @@ spec:
             - { name: spring.security.oauth2.client.registration.telemarkfylke.scope, value: 'fint-client' }
             - { name: spring.security.oauth2.client.registration.telemarkfylke.provider, value: 'fint' }
             - { name: spring.security.oauth2.client.registration.telemarkfylke.authorization-grant-type, value: 'password' }
-
 
             # Troms
             - { name: drosjeloyve.organisations.930068128.name, value: "Troms" }
