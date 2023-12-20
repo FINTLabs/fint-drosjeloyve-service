@@ -76,7 +76,7 @@ spec:
 
             # Tre små kinesere - N/A tt02.altinn.no :-(
             - {name: drosjeloyve.organisations.817920632.name, value: "Trøndelag"}
-            - {name: drosjeloyve.organisations.817920632.enabled, value: "false"}
+            - {name: drosjeloyve.organisations.817920632.enabled, value: "true"}
             - {name: drosjeloyve.organisations.817920632.deviation-policy, value: "true"}
             - {name: drosjeloyve.organisations.817920632.skjermingshjemmel, value: '43'}
             - {name: drosjeloyve.organisations.817920632.tilgangsrestriksjon, value: '200002'}
