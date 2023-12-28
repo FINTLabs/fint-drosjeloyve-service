@@ -301,25 +301,25 @@ spec:
             - { name: spring.security.oauth2.client.registration.bfk.authorization-grant-type, value: 'password' }
 
             # OFK
-            - { name: drosjeloyve.organisations.930580260.name, value: "Østfold" }
-            - { name: drosjeloyve.organisations.930580260.enabled, value: "false" }
-            - { name: drosjeloyve.organisations.930580260.deviation-policy, value: "false" }
-            - { name: drosjeloyve.organisations.930580260.skjermingshjemmel, value: 'UO' }
-            - { name: drosjeloyve.organisations.930580260.tilgangsrestriksjon, value: 'U' }
-            - { name: drosjeloyve.organisations.930580260.variantformat, value: 'P' }
-            - { name: drosjeloyve.organisations.930580260.limit, value: '10' }
-            - { name: drosjeloyve.organisations.930580260.politiattest.skjermingshjemmel, value: 'UO' }
-            - { name: drosjeloyve.organisations.930580260.politiattest.tilgangsrestriksjon, value: 'U' }
-            - { name: drosjeloyve.organisations.930580260.skatteattest.skjermingshjemmel, value: 'UO' }
-            - { name: drosjeloyve.organisations.930580260.skatteattest.tilgangsrestriksjon, value: 'U' }
-            - { name: drosjeloyve.organisations.930580260.konkursattest.skjermingshjemmel, value: 'UO' }
-            - { name: drosjeloyve.organisations.930580260.konkursattest.tilgangsrestriksjon, value: 'U' }
-            - { name: drosjeloyve.organisations.930580260.fagkompetanse.skjermingshjemmel, value: 'UO' }
-            - { name: drosjeloyve.organisations.930580260.fagkompetanse.tilgangsrestriksjon, value: 'U' }
-            - { name: drosjeloyve.organisations.930580260.dom-forelegg.skjermingshjemmel, value: 'UO' }
-            - { name: drosjeloyve.organisations.930580260.dom-forelegg.tilgangsrestriksjon, value: 'U' }
-            - { name: drosjeloyve.organisations.930580260.soknadsskjema.skjermingshjemmel, value: 'UO' }
-            - { name: drosjeloyve.organisations.930580260.soknadsskjema.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580694.name, value: "Østfold" }
+            - { name: drosjeloyve.organisations.930580694.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.930580694.deviation-policy, value: "false" }
+            - { name: drosjeloyve.organisations.930580694.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580694.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580694.variantformat, value: 'P' }
+            - { name: drosjeloyve.organisations.930580694.limit, value: '10' }
+            - { name: drosjeloyve.organisations.930580694.politiattest.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580694.politiattest.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580694.skatteattest.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580694.skatteattest.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580694.konkursattest.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580694.konkursattest.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580694.fagkompetanse.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580694.fagkompetanse.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580694.dom-forelegg.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580694.dom-forelegg.tilgangsrestriksjon, value: 'U' }
+            - { name: drosjeloyve.organisations.930580694.soknadsskjema.skjermingshjemmel, value: 'UO' }
+            - { name: drosjeloyve.organisations.930580694.soknadsskjema.tilgangsrestriksjon, value: 'U' }
             - { name: drosjeloyve.organisations.930580694.username, valueFrom: { secretKeyRef: { name: 'drosje-prod-ofk-no', key: 'fint.core.oauth2.username' } } }
             - { name: drosjeloyve.organisations.930580694.password, valueFrom: { secretKeyRef: { name: 'drosje-prod-ofk-no', key: 'fint.core.oauth2.password' } } }
             - { name: drosjeloyve.organisations.930580694.registration, value: 'ofk' }
