@@ -360,7 +360,7 @@ spec:
 
             # Vestfold
             - { name: drosjeloyve.organisations.929882385.name, value: "Vestfold" }
-            - { name: drosjeloyve.organisations.929882385.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.929882385.enabled, value: "true" }
             - { name: drosjeloyve.organisations.929882385.deviation-policy, value: "false" }
             - { name: drosjeloyve.organisations.929882385.skjermingshjemmel, value: '43' }
             - { name: drosjeloyve.organisations.929882385.tilgangsrestriksjon, value: '200008' }
