@@ -24,8 +24,8 @@ spec:
             - {name: fint.endpoints.drosjeloyve, value: 'https://beta.felleskomponent.no/arkiv/samferdsel/soknaddrosjeloyve'}
             - {name: fint.endpoints.drosjeloyve-mappe-id, value: 'https://beta.felleskomponent.no/arkiv/samferdsel/soknaddrosjeloyve/mappeid/{id}'}
             - {name: fint.endpoints.dokumentfil, value: 'https://beta.felleskomponent.no/arkiv/noark/dokumentfil'}
-            - {name: fint.endpoints.application, value: 'http://altinn-downloadqueue-service:8080/applications/{id}'}
-            - {name: fint.endpoints.attachment, value: 'http://altinn-downloadqueue-service:8080/attachments/{id}'}
+            - {name: fint.endpoints.application, value: 'http://altinn-downloadqueue-service-vigo:8080/applications/{id}'}
+            - {name: fint.endpoints.attachment, value: 'http://altinn-downloadqueue-service-vigo:8080/attachments/{id}'}
             - {name: fint.endpoints.evidence, value: 'http://altinn-ebevis-service:8080/evidence/{id}'}
             - {name: scheduling.cron, value: '0 */5 8-16 * * MON-FRI' }
             - {name: scheduling.interval, value: '15' }
@@ -76,7 +76,7 @@ spec:
 
             # Tre små kinesere - N/A tt02.altinn.no :-(
             - {name: drosjeloyve.organisations.817920632.name, value: "Trøndelag"}
-            - {name: drosjeloyve.organisations.817920632.enabled, value: "false"}
+            - {name: drosjeloyve.organisations.817920632.enabled, value: "true"}
             - {name: drosjeloyve.organisations.817920632.deviation-policy, value: "true"}
             - {name: drosjeloyve.organisations.817920632.skjermingshjemmel, value: '43'}
             - {name: drosjeloyve.organisations.817920632.tilgangsrestriksjon, value: '200002'}
@@ -94,6 +94,27 @@ spec:
             - {name: drosjeloyve.organisations.817920632.dom-forelegg.tilgangsrestriksjon, value: '200002'}
             - {name: drosjeloyve.organisations.817920632.soknadsskjema.skjermingshjemmel, value: '43'}
             - {name: drosjeloyve.organisations.817920632.soknadsskjema.tilgangsrestriksjon, value: '200002'}
+
+            # Joker Nord (tffk)
+            - { name: drosjeloyve.organisations.922420866.name, value: "Troms og Finnmark" }
+            - { name: drosjeloyve.organisations.922420866.enabled, value: "true" }
+            - { name: drosjeloyve.organisations.922420866.deviation-policy, value: "false" }
+            - { name: drosjeloyve.organisations.922420866.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.922420866.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.922420866.variantformat, value: 'P' }
+            - { name: drosjeloyve.organisations.922420866.limit, value: '10' }
+            - { name: drosjeloyve.organisations.922420866.politiattest.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.922420866.politiattest.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.922420866.skatteattest.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.922420866.skatteattest.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.922420866.konkursattest.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.922420866.konkursattest.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.922420866.fagkompetanse.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.922420866.fagkompetanse.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.922420866.dom-forelegg.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.922420866.dom-forelegg.tilgangsrestriksjon, value: '18' }
+            - { name: drosjeloyve.organisations.922420866.soknadsskjema.skjermingshjemmel, value: '43' }
+            - { name: drosjeloyve.organisations.922420866.soknadsskjema.tilgangsrestriksjon, value: '18' }
 
             # mrfylke-no
             - { name: drosjeloyve.organisations.944183779.username, valueFrom: { secretKeyRef: { name: 'drosjeloyve-beta-mrfylke-no', key: 'fint.core.oauth2.username' }}}

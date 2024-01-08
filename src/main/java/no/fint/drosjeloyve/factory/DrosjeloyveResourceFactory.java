@@ -19,17 +19,21 @@ import java.util.*;
 @Slf4j
 public class DrosjeloyveResourceFactory {
     private static final Set<String> POLICE_CERTIFICATES = new HashSet<>(Arrays.asList("PolitiattestForForetaket",
-            "PolitiattestInnehaverDagligLeder", "PolitiattestInnehaver", "PolitiattestTransportleder", "KopiAvDomForelegg"));
+            "PolitiattestInnehaverDagligLeder", "PolitiattestInnehaver", "PolitiattestTransportleder", "KopiAvDomForelegg",
+            "VIGO_PolitiattestForForetaket", "VIGO_PolitiattestInnehaverDagligLeder", "VIGO_PolitiattestInnehaver",
+            "VIGO_PolitiattestTransportleder", "VIGO_KopiAvDomForelegg"));
 
     private static final Set<String> BANKRUPTCY_ARREARS_MANAGER = new HashSet<>(Arrays.asList("KonkursattestInnehaverDagligLeder",
-            "SkatteattestInnehaverDagligLeder"));
+            "SkatteattestInnehaverDagligLeder", "VIGO_KonkursattestInnehaverDagligLeder",
+            "VIGO_SkatteattestInnehaverDagligLeder"));
 
     private static final Set<String> BANKRUPTCY_ARREARS_COMPANY = new HashSet<>(Arrays.asList("RestanserDrosje", "RestanserV2", "KonkursDrosje"));
 
     public static final String BANKRUPTCY = "KonkursDrosje";
     public static final Set<String> ARREARS = new HashSet<>(Arrays.asList("RestanserDrosje", "RestanserV2"));
 
-    public static final String DOCUMENTATION_PROFESSIONAL_COMPETENCE = "DokumentasjonFagkompetanse";
+    public static final Set<String> DOCUMENTATION_PROFESSIONAL_COMPETENCE = new HashSet<>(Arrays.asList(
+            "DokumentasjonFagkompetanse", "VIGO_DokumentasjonFagkompetanse"));
 
     public static SoknadDrosjeloyveResource ofBasic(AltinnApplication application) {
         SoknadDrosjeloyveResource resource = new SoknadDrosjeloyveResource();
@@ -61,7 +65,7 @@ public class DrosjeloyveResourceFactory {
 
         application.getAttachments().values().stream()
                 .filter(attachment -> BANKRUPTCY_ARREARS_MANAGER.contains(attachment.getAttachmentTypeName()) ||
-                        attachment.getAttachmentTypeName().equals(DOCUMENTATION_PROFESSIONAL_COMPETENCE))
+                                DOCUMENTATION_PROFESSIONAL_COMPETENCE.contains(attachment.getAttachmentTypeName()))
                 .map(attachment -> DrosjeloyveResourceFactory.toDokumentbeskrivelseResource(attachment, organisation))
                 .forEach(resource.getDokumentbeskrivelse()::add);
 
