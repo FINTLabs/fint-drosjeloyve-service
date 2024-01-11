@@ -331,7 +331,7 @@ spec:
 
             # FFK
             - { name: drosjeloyve.organisations.830090282.name, value: "Finnmark" }
-            - { name: drosjeloyve.organisations.830090282.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.830090282.enabled, value: "true" }
             - { name: drosjeloyve.organisations.830090282.deviation-policy, value: "false" }
             - { name: drosjeloyve.organisations.830090282.skjermingshjemmel, value: '68' }
             - { name: drosjeloyve.organisations.830090282.tilgangsrestriksjon, value: '18' }
@@ -418,7 +418,7 @@ spec:
 
             # Troms
             - { name: drosjeloyve.organisations.930068128.name, value: "Troms" }
-            - { name: drosjeloyve.organisations.930068128.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.930068128.enabled, value: "true" }
             - { name: drosjeloyve.organisations.930068128.deviation-policy, value: "false" }
             - { name: drosjeloyve.organisations.930068128.skjermingshjemmel, value: '68' }
             - { name: drosjeloyve.organisations.930068128.tilgangsrestriksjon, value: '18' }
