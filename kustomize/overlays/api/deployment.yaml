@@ -244,7 +244,7 @@ spec:
 
             # AFK
             - { name: drosjeloyve.organisations.930580783.name, value: "Akershus" }
-            - { name: drosjeloyve.organisations.930580783.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.930580783.enabled, value: "true" }
             - { name: drosjeloyve.organisations.930580783.deviation-policy, value: "true" }
             - { name: drosjeloyve.organisations.930580783.skjermingshjemmel, value: 'UO' }
             - { name: drosjeloyve.organisations.930580783.tilgangsrestriksjon, value: 'U' }
@@ -273,7 +273,7 @@ spec:
 
             # BFK
             - { name: drosjeloyve.organisations.930580260.name, value: "Buskerud" }
-            - { name: drosjeloyve.organisations.930580260.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.930580260.enabled, value: "true" }
             - { name: drosjeloyve.organisations.930580260.deviation-policy, value: "false" }
             - { name: drosjeloyve.organisations.930580260.skjermingshjemmel, value: 'UO' }
             - { name: drosjeloyve.organisations.930580260.tilgangsrestriksjon, value: 'U' }
@@ -302,7 +302,7 @@ spec:
 
             # OFK
             - { name: drosjeloyve.organisations.930580694.name, value: "Østfold" }
-            - { name: drosjeloyve.organisations.930580694.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.930580694.enabled, value: "true" }
             - { name: drosjeloyve.organisations.930580694.deviation-policy, value: "false" }
             - { name: drosjeloyve.organisations.930580694.skjermingshjemmel, value: 'UO' }
             - { name: drosjeloyve.organisations.930580694.tilgangsrestriksjon, value: 'U' }
