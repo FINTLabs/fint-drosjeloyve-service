@@ -389,7 +389,7 @@ spec:
 
             # Telemark
             - { name: drosjeloyve.organisations.929882989.name, value: "Telemark" }
-            - { name: drosjeloyve.organisations.929882989.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.929882989.enabled, value: "true" }
             - { name: drosjeloyve.organisations.929882989.deviation-policy, value: "false" }
             - { name: drosjeloyve.organisations.929882989.skjermingshjemmel, value: '43' }
             - { name: drosjeloyve.organisations.929882989.tilgangsrestriksjon, value: '200003' }
