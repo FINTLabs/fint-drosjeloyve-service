@@ -139,7 +139,7 @@ spec:
 
             # Oslobygda
             - { name: drosjeloyve.organisations.958935420.name, value: "Oslo" }
-            - { name: drosjeloyve.organisations.958935420.enabled, value: "true" }
+            - { name: drosjeloyve.organisations.958935420.enabled, value: "false" }
             - { name: drosjeloyve.organisations.958935420.deviation-policy, value: "false" }
             - { name: drosjeloyve.organisations.958935420.skjermingshjemmel, value: 'offl.13.fvl.13' }
             - { name: drosjeloyve.organisations.958935420.tilgangsrestriksjon, value: 'UO' }
