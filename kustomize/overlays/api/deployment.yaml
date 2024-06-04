@@ -27,7 +27,8 @@ spec:
             - { name: fint.endpoints.application, value: 'http://altinn-downloadqueue-service-vigo:8080/applications/{id}' }
             - { name: fint.endpoints.attachment, value: 'http://altinn-downloadqueue-service-vigo:8080/attachments/{id}' }
             - { name: fint.endpoints.evidence, value: 'http://altinn-ebevis-service:8080/evidence/{id}' }
-            - { name: scheduling.cron, value: '0 0 8-16 * * MON-FRI' }
+            #- { name: scheduling.cron, value: '0 0 8-16 * * MON-FRI' }
+            - { name: scheduling.cron, value: '0 */5 8-16 * * MON-FRI' }
             - { name: scheduling.interval, value: '15' }
             - { name: fint.drosjeloyve.scheduled, value: 'true' }
             - { name: fint.font, value: '/app/times.ttf' }
@@ -118,7 +119,7 @@ spec:
 
             # Møre og Romsdal
             - { name: drosjeloyve.organisations.944183779.name, value: "Møre og Romsdal" }
-            - { name: drosjeloyve.organisations.944183779.enabled, value: "false" }
+            - { name: drosjeloyve.organisations.944183779.enabled, value: "true" }
             - { name: drosjeloyve.organisations.944183779.deviation-policy, value: "false" }
             - { name: drosjeloyve.organisations.944183779.skjermingshjemmel, value: '§ 13 1. ledd, jf. fvl. § 13 1. ledd nr. 1' }
             - { name: drosjeloyve.organisations.944183779.tilgangsrestriksjon, value: 'TP' }
