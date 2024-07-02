@@ -179,27 +179,6 @@ spec:
             - { name: drosjeloyve.organisations.821311632.soknadsskjema.skjermingshjemmel, value: 'none' }
             - { name: drosjeloyve.organisations.821311632.soknadsskjema.tilgangsrestriksjon, value: 'none' }
 
-            # Joker Nord (tffk)
-            - { name: drosjeloyve.organisations.922420866.name, value: "Troms og Finnmark" }
-            - { name: drosjeloyve.organisations.922420866.enabled, value: "false" }
-            - { name: drosjeloyve.organisations.922420866.deviation-policy, value: "false" }
-            - { name: drosjeloyve.organisations.922420866.skjermingshjemmel, value: '43' }
-            - { name: drosjeloyve.organisations.922420866.tilgangsrestriksjon, value: '18' }
-            - { name: drosjeloyve.organisations.922420866.variantformat, value: 'P' }
-            - { name: drosjeloyve.organisations.922420866.limit, value: '10' }
-            - { name: drosjeloyve.organisations.922420866.politiattest.skjermingshjemmel, value: '43' }
-            - { name: drosjeloyve.organisations.922420866.politiattest.tilgangsrestriksjon, value: '18' }
-            - { name: drosjeloyve.organisations.922420866.skatteattest.skjermingshjemmel, value: '43' }
-            - { name: drosjeloyve.organisations.922420866.skatteattest.tilgangsrestriksjon, value: '18' }
-            - { name: drosjeloyve.organisations.922420866.konkursattest.skjermingshjemmel, value: '43' }
-            - { name: drosjeloyve.organisations.922420866.konkursattest.tilgangsrestriksjon, value: '18' }
-            - { name: drosjeloyve.organisations.922420866.fagkompetanse.skjermingshjemmel, value: '43' }
-            - { name: drosjeloyve.organisations.922420866.fagkompetanse.tilgangsrestriksjon, value: '18' }
-            - { name: drosjeloyve.organisations.922420866.dom-forelegg.skjermingshjemmel, value: '43' }
-            - { name: drosjeloyve.organisations.922420866.dom-forelegg.tilgangsrestriksjon, value: '18' }
-            - { name: drosjeloyve.organisations.922420866.soknadsskjema.skjermingshjemmel, value: '43' }
-            - { name: drosjeloyve.organisations.922420866.soknadsskjema.tilgangsrestriksjon, value: '18' }
-
             # Tre små kinesere (trøndelag)
             - { name: drosjeloyve.organisations.817920632.name, value: "Trøndelag" }
             - { name: drosjeloyve.organisations.817920632.enabled, value: "true" }
