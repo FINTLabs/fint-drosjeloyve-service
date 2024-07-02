@@ -53,27 +53,6 @@ spec:
             - { name: drosjeloyve.organisations.971045698.soknadsskjema.skjermingshjemmel, value: 'UO:§13j' }
             - { name: drosjeloyve.organisations.971045698.soknadsskjema.tilgangsrestriksjon, value: 'UO' }
 
-            # Viken
-            - { name: drosjeloyve.organisations.921693230.name, value: "Viken" }
-            - { name: drosjeloyve.organisations.921693230.enabled, value: "false" }
-            - { name: drosjeloyve.organisations.921693230.deviation-policy, value: "true" }
-            - { name: drosjeloyve.organisations.921693230.skjermingshjemmel, value: 'U:Offl§13jfFvl§131' }
-            - { name: drosjeloyve.organisations.921693230.tilgangsrestriksjon, value: 'U' }
-            - { name: drosjeloyve.organisations.921693230.variantformat, value: 'P' }
-            - { name: drosjeloyve.organisations.921693230.limit, value: '10' }
-            - { name: drosjeloyve.organisations.921693230.politiattest.skjermingshjemmel, value: 'U:Offl§13jfFvl§131' }
-            - { name: drosjeloyve.organisations.921693230.politiattest.tilgangsrestriksjon, value: 'U' }
-            - { name: drosjeloyve.organisations.921693230.skatteattest.skjermingshjemmel, value: 'U:Offl§13jfFvl§131' }
-            - { name: drosjeloyve.organisations.921693230.skatteattest.tilgangsrestriksjon, value: 'U' }
-            - { name: drosjeloyve.organisations.921693230.konkursattest.skjermingshjemmel, value: 'U:Offl§13jfFvl§131' }
-            - { name: drosjeloyve.organisations.921693230.konkursattest.tilgangsrestriksjon, value: 'U' }
-            - { name: drosjeloyve.organisations.921693230.fagkompetanse.skjermingshjemmel, value: 'U:Offl§13jfFvl§131' }
-            - { name: drosjeloyve.organisations.921693230.fagkompetanse.tilgangsrestriksjon, value: 'U' }
-            - { name: drosjeloyve.organisations.921693230.dom-forelegg.skjermingshjemmel, value: 'U:Offl§13jfFvl§131' }
-            - { name: drosjeloyve.organisations.921693230.dom-forelegg.tilgangsrestriksjon, value: 'U' }
-            - { name: drosjeloyve.organisations.921693230.soknadsskjema.skjermingshjemmel, value: 'U:Offl§13jfFvl§131' }
-            - { name: drosjeloyve.organisations.921693230.soknadsskjema.tilgangsrestriksjon, value: 'U' }
-
             # Agder
             - { name: drosjeloyve.organisations.921707134.name, value: "Agder" }
             - { name: drosjeloyve.organisations.921707134.enabled, value: "true" }
