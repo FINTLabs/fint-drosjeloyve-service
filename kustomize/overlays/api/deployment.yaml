@@ -97,7 +97,7 @@ spec:
 
             # Møre og Romsdal
             - { name: drosjeloyve.organisations.944183779.name, value: "Møre og Romsdal" }
-            - { name: drosjeloyve.organisations.944183779.enabled, value: "true" }
+            - { name: drosjeloyve.organisations.944183779.enabled, value: "false" }
             - { name: drosjeloyve.organisations.944183779.deviation-policy, value: "false" }
             - { name: drosjeloyve.organisations.944183779.skjermingshjemmel, value: '§ 13 1. ledd, jf. fvl. § 13 1. ledd nr. 1' }
             - { name: drosjeloyve.organisations.944183779.tilgangsrestriksjon, value: 'TP' }
