@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import no.fint.altinn.model.AltinnApplication;
 import no.fint.altinn.model.ebevis.Evidence;
+import no.novari.drosjeloyve.util.CertificateConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

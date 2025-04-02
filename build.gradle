@@ -6,7 +6,7 @@ plugins {
     id "com.github.ben-manes.versions" version "0.52.0"
 }
 
-group = 'no.fint'
+group = 'no.novari'
 
 java {
     toolchain {
