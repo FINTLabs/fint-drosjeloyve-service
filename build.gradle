@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.4.RELEASE'
+    id 'org.springframework.boot' version '3.4.4'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'java'
     id 'groovy'
@@ -7,7 +7,12 @@ plugins {
 }
 
 group = 'no.fint'
-sourceCompatibility = '1.8'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
 
 configurations {
     compileOnly {
@@ -23,6 +28,15 @@ repositories {
 
 test {
     useJUnitPlatform()
+}
+
+dependencyManagement {
+    dependencies {
+        // Azure Cosmos DB server version 3.6 :-(
+        dependency 'org.mongodb:mongodb-driver-sync:5.1.4'
+        dependency 'org.mongodb:mongodb-driver-core:5.1.4'
+        dependency 'org.springframework.data:spring-data-mongodb:4.3.10'
+    }
 }
 
 dependencies {
@@ -51,8 +65,8 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
     testImplementation 'io.projectreactor:reactor-test'
-    testImplementation 'org.spockframework:spock-spring:2.0-groovy-2.5'
-    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0'
+    testImplementation 'org.spockframework:spock-spring:2.4-M5-groovy-4.0'
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.20.0'
 
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
     testImplementation 'com.squareup.okhttp3:okhttp:4.12.0'
