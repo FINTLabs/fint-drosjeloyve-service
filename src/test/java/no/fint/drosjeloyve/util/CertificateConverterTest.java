@@ -9,8 +9,10 @@ import no.novari.drosjeloyve.util.CertificateConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 
 
 public class CertificateConverterTest {
@@ -30,7 +32,7 @@ public class CertificateConverterTest {
     }
 
     @Test
-    public void testThatWeCanDoSimpleBankruptCertificateConversion() {
+    public void testThatWeCanDoSimpleBankruptCertificateConversion() throws IOException {
         Evidence evidence = new Evidence();
         AltinnApplication application = new AltinnApplication();
         application.setSubject("123456789");
@@ -39,6 +41,7 @@ public class CertificateConverterTest {
         converter.setFontFile("times.ttf");
 
         byte[] pdf = converter.convertBankruptCertificate(evidence, application);
+        //Files.write(new File("./KonkursattestTest.pdf").toPath(), pdf);
 
         Assertions.assertNotNull(pdf, "The byte array with the converted bankrupt certificate should not be null!");
     }

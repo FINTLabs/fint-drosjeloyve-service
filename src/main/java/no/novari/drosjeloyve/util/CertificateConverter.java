@@ -6,8 +6,9 @@ import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.pdfa.PdfADocument;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,6 @@ import no.fint.altinn.model.ebevis.vocab.ValueType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -69,22 +69,22 @@ public class CertificateConverter {
 
             document.add(new Paragraph("U.off. offl. § 13, sktbl. § 3-2").setTextAlignment(TextAlignment.RIGHT));
 
-            document.add(new Paragraph("Attest for skatt og merverdiavgift").setFontSize(18).setBold());
+            document.add(new Paragraph("Attest for skatt og merverdiavgift").setFontSize(18).simulateBold());
 
             document.add(new Paragraph("Attesten er produsert på bakgrunn av registrerte opplysninger i skatte- og avgiftssystemene." +
                     " For spørsmål om merverdiavgift kontakt Skatteetaten. For spørsmål om øvrige skatte- og avgiftskrav kontakt skatteoppkrever."));
 
-            document.add(new Paragraph("Gjelder:").setBold());
+            document.add(new Paragraph("Gjelder:").simulateBold());
 
             document.add(new Paragraph(String.format("%s (%s)", application.getSubjectName(), application.getSubject())));
 
-            document.add(new Paragraph("Følgende forfalte ikke betalte restanser er registrert på ovennevnte foretak:").setBold());
+            document.add(new Paragraph("Følgende forfalte ikke betalte restanser er registrert på ovennevnte foretak:").simulateBold());
 
             addEvidence(evidence, document);
 
-            document.add(new Paragraph("Ved offentlige anskaffelser skal attesten ikke være eldre enn 6 måneder.").setBold());
+            document.add(new Paragraph("Ved offentlige anskaffelser skal attesten ikke være eldre enn 6 måneder.").simulateBold());
             document.add(new Paragraph("Dokumentet er elektronisk godkjent og er derfor ikke signert."));
-            document.add(new Paragraph().add("Skatteetaten.no | FINTLabs.no | VigoIKS.no").setTextAlignment(TextAlignment.RIGHT));
+            document.add(new Paragraph().add("Skatteetaten.no | FINTLabs.no | Novari.no").setTextAlignment(TextAlignment.RIGHT));
 
             document.close();
 
@@ -102,20 +102,20 @@ public class CertificateConverter {
             pdfFile.deleteOnExit();
 
             Document document = createDocument(pdfFile);
-            document.add(new Paragraph("Brønnøysundregistrene").setFontSize(18).setItalic());
+            document.add(new Paragraph("Brønnøysundregistrene").setFontSize(18).simulateItalic());
             document.add(new Paragraph(BANKRUPT_TITLE).setFontSize(36));
 
             document.add(new Paragraph("Vi viser til din bestilling vedrørende:"));
 
             document.add(new Paragraph(String.format("%s (%s)", application.getSubjectName(), application.getSubject())));
 
-            document.add(new Paragraph("Konkursregisteret har følgende registrerte opplysninger:").setBold());
+            document.add(new Paragraph("Konkursregisteret har følgende registrerte opplysninger:").simulateBold());
 
             addEvidence(evidence, document);
 
-            document.add(new Paragraph("Ved offentlige anskaffelser skal attesten ikke være eldre enn 6 måneder.").setBold());
+            document.add(new Paragraph("Ved offentlige anskaffelser skal attesten ikke være eldre enn 6 måneder.").simulateBold());
             document.add(new Paragraph("Dokumentet er elektronisk godkjent og er derfor ikke signert."));
-            document.add(new Paragraph().add("brreg.no | FINTLabs.no | VigoIKS.no").setTextAlignment(TextAlignment.RIGHT));
+            document.add(new Paragraph().add("brreg.no | FINTLabs.no | Novari.no").setTextAlignment(TextAlignment.RIGHT));
 
             document.close();
 
@@ -129,14 +129,14 @@ public class CertificateConverter {
 
     private Document createDocument(File pdfFile) throws IOException {
         PdfADocument pdfADocument = new PdfADocument(new PdfWriter(pdfFile),
-                PdfAConformanceLevel.PDF_A_1A,
+                PdfAConformance.PDF_A_1A,
                 new PdfOutputIntent(new PdfDictionary()));
 
         Document document = new Document(pdfADocument);
         pdfADocument.setTagged();
         pdfADocument.getCatalog().setLang(new PdfString("no"));
 
-        PdfFont pdfFont = PdfFontFactory.createFont(fontFile, PdfEncodings.WINANSI, true);
+        PdfFont pdfFont = PdfFontFactory.createFont(fontFile, PdfEncodings.WINANSI);
         document.setFont(pdfFont);
 
         return document;
