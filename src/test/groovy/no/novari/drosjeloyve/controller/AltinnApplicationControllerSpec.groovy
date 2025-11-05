@@ -55,6 +55,7 @@ class AltinnApplicationControllerSpec extends Specification {
         def now = LocalDateTime.now()
 
         return new AltinnApplication(
+                archiveReference: 'AR123',
                 caseId: 'case-id',
                 requestor: 'requestor',
                 requestorName: 'requestor-name',
@@ -62,6 +63,7 @@ class AltinnApplicationControllerSpec extends Specification {
                 subjectName: 'subject-name',
                 status: AltinnApplicationStatus.NEW,
                 archivedDate: now,
-                updatedDate: now)
+                updatedDate: now,
+                phone: 'phone')
     }
 }
