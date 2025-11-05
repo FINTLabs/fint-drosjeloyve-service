@@ -62,7 +62,7 @@ public class TaxiLicenseApplicationService {
             List<AltinnApplication> applications =
                     repository.findAllByStatus(AltinnApplicationStatus.CONSENTS_ACCEPTED)
                             .stream()
-                            .filter(it -> StringUtils.startsWithIgnoreCase("AR", it.getArchiveReference()))
+                            .filter(it -> StringUtils.startsWithIgnoreCase(it.getArchiveReference(),"AR"))
                             .filter(it -> enabledOrganisations.contains(it.getRequestor()))
                             .filter(it -> limits.get(it.getRequestor()).decrementAndGet() > 0)
                             .sorted(Comparator.comparing(AltinnApplication::getArchivedDate))
