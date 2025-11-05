@@ -45,6 +45,7 @@ public class AltinnApplicationController {
     public Map<String, String> getOrganisations(@RequestHeader(required = false, name = "x-requestor") String requestor) {
         return repository.findAll()
                 .stream()
+                .filter(altinnApplication -> StringUtils.startsWith("AR", altinnApplication.getArchiveReference()))
                 .filter(altinnApplication -> StringUtils.isNotBlank(altinnApplication.getRequestor()))
                 .filter(altinnApplication -> !StringUtils.isNotEmpty(requestor) || altinnApplication.getRequestor().equals(requestor))
                 .collect(Collectors.toMap(AltinnApplication::getRequestor, AltinnApplication::getRequestorName,

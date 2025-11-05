@@ -8,6 +8,7 @@ import no.novari.drosjeloyve.repository.AltinnApplicationRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 
 import java.time.Duration;
@@ -61,6 +62,7 @@ public class TaxiLicenseApplicationService {
             List<AltinnApplication> applications =
                     repository.findAllByStatus(AltinnApplicationStatus.CONSENTS_ACCEPTED)
                             .stream()
+                            .filter(it -> StringUtils.startsWithIgnoreCase("AR", it.getArchiveReference()))
                             .filter(it -> enabledOrganisations.contains(it.getRequestor()))
                             .filter(it -> limits.get(it.getRequestor()).decrementAndGet() > 0)
                             .sorted(Comparator.comparing(AltinnApplication::getArchivedDate))
