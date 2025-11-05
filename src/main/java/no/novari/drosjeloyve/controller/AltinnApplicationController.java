@@ -30,9 +30,15 @@ public class AltinnApplicationController {
     @GetMapping("applications")
     public List<AltinnApplication> getAltinnApplications(@RequestHeader(required = false, name = "x-requestor") String requestor) {
         if (StringUtils.isEmpty(requestor)) {
-            return repository.findAllMinified();
+            return repository.findAllMinified()
+                    .stream()
+                    .filter(altinnApplication -> StringUtils.startsWith("AR", altinnApplication.getArchiveReference()))
+                    .collect(Collectors.toList());
         } else {
-            return repository.findAllByRequestor(requestor);
+            return repository.findAllByRequestor(requestor)
+                    .stream()
+                    .filter(altinnApplication -> StringUtils.startsWith("AR", altinnApplication.getArchiveReference()))
+                    .collect(Collectors.toList());
         }
     }
 
