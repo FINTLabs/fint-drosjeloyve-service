@@ -3,7 +3,10 @@ package no.novari.drosjeloyve.util;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
-import com.itextpdf.kernel.pdf.*;
+import com.itextpdf.kernel.pdf.PdfAConformance;
+import com.itextpdf.kernel.pdf.PdfOutputIntent;
+import com.itextpdf.kernel.pdf.PdfString;
+import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.TextAlignment;
@@ -20,6 +23,9 @@ import no.fint.altinn.model.ebevis.vocab.ValueType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.awt.color.ColorSpace;
+import java.awt.color.ICC_Profile;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -130,7 +136,11 @@ public class CertificateConverter {
     private Document createDocument(File pdfFile) throws IOException {
         PdfADocument pdfADocument = new PdfADocument(new PdfWriter(pdfFile),
                 PdfAConformance.PDF_A_1A,
-                new PdfOutputIntent(new PdfDictionary()));
+                new PdfOutputIntent("sRGB IEC61966-2.1",
+                        "",
+                        "http://www.color.org",
+                        "sRGB IEC61966-2.1",
+                        new ByteArrayInputStream(ICC_Profile.getInstance(ColorSpace.CS_sRGB).getData())));
 
         Document document = new Document(pdfADocument);
         pdfADocument.setTagged();
