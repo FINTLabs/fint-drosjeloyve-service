@@ -72,7 +72,7 @@ dependencies {
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
     testImplementation 'com.squareup.okhttp3:okhttp:4.12.0'
 
-    implementation 'com.itextpdf:itext-core:9.3.0'
+    implementation 'com.itextpdf:itext-core:9.5.0'
 
     implementation 'no.fint:fint-felles-resource-model-java:3.21.10'
     implementation 'no.fint:fint-arkiv-resource-model-java:3.21.10'
