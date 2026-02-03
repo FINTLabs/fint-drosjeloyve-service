@@ -1,6 +1,6 @@
 FROM ghcr.io/fintlabs/fint-drosjeloyve-admin AS node
 
-FROM gradle:8.13-jdk21 AS builder
+FROM gradle:9.3-jdk21 AS builder
 USER root
 COPY . .
 COPY --from=node /src/build/ src/main/resources/public/

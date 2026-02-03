@@ -10,7 +10,7 @@ import no.novari.drosjeloyve.exception.FinalStatusPendingException;
 import no.novari.drosjeloyve.factory.DrosjeloyveResourceFactory;
 import no.novari.drosjeloyve.repository.AltinnApplicationRepository;
 import no.novari.drosjeloyve.util.CertificateConverter;
-import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource;
+import no.novari.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
