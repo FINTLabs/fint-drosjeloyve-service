@@ -3,15 +3,15 @@ package no.novari.drosjeloyve.factory;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.altinn.model.AltinnApplication;
 import no.novari.drosjeloyve.configuration.OrganisationProperties;
-import no.fint.model.arkiv.kodeverk.*;
-import no.fint.model.arkiv.noark.Dokumentfil;
-import no.fint.model.arkiv.noark.Skjerming;
-import no.fint.model.arkiv.noark.Tilgang;
-import no.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
-import no.fint.model.resource.Link;
-import no.fint.model.resource.arkiv.noark.*;
-import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource;
-import no.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
+import no.novari.fint.model.arkiv.kodeverk.*;
+import no.novari.fint.model.arkiv.noark.Dokumentfil;
+import no.novari.fint.model.arkiv.noark.Skjerming;
+import no.novari.fint.model.arkiv.noark.Tilgang;
+import no.novari.fint.model.felles.kompleksedatatyper.Kontaktinformasjon;
+import no.novari.fint.model.resource.Link;
+import no.novari.fint.model.resource.arkiv.noark.*;
+import no.novari.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource;
+import no.novari.fint.model.resource.felles.kompleksedatatyper.AdresseResource;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
@@ -287,7 +287,9 @@ public class DrosjeloyveResourceFactory {
     private static DokumentobjektResource getDokumentobjektResource(String format, String id, String variantFormat) {
         DokumentobjektResource resource = new DokumentobjektResource();
 
-        resource.setFormat(format);
+        log.info("Until v3.21.10 it was possible to set format as a plain string directly on the Dokumentobjekt, " +
+                "from v4.0.0 we'll use the relation filformat (Format from Kodeverk).");
+        resource.addFilformat(Link.with(Format.class, "systemid", format));
         resource.addVariantFormat(Link.with(Variantformat.class, "systemid", variantFormat));
         resource.addReferanseDokumentfil(Link.with(Dokumentfil.class, "systemid", id));
 
