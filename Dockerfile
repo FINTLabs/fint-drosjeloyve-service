@@ -3,7 +3,7 @@ FROM ghcr.io/fintlabs/novari-drosje-dashboard AS node
 FROM gradle:8.13-jdk21 AS builder
 USER root
 COPY . .
-COPY --from=node /app/ src/main/resources/public/
+COPY --from=node /app/ src/main/resources/static/
 RUN gradle --no-daemon clean build
 
 FROM gcr.io/distroless/java21
