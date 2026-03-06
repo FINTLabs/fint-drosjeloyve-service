@@ -1,4 +1,4 @@
-FROM ghcr.io/fintlabs/fint-drosjeloyve-admin AS node
+FROM ghcr.io/fintlabs/novari-drosje-dashboard AS node
 
 FROM gradle:8.13-jdk21 AS builder
 USER root
