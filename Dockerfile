@@ -1,6 +1,6 @@
 FROM ghcr.io/fintlabs/novari-drosje-dashboard AS node
 
-FROM gradle:8.13-jdk21 AS builder
+FROM gradle:9-jdk21 AS builder
 USER root
 COPY . .
 COPY --from=node /app/dist/ src/main/resources/static/
