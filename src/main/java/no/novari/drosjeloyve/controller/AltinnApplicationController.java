@@ -49,13 +49,14 @@ public class AltinnApplicationController {
 
     @GetMapping("organisations")
     public Map<String, String> getOrganisations(@RequestHeader(required = false, name = "x-requestor") String requestor) {
-        return repository.findAll()
-                .stream()
-                //.filter(altinnApplication -> StringUtils.startsWith(altinnApplication.getArchiveReference(),"AR"))
-                .filter(altinnApplication -> StringUtils.isNotBlank(altinnApplication.getRequestor()))
-                .filter(altinnApplication -> !StringUtils.isNotEmpty(requestor) || altinnApplication.getRequestor().equals(requestor))
-                .collect(Collectors.toMap(AltinnApplication::getRequestor, AltinnApplication::getRequestorName,
-                        (k, v) -> k, HashMap::new));
+            return repository.findAll()
+                    .stream()
+                    //.filter(altinnApplication -> StringUtils.startsWith(altinnApplication.getArchiveReference(),"AR"))
+                    .filter(altinnApplication -> StringUtils.isNotBlank(altinnApplication.getRequestor()))
+                    .filter(altinnApplication -> StringUtils.isNotBlank(altinnApplication.getRequestorName()))
+                    .filter(altinnApplication -> !StringUtils.isNotEmpty(requestor) || altinnApplication.getRequestor().equals(requestor))
+                    .collect(Collectors.toMap(AltinnApplication::getRequestor, AltinnApplication::getRequestorName,
+                            (k, v) -> k, HashMap::new));
     }
 
     @GetMapping("{application:AR[\\d]{9,}}")
