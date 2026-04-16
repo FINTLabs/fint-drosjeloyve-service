@@ -30,13 +30,9 @@ public class AltinnApplicationController {
     @GetMapping("applications")
     public List<AltinnApplication> getAltinnApplications(@RequestHeader(required = false, name = "x-requestor") String requestor) {
         if (StringUtils.isEmpty(requestor)) {
-            return repository.findAllMinified()
-                    .stream()
-                    .collect(Collectors.toList());
+            return repository.findAllMinified();
         } else {
-            return repository.findAllByRequestor(requestor)
-                    .stream()
-                    .collect(Collectors.toList());
+            return repository.findAllByRequestor(requestor);
         }
     }
 
