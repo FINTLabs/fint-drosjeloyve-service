@@ -1,7 +1,7 @@
 package no.novari.drosjeloyve.client;
 
 import no.novari.drosjeloyve.configuration.OrganisationProperties;
-import no.fint.model.resource.FintLinks;
+import no.novari.fint.model.resource.FintLinks;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

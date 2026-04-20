@@ -30,15 +30,9 @@ public class AltinnApplicationController {
     @GetMapping("applications")
     public List<AltinnApplication> getAltinnApplications(@RequestHeader(required = false, name = "x-requestor") String requestor) {
         if (StringUtils.isEmpty(requestor)) {
-            return repository.findAllMinified()
-                    .stream()
-                    .filter(altinnApplication -> StringUtils.startsWith(altinnApplication.getArchiveReference(),"AR"))
-                    .collect(Collectors.toList());
+            return repository.findAllMinified();
         } else {
-            return repository.findAllByRequestor(requestor)
-                    .stream()
-                    .filter(altinnApplication -> StringUtils.startsWith(altinnApplication.getArchiveReference(),"AR"))
-                    .collect(Collectors.toList());
+            return repository.findAllByRequestor(requestor);
         }
     }
 
@@ -49,13 +43,13 @@ public class AltinnApplicationController {
 
     @GetMapping("organisations")
     public Map<String, String> getOrganisations(@RequestHeader(required = false, name = "x-requestor") String requestor) {
-        return repository.findAll()
-                .stream()
-                .filter(altinnApplication -> StringUtils.startsWith(altinnApplication.getArchiveReference(),"AR"))
-                .filter(altinnApplication -> StringUtils.isNotBlank(altinnApplication.getRequestor()))
-                .filter(altinnApplication -> !StringUtils.isNotEmpty(requestor) || altinnApplication.getRequestor().equals(requestor))
-                .collect(Collectors.toMap(AltinnApplication::getRequestor, AltinnApplication::getRequestorName,
-                        (k, v) -> k, HashMap::new));
+            return repository.findAll()
+                    .stream()
+                    .filter(altinnApplication -> StringUtils.isNotBlank(altinnApplication.getRequestor()))
+                    .filter(altinnApplication -> StringUtils.isNotBlank(altinnApplication.getRequestorName()))
+                    .filter(altinnApplication -> !StringUtils.isNotEmpty(requestor) || altinnApplication.getRequestor().equals(requestor))
+                    .collect(Collectors.toMap(AltinnApplication::getRequestor, AltinnApplication::getRequestorName,
+                            (k, v) -> k, HashMap::new));
     }
 
     @GetMapping("{application:AR[\\d]{9,}}")

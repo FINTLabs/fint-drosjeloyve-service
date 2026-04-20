@@ -2,9 +2,8 @@ package no.novari.drosjeloyve.factory
 
 import no.fint.altinn.model.AltinnApplication
 import no.novari.drosjeloyve.configuration.OrganisationProperties
-import no.fint.model.felles.kompleksedatatyper.Identifikator
-import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource
-import no.novari.drosjeloyve.factory.DrosjeloyveResourceFactory
+import no.novari.fint.model.felles.kompleksedatatyper.Identifikator
+import no.novari.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -63,9 +62,9 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.journalpost.first().dokumentbeskrivelse.get(0).skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/soknadsskjema' }
         resource.journalpost.first().dokumentbeskrivelse.get(0).skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/soknadsskjema-tilgangsrestriksjon' }
         resource.journalpost.first().dokumentbeskrivelse.get(0).dokumentobjekt.any { it ->
-            it.format == 'PDF' &&
-                    it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
-                    it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
+            it.filformat.any {it.href == '${arkiv.kodeverk.format}/systemid/PDF' } &&
+            it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
+            it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
         }
 
         resource.journalpost.first().dokumentbeskrivelse.get(1).tittel == 'Dokumentasjon fagkompetanse'
@@ -74,9 +73,9 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.journalpost.first().dokumentbeskrivelse.get(1).skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/fagkompetanse' }
         resource.journalpost.first().dokumentbeskrivelse.get(1).skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/fagkompetanse-tilgangsrestriksjon' }
         resource.journalpost.first().dokumentbeskrivelse.get(1).dokumentobjekt.any { it ->
-            it.format == 'PDF' &&
-                    it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
-                    it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
+            it.filformat.any {it.href == '${arkiv.kodeverk.format}/systemid/PDF' } &&
+            it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
+            it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
         }
 
         resource.journalpost.first().dokumentbeskrivelse.get(2).tittel == 'Konkursattest for foretak'
@@ -85,9 +84,9 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.journalpost.first().dokumentbeskrivelse.get(2).skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/konkursattest' }
         resource.journalpost.first().dokumentbeskrivelse.get(2).skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/konkursattest-tilgangsrestriksjon' }
         resource.journalpost.first().dokumentbeskrivelse.get(2).dokumentobjekt.any { it ->
-            it.format == 'PDF' &&
-                    it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
-                    it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
+            it.filformat.any {it.href == '${arkiv.kodeverk.format}/systemid/PDF' } &&
+            it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
+            it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
         }
 
         resource.journalpost.last().tittel == 'Politiattest - subject-name - subject'
@@ -113,9 +112,9 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.journalpost.last().dokumentbeskrivelse.first().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/politiattest' }
         resource.journalpost.last().dokumentbeskrivelse.first().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/politiattest-tilgangsrestriksjon' }
         resource.journalpost.last().dokumentbeskrivelse.first().dokumentobjekt.any { it ->
-            it.format == 'PDF' &&
-                    it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
-                    it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
+            it.filformat.any {it.href == '${arkiv.kodeverk.format}/systemid/PDF' } &&
+            it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
+            it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
         }
 
         resource.journalpost.last().dokumentbeskrivelse.last().tittel == 'Politiattest for innehaver/daglig leder'
@@ -124,9 +123,9 @@ class DrosjeloyveResourceFactorySpec extends Specification {
         resource.journalpost.last().dokumentbeskrivelse.last().skjerming.skjermingshjemmel.any { it.href == '${arkiv.noark.skjerming}/systemid/politiattest' }
         resource.journalpost.last().dokumentbeskrivelse.last().skjerming.tilgangsrestriksjon.any { it.href == '${arkiv.noark.tilgang}/systemid/politiattest-tilgangsrestriksjon' }
         resource.journalpost.last().dokumentbeskrivelse.last().dokumentobjekt.any { it ->
-            it.format == 'PDF' &&
-                    it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
-                    it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
+            it.filformat.any {it.href == '${arkiv.kodeverk.format}/systemid/PDF' } &&
+            it.variantFormat.any { it.href == '${arkiv.kodeverk.variantformat}/systemid/A' } &&
+            it.referanseDokumentfil.any { it.href == '${arkiv.noark.dokumentfil}/systemid/document-id' }
         }
     }
 
