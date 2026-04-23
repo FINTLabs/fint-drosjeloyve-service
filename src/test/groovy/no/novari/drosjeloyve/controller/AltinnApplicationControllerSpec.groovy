@@ -49,6 +49,7 @@ class AltinnApplicationControllerSpec extends Specification {
                 .expectStatus().isOk()
                 .expectBody()
                 .jsonPath('$.[0].caseId').isEqualTo('case-id')
+                .jsonPath('$.[0].appId').isEqualTo('1234')
     }
 
     def newAltinnApplication() {
@@ -56,6 +57,7 @@ class AltinnApplicationControllerSpec extends Specification {
 
         return new AltinnApplication(
                 archiveReference: 'AR123',
+                appId: '1234',
                 caseId: 'case-id',
                 requestor: 'requestor',
                 requestorName: 'requestor-name',
