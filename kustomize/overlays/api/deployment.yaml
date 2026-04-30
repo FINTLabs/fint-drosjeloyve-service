@@ -124,7 +124,7 @@ spec:
             - { name: drosjeloyve.organisations.958935420.skjermingshjemmel, value: 'offl.13.fvl.13' }
             - { name: drosjeloyve.organisations.958935420.tilgangsrestriksjon, value: 'UO' }
             - { name: drosjeloyve.organisations.958935420.variantformat, value: 'A' }
-            - { name: drosjeloyve.organisations.958935420.limit, value: '1' }
+            - { name: drosjeloyve.organisations.958935420.limit, value: '10' }
             - { name: drosjeloyve.organisations.958935420.politiattest.skjermingshjemmel, value: 'offl.13.fvl.13' }
             - { name: drosjeloyve.organisations.958935420.politiattest.tilgangsrestriksjon, value: 'UO' }
             - { name: drosjeloyve.organisations.958935420.skatteattest.skjermingshjemmel, value: 'offl.13.fvl.13' }
