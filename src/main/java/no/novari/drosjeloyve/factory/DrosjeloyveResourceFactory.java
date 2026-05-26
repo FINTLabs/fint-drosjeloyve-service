@@ -287,7 +287,7 @@ public class DrosjeloyveResourceFactory {
     private static DokumentobjektResource getDokumentobjektResource(String format, String id, String variantFormat) {
         DokumentobjektResource resource = new DokumentobjektResource();
 
-        log.info("Until v3.21.10 it was possible to set format as a plain string directly on the Dokumentobjekt, " +
+        log.debug("Until v3.21.10 it was possible to set format as a plain string directly on the Dokumentobjekt, " +
                 "from v4.0.0 we'll use the relation filformat (Format from Kodeverk).");
         resource.addFilformat(Link.with(Format.class, "systemid", format));
         resource.addVariantFormat(Link.with(Variantformat.class, "systemid", variantFormat));
