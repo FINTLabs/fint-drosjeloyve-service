@@ -12,4 +12,4 @@ ${AnsiColor.202}     ▓███░                ░▓██████░ 
 
 ${AnsiColor.231}     Drivkraft for digitalt fellesskap
 
-${Ansi.DEFAULT}${AnsiBackground.DEFAULT}
+${Ansi.DEFAULT}${AnsiBackground.DEFAULT}${AnsiColor.DEFAULT}

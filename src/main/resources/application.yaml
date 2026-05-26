@@ -22,6 +22,9 @@ spring:
         provider:
           fint:
             token-uri: https://idp.felleskomponent.no/nidp/oauth/nam/token
+  output:
+    ansi:
+      enabled: always
 
 management:
   endpoints:

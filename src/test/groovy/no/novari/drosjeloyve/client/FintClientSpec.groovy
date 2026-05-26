@@ -1,9 +1,8 @@
 package no.novari.drosjeloyve.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.novari.drosjeloyve.client.FintClient
 import no.novari.drosjeloyve.configuration.OrganisationProperties
-import no.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource
+import no.novari.fint.model.resource.arkiv.samferdsel.SoknadDrosjeloyveResource
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.springframework.http.HttpHeaders
