@@ -5,14 +5,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import no.fint.altinn.model.AltinnApplication;
 import no.fint.altinn.model.ebevis.Evidence;
-import no.novari.drosjeloyve.util.CertificateConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 
 
 public class CertificateConverterTest {
