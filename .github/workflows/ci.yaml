@@ -23,10 +23,10 @@ jobs:
           distribution: 'corretto'
           cache: 'gradle'
           
-      - uses: gradle/actions/wrapper-validation@v6
+      - uses: gradle/actions/wrapper-validation@v6.2.0
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
+        uses: gradle/actions/setup-gradle@v6.2.0
 
       - name: Build with Gradle
         run: ./gradlew build
