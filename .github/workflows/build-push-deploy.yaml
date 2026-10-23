@@ -31,15 +31,15 @@ jobs:
       deploy-every-branch: true
     secrets: inherit
 
-#  prod:
-#    needs: [ build-push, beta ]
-#    uses: fintlabs/shared-workflows/.github/workflows/kustomize-deploy.yaml@v0
-#    strategy:
-#      matrix:
-#        org:
-#           - default
-#    with:
-#      tags: ${{ needs.build-push.outputs.tags }}
-#      environment: api
-#      org: ${{ matrix.org }}
-#    secrets: inherit
+  prod:
+    needs: [ build-push, beta ]
+    uses: fintlabs/shared-workflows/.github/workflows/kustomize-deploy.yaml@v0
+    strategy:
+      matrix:
+        org:
+           - default
+    with:
+      tags: ${{ needs.build-push.outputs.tags }}
+      environment: api
+      org: ${{ matrix.org }}
+    secrets: inherit
