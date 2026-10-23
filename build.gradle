@@ -75,8 +75,8 @@ dependencies {
     testImplementation 'org.spockframework:spock-spring:2.4-groovy-4.0'
     testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.33.0'
     // Fix CVE-2025-48924 (de.flapdoodle.embed) and friends
-    implementation("org.apache.commons:commons-lang3:3.18.0")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.21.1")
+    implementation("org.apache.commons:commons-lang3:3.21.0")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.22.4")
 
     testImplementation 'org.jetbrains.kotlin:kotlin-stdlib:2.1.0'
 
