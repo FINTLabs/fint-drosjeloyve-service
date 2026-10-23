@@ -26,7 +26,6 @@ import java.net.URI;
 import java.time.Duration;
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 import static reactor.util.retry.Retry.withThrowable;
 
@@ -90,17 +89,17 @@ public class CaseHandlerService {
                     .map(AltinnApplication::getCaseId)
                     .filter(Objects::nonNull)
                     .distinct()
-                    .collect(Collectors.toList());
+                    .toList();
 
             if (caseIds.size() == 1) {
-                application.setCaseId(caseIds.get(0));
+                application.setCaseId(caseIds.getFirst());
                 repository.save(application);
 
                 createForm()
                         .andThen(createAttachments())
                         .andThen(createEvidence())
                         .accept(organisation, application);
-            } else if (caseIds.size() == 0) {
+            } else if (caseIds.isEmpty()) {
                 create(organisation, application);
             } else {
                 log.error("Found more than 1 caseId for requestor {} and subject {}", application.getRequestor(), application.getSubject());
