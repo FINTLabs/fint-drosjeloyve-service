@@ -72,7 +72,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
     testImplementation 'io.projectreactor:reactor-test'
-    testImplementation 'org.spockframework:spock-spring:2.4-groovy-4.0'
+    testImplementation 'org.spockframework:spock-spring:2.5-groovy-4.0'
     testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.33.0'
     // Fix CVE-2025-48924 (de.flapdoodle.embed) and friends
     implementation("org.apache.commons:commons-lang3:3.21.0")
