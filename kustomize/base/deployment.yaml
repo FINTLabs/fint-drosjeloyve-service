@@ -48,7 +48,7 @@ spec:
           env:
             - {name: TZ, value: Europe/Oslo}
             - {name: logging.level.no.fint, value: 'trace'}
-            - {name: JAVA_TOOL_OPTIONS, value: '-Xmx1G -XX:+ExitOnOutOfMemoryError'}
+            - {name: JAVA_TOOL_OPTIONS, value: '-Xmx1G -XX:+ExitOnOutOfMemoryError -XX:-UseBASE64Intrinsics'}
             - {name: fint.endpoints.drosjeloyve, value: 'https://beta.felleskomponent.no/arkiv/samferdsel/soknaddrosjeloyve'}
             - {name: fint.endpoints.drosjeloyve-mappe-id, value: 'https://beta.felleskomponent.no/arkiv/samferdsel/soknaddrosjeloyve/mappeid/{id}'}
             - {name: fint.endpoints.dokumentfil, value: 'https://beta.felleskomponent.no/arkiv/noark/dokumentfil'}
