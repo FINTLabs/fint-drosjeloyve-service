@@ -8,7 +8,7 @@ COPY --from=node /app/dist/ src/main/resources/static/
 RUN gradle --no-daemon clean build
 
 FROM gcr.io/distroless/java21
-ENV JAVA_TOOL_OPTIONS=-XX:+ExitOnOutOfMemoryError
+ENV JAVA_TOOL_OPTIONS="-XX:+ExitOnOutOfMemoryError -XX:-UseBASE64Intrinsics"
 
 WORKDIR /app
 COPY --from=builder /home/gradle/src/main/resources/times.ttf /app/times.ttf
