@@ -33,7 +33,7 @@ test {
 dependencyManagement {
     imports {
         mavenBom 'com.fasterxml.jackson:jackson-bom:2.23.0'
-        mavenBom 'io.netty:netty-bom:4.2.20.Final'
+        mavenBom 'io.netty:netty-bom:4.2.21.Final'
     }
     dependencies {
         // Azure Cosmos DB server version 3.6 :-(
